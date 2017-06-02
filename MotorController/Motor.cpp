@@ -32,8 +32,8 @@ Motor::Motor(uint8_t M_PWM, uint8_t M_DIR_1, uint8_t M_DIR_2, uint8_t M_STBY, ui
   if (digitalRead(ENC_1)) state |= 0x2;
   if (digitalRead(ENC_2)) state |= 0x1;
 
-  attachInterrupt(digitalPinToInterrupt(ENC_1), test, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(ENC_2), test, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(ENC_1), encoder1Count, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(ENC_2), encoder2Count, CHANGE);
 }
 
 void Motor::drive(int amount) {
@@ -74,7 +74,7 @@ void Motor::drive(int amount) {
 
       int output = kpNumer * error / kpDenom;
       Serial.println("hit");
-      analogWrite(M_PWM, 50 /*constrain(abs(output), 50, 100)*/);
+      analogWrite(M_PWM, constrain(abs(output), 100, 150));
     }
   } else {
     analogWrite(M_PWM, 0);
@@ -92,14 +92,14 @@ void Motor::PIDtuner() { /* coming soon to code near you */ }
 
 int Motor::getSteps() { return steps; }
 
-void Motor::encoder1Count() {
-  steps += (0 - (state & 1)) | 1;
-  state = state ^ 0x1;
+void encoder1Count() {
+  Motor::steps += (0 - (state & 1)) | 1;
+  Motor::state = Motor::state ^ 0x1;
 }
 
-void Motor::encoder2Count() {
-  steps -= (0 - (state & 1)) | 1;
-  state = state ^ 0x3;
+void encoder2Count() {
+  Motor::steps -= (0 - (Motor::state & 1)) | 1;
+  Motor::state = Motor::state ^ 0x3;
 }
 
 

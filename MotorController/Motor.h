@@ -20,8 +20,8 @@ class Motor {
     uint8_t ENC_1;
     uint8_t ENC_2;
     
-    void encoder1Count();
-    void encoder2Count();
+    friend void encoder1Count();
+    friend void encoder2Count();
     
   public:
     Motor(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
