@@ -1,14 +1,9 @@
 #include "Motor.h"
 #include "Arduino.h"
 
-
-void test() {
-
-}
-
-Motor::Motor(uint8_t M_PWM, uint8_t M_DIR_1, uint8_t M_DIR_2, uint8_t M_STBY, uint8_t ENC_1, uint8_t ENC_2) {
-  steps = 0;
-  state = 0;
+Motor::Motor(int32_t* steps, uint8_t* state, uint8_t M_PWM, uint8_t M_DIR_1, uint8_t M_DIR_2, uint8_t M_STBY, uint8_t ENC_1, uint8_t ENC_2) {
+  this->steps = steps;
+  this->state = state;
 
   kpNumer = 3;
   kpDenom = 128;
@@ -29,11 +24,8 @@ Motor::Motor(uint8_t M_PWM, uint8_t M_DIR_1, uint8_t M_DIR_2, uint8_t M_STBY, ui
   pinMode(ENC_1, INPUT);
   pinMode(ENC_2, INPUT);
   
-  if (digitalRead(ENC_1)) state |= 0x2;
-  if (digitalRead(ENC_2)) state |= 0x1;
-
-  attachInterrupt(digitalPinToInterrupt(ENC_1), encoder1Count, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(ENC_2), encoder2Count, CHANGE);
+  if (digitalRead(ENC_1)) *this->state |= 0x2;
+  if (digitalRead(ENC_2)) *this->state |= 0x1;
 }
 
 void Motor::drive(int amount) {
@@ -48,12 +40,12 @@ void Motor::drive(int amount) {
 
   digitalWrite(M_STBY, HIGH);
 
-  if(!done) {
+  if (!done) {
     if(micros() - ctrlLastMicros > CTRL_MICROS_PERIOD) {
       ctrlLastMicros = micros();
 
       noInterrupts();
-      error = amount - steps;
+      error = amount - *steps;
       interrupts();
 
       if (abs(lastError - error) < 10 && error < 100) {
@@ -63,11 +55,11 @@ void Motor::drive(int amount) {
       lastError = error;
       totalError += error;
 
-      if (steps < amount) {
+      if (*steps < amount) {
         digitalWrite(M_DIR_1, LOW);
         digitalWrite(M_DIR_2, HIGH);
       }
-      if (steps > amount) {
+      if (*steps > amount) {
         digitalWrite(M_DIR_1, HIGH);
         digitalWrite(M_DIR_2, HIGH);
       }
@@ -83,23 +75,17 @@ void Motor::drive(int amount) {
   }
 
   if (millis() - graphLastMillis > GRAPH_MILLIS_PERIOD) {
-    Serial.println(steps);
+    Serial.println(*steps);
     graphLastMillis = millis();
   }
 }
 
 void Motor::PIDtuner() { /* coming soon to code near you */ }
 
-int Motor::getSteps() { return steps; }
+int32_t Motor::getSteps() { return *steps; }
+uint8_t Motor::getEncoder1Pin() { return ENC_1; }
+uint8_t Motor::getEncoder2Pin() { return ENC_2; }
 
-void encoder1Count() {
-  Motor::steps += (0 - (state & 1)) | 1;
-  Motor::state = Motor::state ^ 0x1;
-}
 
-void encoder2Count() {
-  Motor::steps -= (0 - (Motor::state & 1)) | 1;
-  Motor::state = Motor::state ^ 0x3;
-}
 
 
