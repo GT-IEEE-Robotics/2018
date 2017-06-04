@@ -8,7 +8,7 @@ Motor::Motor(int32_t* steps, uint8_t* state, uint8_t M_PWM, uint8_t M_DIR_1, uin
   kpNumer = 3;
   kpDenom = 128;
   kiNumer = 0;
-  kiDenom = 100000000;
+  kiDenom = 100;
 
   this->M_PWM = M_PWM;
   this->M_DIR_1 = M_DIR_1;
@@ -32,7 +32,7 @@ void Motor::drive(int amount) {
   bool done = false;
   int error = 0;
   int lastError = 0;
-  int totalError = 0;
+  //int totalError = 0;
   unsigned long graphLastMillis = 0;
   unsigned long ctrlLastMicros = 0;
   const int GRAPH_MILLIS_PERIOD = 10;
@@ -40,20 +40,21 @@ void Motor::drive(int amount) {
 
   digitalWrite(M_STBY, HIGH);
 
-  if (!done) {
-    if(micros() - ctrlLastMicros > CTRL_MICROS_PERIOD) {
+  while (!done) {
+    if(micros() - ctrlLastMicros > CTRL_MICROS_PERIOD) { // controlled encoder checking
       ctrlLastMicros = micros();
 
       noInterrupts();
       error = amount - *steps;
       interrupts();
 
-      if (abs(lastError - error) < 10 && error < 100) {
+      if (abs(lastError - error) < 10 && abs(error) < 100) {
         done = true;
+        // break;
       }
 
       lastError = error;
-      totalError += error;
+      //totalError += error;
 
       if (*steps < amount) {
         digitalWrite(M_DIR_1, LOW);
@@ -61,23 +62,28 @@ void Motor::drive(int amount) {
       }
       if (*steps > amount) {
         digitalWrite(M_DIR_1, HIGH);
-        digitalWrite(M_DIR_2, HIGH);
+        digitalWrite(M_DIR_2, LOW);
       }
 
       int output = kpNumer * error / kpDenom;
-      Serial.println("hit");
-      analogWrite(M_PWM, constrain(abs(output), 100, 150));
+      analogWrite(M_PWM, constrain(abs(output), 30, 50));
+
+      if (millis() - graphLastMillis > GRAPH_MILLIS_PERIOD) { // controlled encoder printing
+        Serial.print("Error: ");
+        Serial.println(error);
+        Serial.print("Steps: ");
+        Serial.println(*steps);
+        graphLastMillis = millis();
+      }
     }
-  } else {
-    analogWrite(M_PWM, 0);
-    digitalWrite(M_DIR_1, LOW);
-    digitalWrite(M_DIR_2, LOW);
   }
 
-  if (millis() - graphLastMillis > GRAPH_MILLIS_PERIOD) {
-    Serial.println(*steps);
-    graphLastMillis = millis();
-  }
+  *steps = 0;
+  
+  // shut the motor down
+  analogWrite(M_PWM, 0);
+  digitalWrite(M_DIR_1, LOW);
+  digitalWrite(M_DIR_2, LOW);
 }
 
 void Motor::PIDtuner() { /* coming soon to code near you */ }
