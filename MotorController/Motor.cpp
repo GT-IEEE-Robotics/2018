@@ -66,7 +66,7 @@ void Motor::drive(int amount) {
       }
 
       int output = kpNumer * error / kpDenom;
-      analogWrite(M_PWM, constrain(abs(output), 30, 50));
+      analogWrite(M_PWM, constrain(abs(output), 100, 250));
 
       if (millis() - graphLastMillis > GRAPH_MILLIS_PERIOD) { // controlled encoder printing
         Serial.print("Error: ");

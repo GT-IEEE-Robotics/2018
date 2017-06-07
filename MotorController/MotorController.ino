@@ -24,9 +24,9 @@ void setup() {
 }
 
 void loop() {
-  motor1.drive(2000);
+  //motor1.drive(8000);
   Serial.println("here");
-  motor1.drive(-2000);
+  motor2.drive(8000);
   Serial.println("now here");
 }
 
