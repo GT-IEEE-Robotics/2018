@@ -29,6 +29,7 @@ void Motor::drive(int speed, bool direction) {
 }
 
 void Motor::brake() {
+  digitalWrite(M_STBY, LOW);
   analogWrite(M_PWM, 0);
   digitalWrite(M_DIR_1, LOW);
   digitalWrite(M_DIR_2, LOW);
