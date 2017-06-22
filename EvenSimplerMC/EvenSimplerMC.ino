@@ -22,15 +22,20 @@ void setup() {
 }
 
 void loop() {
-  forward(128);
+  forward(255);
   delay(3000);
-  left(128);
+  left(255);
   delay(3000);
-  backward(128);
+  backward(255);
   delay(3000);
-  right(128);
+  right(255);
   delay(3000);
   brake();
+  delay(3000);
+  forward(255);
+  delay(10000);
+  brake();
+  delay(3000);
   while (true) delay(1000); // the end
 }
 
@@ -46,37 +51,37 @@ void brake() {
 }
 
 void forward(int speed) {
-  motor1(speed, 0);
+  motor1(speed, 1);
   motor2(speed, 0);
   motor3(speed, 0);
-  motor4(speed, 0);
-}
-
-void backward(int speed) {
-  motor1(speed, 1);
-  motor2(speed, 1);
-  motor3(speed, 1);
   motor4(speed, 1);
 }
 
-void left(int speed) {
-  motor1(speed, 1);
-  motor2(speed, 0);
+void backward(int speed) {
+  motor1(speed, 0);
+  motor2(speed, 1);
   motor3(speed, 1);
+  motor4(speed, 0);
+}
+
+void left(int speed) {
+  motor1(speed, 0);
+  motor2(speed, 0);
+  motor3(speed, 0);
   motor4(speed, 0);
 }
 
 void right(int speed) {
-  motor1(speed, 0);
+  motor1(speed, 1);
   motor2(speed, 1);
-  motor3(speed, 0);
+  motor3(speed, 1);
   motor4(speed, 1);
 }
 
 void motor1(int speed, bool direction) {
   analogWrite(8, 0);
   analogWrite(9, 0);
-  if (!direction) {
+  if (direction) {
     analogWrite(8, speed);
   } else {
     analogWrite(9, speed);
@@ -106,7 +111,7 @@ void motor3(int speed, bool direction) {
 void motor4(int speed, bool direction) {
   analogWrite(2, 0);
   analogWrite(3, 0);
-  if (!direction) {
+  if (direction) {
     analogWrite(2, speed);
   } else {
     analogWrite(3, speed);
