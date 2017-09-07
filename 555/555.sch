@@ -1,0 +1,214 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L R R1
+U 1 1 59B1D2F6
+P 2350 2800
+F 0 "R1" V 2430 2800 50  0000 C CNN
+F 1 "1k" V 2350 2800 50  0000 C CNN
+F 2 "" V 2280 2800 50  0001 C CNN
+F 3 "" H 2350 2800 50  0001 C CNN
+	1    2350 2800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R2
+U 1 1 59B1D35F
+P 2250 1950
+F 0 "R2" V 2330 1950 50  0000 C CNN
+F 1 "R" V 2250 1950 50  0000 C CNN
+F 2 "" V 2180 1950 50  0001 C CNN
+F 3 "" H 2250 1950 50  0001 C CNN
+	1    2250 1950
+	-1   0    0    1   
+$EndComp
+$Comp
+L R R3
+U 1 1 59B1D378
+P 4000 1950
+F 0 "R3" V 4080 1950 50  0000 C CNN
+F 1 "R" V 4000 1950 50  0000 C CNN
+F 2 "" V 3930 1950 50  0001 C CNN
+F 3 "" H 4000 1950 50  0001 C CNN
+	1    4000 1950
+	0    1    1    0   
+$EndComp
+$Comp
+L C C1
+U 1 1 59B1D435
+P 2550 3000
+F 0 "C1" H 2575 3100 50  0000 L CNN
+F 1 "C" H 2575 2900 50  0000 L CNN
+F 2 "" H 2588 2850 50  0001 C CNN
+F 3 "" H 2550 3000 50  0001 C CNN
+	1    2550 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Battery BT1
+U 1 1 59B1D4A2
+P 1800 2150
+F 0 "BT1" H 1900 2250 50  0000 L CNN
+F 1 "Battery" H 1900 2150 50  0000 L CNN
+F 2 "" V 1800 2210 50  0001 C CNN
+F 3 "" V 1800 2210 50  0001 C CNN
+	1    1800 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED D1
+U 1 1 59B1D4D3
+P 4300 2300
+F 0 "D1" H 4300 2400 50  0000 C CNN
+F 1 "LED" H 4300 2200 50  0000 C CNN
+F 2 "" H 4300 2300 50  0001 C CNN
+F 3 "" H 4300 2300 50  0001 C CNN
+	1    4300 2300
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1800 1550 3300 1550
+Wire Wire Line
+	1800 1550 1800 1950
+$Comp
+L LM555N U1
+U 1 1 59B1D954
+P 3300 2150
+F 0 "U1" H 2900 2500 50  0000 L CNN
+F 1 "LM555N" H 2900 1800 50  0000 L CNN
+F 2 "" H 3300 2150 50  0001 C CNN
+F 3 "" H 3300 2150 50  0001 C CNN
+	1    3300 2150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2700 1550 2700 2350
+Wire Wire Line
+	2700 2350 2800 2350
+Wire Wire Line
+	2250 1800 2250 1550
+Connection ~ 2250 1550
+Wire Wire Line
+	3300 1550 3300 1750
+Connection ~ 2700 1550
+Wire Wire Line
+	2250 2100 2250 2650
+Wire Wire Line
+	2200 2650 4100 2650
+Wire Wire Line
+	4100 2650 4100 2150
+Wire Wire Line
+	4100 2150 3800 2150
+Wire Wire Line
+	2200 2650 2200 2800
+Connection ~ 2250 2650
+Wire Wire Line
+	2500 2800 3800 2800
+Wire Wire Line
+	3800 2800 3800 2350
+Wire Wire Line
+	2550 1950 2550 2850
+Wire Wire Line
+	2550 1950 2800 1950
+Connection ~ 2550 2800
+Wire Wire Line
+	3850 1950 3800 1950
+Wire Wire Line
+	4150 1950 4300 1950
+Wire Wire Line
+	4300 1950 4300 2150
+$Comp
+L Earth #PWR01
+U 1 1 59B1E119
+P 2550 3300
+F 0 "#PWR01" H 2550 3050 50  0001 C CNN
+F 1 "Earth" H 2550 3150 50  0001 C CNN
+F 2 "" H 2550 3300 50  0001 C CNN
+F 3 "" H 2550 3300 50  0001 C CNN
+	1    2550 3300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1800 2350 1800 3200
+Wire Wire Line
+	1800 3200 4300 3200
+Wire Wire Line
+	4300 3200 4300 2450
+NoConn ~ 2800 2150
+Wire Wire Line
+	3300 3200 3300 2550
+Connection ~ 3300 3200
+$Comp
+L PWR_FLAG #FLG02
+U 1 1 59B1E36C
+P 1550 1900
+F 0 "#FLG02" H 1550 1975 50  0001 C CNN
+F 1 "PWR_FLAG" H 1550 2050 50  0000 C CNN
+F 2 "" H 1550 1900 50  0001 C CNN
+F 3 "" H 1550 1900 50  0001 C CNN
+	1    1550 1900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1550 1900 1800 1900
+Connection ~ 1800 1900
+Wire Wire Line
+	2550 3150 2550 3300
+Connection ~ 2550 3200
+$Comp
+L PWR_FLAG #FLG03
+U 1 1 59B1E572
+P 2900 3350
+F 0 "#FLG03" H 2900 3425 50  0001 C CNN
+F 1 "PWR_FLAG" H 2900 3500 50  0000 C CNN
+F 2 "" H 2900 3350 50  0001 C CNN
+F 3 "" H 2900 3350 50  0001 C CNN
+	1    2900 3350
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2900 3350 2900 3200
+Connection ~ 2900 3200
+$EndSCHEMATC
