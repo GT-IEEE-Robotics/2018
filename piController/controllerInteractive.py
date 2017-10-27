@@ -19,7 +19,13 @@ def sendInstructionsToRobot(direction,power,time):
     direction_raw = convertDirectionsToNumber(direction)
     power_raw = power         # value is from 0 to 100 - denotes percentage of max power.
     time_raw  = time*1000     # time_raw in milliseconds. I like to think in seconds because I'm a fucking human
-    return (direction_raw,power_raw,time_raw)
+
+    def convertToSerialString(direction,power,time):
+        return str(direction) + " " + str(power) + " " + str(time)
+
+
+    serialString = convertToSerialString(direction_raw,power_raw,time_raw)
+    return serialString
 
 # What you actually do
 #    inputData = raw_input("dir speed interval\n")
@@ -109,6 +115,8 @@ if __name__ == "__main__":
     print(rotate(degrees = -90,
                  power = 50,
                  spinDirection = "CW"))
+
+
 
 
 
