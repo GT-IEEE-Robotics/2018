@@ -106,6 +106,15 @@ def rotate(degrees, spinDirection = None, power = None):
 
     return sendInstructionsToRobot(spinDirection,power,1)
 
+def move(direction = None ,power = None ,time = None):
+    if direction == None:
+        direction = "N"
+    if power == None:
+        power = 50
+    if time == None:
+        time = 1
+
+    return sendInstructionsToRobot(direction,power,time)
 
 if __name__ == "__main__":
     print(convertDirectionsToNumber("NW"))
@@ -115,6 +124,9 @@ if __name__ == "__main__":
     print(rotate(degrees = -90,
                  power = 50,
                  spinDirection = "CW"))
+    print(move(direction = "N",
+               power = 50,
+               time = 1))
 
 
 
