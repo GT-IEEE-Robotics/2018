@@ -1,6 +1,7 @@
 # use a class with tinker
 
 #import serial
+import ttk
 from Tkinter import *
 
 # ser = serial.Serial("/dev/ttyACM0", 9600)
@@ -59,6 +60,9 @@ class Application(Frame):
         self.button8.grid(row = 0, column = 0, padx=(10, 0), pady=(10, 0))
         self.button8["command"] = self.forwardLeft
 
+        self.separator0 = ttk.Separator(self, orient="horizontal")
+        self.separator0.grid(row = 3, column = 0)
+
         self.button9 = Button(self, text="clockwise", width=15)
         self.button9.grid(row = 4, column = 0, padx=(10, 0), pady=(10, 0))
         self.button9["command"] = self.clockwise
@@ -69,10 +73,10 @@ class Application(Frame):
 
      
         self.entry0 = Entry(self, text="Speed", width=15)
-        self.entry0.grid(row = 3, column = 0, padx=(10, 0), pady=(10, 0))
+        self.entry0.grid(row = 6, column = 0, padx=(10, 0), pady=(10, 0))
 
         self.button11 = Button(self, text="speedInput", width=15)
-        self.button11.grid(row = 3, column = 1, padx=(10, 0), pady=(10, 0))
+        self.button11.grid(row = 6, column = 1, padx=(10, 0), pady=(10, 0))
         self.button11["command"] = self.speedInput
 
     def speedInput(self):
