@@ -228,24 +228,18 @@ class VectorDirectionTestCase(unittest.TestCase):
 
  So this is the function that sends instructions to the motor controller using the serial library.
  The serial port used is /dev/ttyACM0 with baud rate 9600.
-
  When using this particular function, please give directions as N, NW and the like.
 
 
 So why are we not defining this as some kind of function? Because I'd like to be able to reuse commands as much as possible AND because it makes more sense to write down commands and then execute them whenever required instead of creating wrapper functions around one main function.
-
 - Logger 
 The logger is to see what instructions are actually sent to the robot - I'm guessing that we'll need to look at the logs at some point even if we write perfect code.
-
 I've also written a nice bash script that clears the log instead of us having to delete the file manually - it will probably be incorporated into whatever cleanup scripts the other programmers come up with.
-
 
 #+NAME: Instruction
 #+BEGIN_SRC python :tangle instruction/instruction.py
 import logging #This is to send logs of instructions sent directly to robot.
 import serial # Serial interface to talk to robot's motor controllers
-
-ser = serial.Serial("/dev/ttyACM0", 9600) #The only interface we talk to.
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -257,6 +251,10 @@ logger.addHandler(handler)
 
 class Instruction(object):
   def __init__(self,direction = None, power = None, time = None):
+    
+    
+    # Serial interface. Gonna be hardcoded for now. I'm sorry, future Vi.
+    self.ser = serial.Serial("/dev/ttyACM0", 9600) #The only interface we talk to.
 
     #sanitizing input
     if direction_input == None or power_input == None or time_input == None:
@@ -280,7 +278,11 @@ class Instruction(object):
 
     instruction = convertToSerialString(self.direction,self.power,self.time)
     logger.info(instruction)
-    # ser.write(instruction)         #Actually send stuff to the robot.
+    self.ser.write(instruction)         #Actually send stuff to the robot.
+
+  @staticmethod  
+  def stop():
+    Instruction(0,0,0).execute()
  #+END_SRC
 
 *** InstructionError
@@ -349,9 +351,9 @@ Acts as an adapter between the higher-level interface users use and the Instruct
 The move function accepts three types of inputs - compass points, vector directions and coordinate points. All three types of inputs are logged and each one updates the current position of the robot.
 
 #+BEGIN_SRC python :tangle robot/robot.py
-import position.coordinate as coordinate
-import direction.vector as vector
-import direction.compass as compass
+import piController.position.coordinate as coordinate
+import piController.direction.vector as vector
+import piController.direction.compass as compass
 
 class Robot(object):
 #  def __init__(self):
@@ -365,10 +367,13 @@ class Robot(object):
     
     if type(direction) is compass.Compass:
       # The user has given a compass point and expects us to move to that location. This is where things can get a littlw awry.
-
+      directionMove(direction,distance)
     if type(direction) is vector.Vector:
       # The user has given a vector and expects us to move to that location. 
       #If the distance is not specified, simply take the length of the vector. If distance is specified, use the distance instead.
+      vectorMove(direction,distance)
+
+
 
   
   def vectorMove(self,vector=None,distance=None):
@@ -385,18 +390,12 @@ class Robot(object):
     vector = vector/vector.mag()
 
 
-  def directionMove(self,vector=None,distance=None):
-    if vector is None:
-      raise ValueError("The vector input is not specified.")
-    if type(vector) is not vector.Vector:
-      raise ValueError("The vector input needs to be a vector")
+  def directionMove(self,direction=None,distance=None):
+    # So I'm going to convert the distance into power and time values. Not very clean but it should work for now.
 
-    if distance is None:
-      raise ValueError("")
-      
-    #Convert the vector input into its norm. We're just going to divide the vector by its magnitude.
-    vector = vector/vector.mag()
-
+    instruction = Instruction(direction = 1, power = 100, time = 1000)
+    instruction.execute()
+    instruction.stop()
 
 
 

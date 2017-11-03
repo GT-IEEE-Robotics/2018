@@ -1,6 +1,6 @@
-import position.coordinate as coordinate
-import direction.vector as vector
-import direction.compass as compass
+import piController.position.coordinate as coordinate
+import piController.direction.vector as vector
+import piController.direction.compass as compass
 
 class Robot(object):
 #  def __init__(self):
@@ -34,18 +34,11 @@ class Robot(object):
     vector = vector/vector.mag()
 
 
-  def directionMove(self,vector=None,distance=None):
-    if vector is None:
-      raise ValueError("The vector input is not specified.")
-    if type(vector) is not vector.Vector:
-      raise ValueError("The vector input needs to be a vector")
+  def directionMove(self,direction=None,distance=None):
+    # So I'm going to convert the distance into power and time values. Not very clean but it should work for now.
 
-    if distance is None:
-      raise ValueError("")
-      
-    #Convert the vector input into its norm. We're just going to divide the vector by its magnitude.
-    vector = vector/vector.mag()
-
+    instruction = Instruction(direction = 1, power = 100, time = 1000)
+    instruction.execute()
 
 
 

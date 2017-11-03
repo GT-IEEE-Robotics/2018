@@ -36,6 +36,9 @@ class Instruction(object):
 
     instruction = convertToSerialString(self.direction,self.power,self.time)
     logger.info(instruction)
-    # ser.write(instruction)         #Actually send stuff to the robot.
+    ser.write(instruction)         #Actually send stuff to the robot.
+
+  def stop(self):
+    instruction = Instruction(0,0,0).execute()
 
 
