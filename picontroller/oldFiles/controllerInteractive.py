@@ -34,6 +34,16 @@ def sendInstructionsToRobot(direction,power,time):
     direction_raw = convertDirectionsToNumber(direction)
     power_raw = power         # value is from 0 to 100 - denotes percentage of max power.
     time_raw  = time*1000     # time_raw in milliseconds. I like to think in seconds because I'm a fucking human
+<<<<<<< HEAD:picontroller/oldFiles/controllerInteractive.py
+=======
+
+    def convertToSerialString(direction,power,time):
+        return str(direction) + " " + str(power) + " " + str(time)
+
+
+    serialString = convertToSerialString(direction_raw,power_raw,time_raw)
+    return serialString
+>>>>>>> 567121e... Convert tuple output to Serial String in a nice inside function:piController/controllerInteractive.py
 
     def convertToSerialString(direction,power,time):
         return str(direction) + " " + str(power) + " " + str(time)
@@ -140,6 +150,8 @@ if __name__ == "__main__":
 
 # Read up on SLAM algorithm and implement a coordinate system if you can.
 # 
+
+
 
 
 

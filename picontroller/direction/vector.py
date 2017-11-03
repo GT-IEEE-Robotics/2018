@@ -8,17 +8,17 @@ class Vector(numpy.ndarray):
 
         # Sanitizing x and y values
         if x == None or y == None:
-          raise ValueError('Incomplete vector input')
+          raise VectorError('Incomplete vector input')
 
         def is_number(s):
             try:
                 float(s)
                 return True
-            except ValueError:
+            except VectorError:
                 return False
         
         if not (is_number(x) and is_number(y)):
-          raise ValueError('Incorrect vector input. Please use numbers only')
+          raise VectorError('Incorrect vector input. Please use numbers only')
       
         # We need to make ndarray instance using x and y values.
         input_array = numpy.array([x,y])
@@ -38,9 +38,16 @@ class Vector(numpy.ndarray):
     def __repr__(self):
         return "< "+str(self[0])+" "+str(self[1])+" >"
 
+    def mag(self):
+      return numpy.sqrt(self.dot(self))
+
 if __name__=="__main__":
     start = Vector(1,2)
     finish = Vector(4,5)
 
     distance = finish - start
     print(distance)
+
+class VectorError(ValueError):
+    def __init__(self,*args,**kwargs):
+        ValueError.__init__(self,*args,**kwargs)

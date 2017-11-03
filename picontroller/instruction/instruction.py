@@ -37,3 +37,5 @@ class Instruction(object):
     instruction = convertToSerialString(self.direction,self.power,self.time)
     logger.info(instruction)
     # ser.write(instruction)         #Actually send stuff to the robot.
+
+

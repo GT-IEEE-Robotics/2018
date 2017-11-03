@@ -9,19 +9,19 @@ class Compass(object):
     elif 1 <= value <= 10:
       self.value = value
     else:
-      raise ValueError
+      raise CompassError
 
   def __repr__(self):
     if 1 <= self.value <= 10:
       return "Compass." + Compass.convert(self.value)  #Should return the string representation of the value
     else:
-      raise ValueError('Value contained is unrepresentable.')
+      raise CompassError('Value contained is unrepresentable.')
   @staticmethod
   def convert(direction = None):
 
     #Sanitizing inputs
     if direction == None:
-        raise ValueError('No input. Please enter valid input')
+        raise CompassError('No input. Please enter valid input')
 
 
     # If the input is a number, return a string
@@ -43,7 +43,7 @@ class Compass(object):
       if direction_raw is not None:
           return direction_raw
       else:
-          raise ValueError('Please enter valid integer number from 1 to 10')
+          raise CompassError('Please enter valid integer number from 1 to 10')
 
 
 
@@ -68,11 +68,11 @@ class Compass(object):
       if 1 <= direction_raw <= 10:
           return direction_raw
       else:
-          raise ValueError('Invalid input. Please enter valid string')
+          raise CompassError('Invalid input. Please enter valid string')
 
       # Somehow, you've reached here. This should not happen but whatever, raise the error
       
-      raise ValueError('Invalid input - input entered is neither string nor number')
+      raise CompassError('Invalid input - input entered is neither string nor number')
 
 
 
@@ -92,3 +92,7 @@ W   = Compass.W
 NW  = Compass.NW
 CW  = Compass.CW
 CCW = Compass.CCW
+
+class CompassError(ValueError):
+    def __init__(self,*args,**kwargs):
+        ValueError.__init__(self,*args,**kwargs)

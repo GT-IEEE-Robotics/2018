@@ -38,19 +38,19 @@ class Compass(object):
     elif 1 <= value <= 10:
       self.value = value
     else:
-      raise ValueError
+      raise CompassError
 
   def __repr__(self):
     if 1 <= self.value <= 10:
       return "Compass." + Compass.convert(self.value)  #Should return the string representation of the value
     else:
-      raise ValueError('Value contained is unrepresentable.')
+      raise CompassError('Value contained is unrepresentable.')
   @staticmethod
   def convert(direction = None):
 
     #Sanitizing inputs
     if direction == None:
-        raise ValueError('No input. Please enter valid input')
+        raise CompassError('No input. Please enter valid input')
 
 
     # If the input is a number, return a string
@@ -72,7 +72,7 @@ class Compass(object):
       if direction_raw is not None:
           return direction_raw
       else:
-          raise ValueError('Please enter valid integer number from 1 to 10')
+          raise CompassError('Please enter valid integer number from 1 to 10')
 
 
 
@@ -97,11 +97,11 @@ class Compass(object):
       if 1 <= direction_raw <= 10:
           return direction_raw
       else:
-          raise ValueError('Invalid input. Please enter valid string')
+          raise CompassError('Invalid input. Please enter valid string')
 
       # Somehow, you've reached here. This should not happen but whatever, raise the error
       
-      raise ValueError('Invalid input - input entered is neither string nor number')
+      raise CompassError('Invalid input - input entered is neither string nor number')
 
 
 
@@ -122,6 +122,17 @@ NW  = Compass.NW
 CW  = Compass.CW
 CCW = Compass.CCW
 #+END_SRC 
+
+*** CompassError
+Compass Error exists because ValueError is kind of vague and I'd like my errors to be be a bit more specific. 
+I'd heavily discourage anyone from using this error if they're not dealing with the Compass class directly.
+#+BEGIN_SRC python :tangle direction/compass.py 
+
+class CompassError(ValueError):
+    def __init__(self,*args,**kwargs):
+        ValueError.__init__(self,*args,**kwargs)
+
+#+END_SRC
 *** Unit Tests
 #+BEGIN_SRC python :tangle tests/direction/compass.py
 
@@ -149,17 +160,17 @@ class Vector(numpy.ndarray):
 
         # Sanitizing x and y values
         if x == None or y == None:
-          raise ValueError('Incomplete vector input')
+          raise VectorError('Incomplete vector input')
 
         def is_number(s):
             try:
                 float(s)
                 return True
-            except ValueError:
+            except VectorError:
                 return False
         
         if not (is_number(x) and is_number(y)):
-          raise ValueError('Incorrect vector input. Please use numbers only')
+          raise VectorError('Incorrect vector input. Please use numbers only')
       
         # We need to make ndarray instance using x and y values.
         input_array = numpy.array([x,y])
@@ -188,6 +199,15 @@ if __name__=="__main__":
 
     distance = finish - start
     print(distance)
+#+END_SRC
+*** VectorError
+I like better named exceptions.
+#+BEGIN_SRC python :tangle direction/vector.py
+
+class VectorError(ValueError):
+    def __init__(self,*args,**kwargs):
+        ValueError.__init__(self,*args,**kwargs)
+
 #+END_SRC
 
 *** Unit tests
@@ -263,6 +283,11 @@ class Instruction(object):
     # ser.write(instruction)         #Actually send stuff to the robot.
  #+END_SRC
 
+*** InstructionError
+Because this particular class is called really often and I'd like for my arguments to be better named.
+#+BEGIN_SRC python :tangle instruction/instruction.py
+
+#+END_SRC
 *** Bash Script to clean logs
 Bash script to clean the logs of whatever instructions are given to the robot.
 #+BEGIN_SRC bash :tangle no
@@ -349,8 +374,97 @@ class Robot(object):
   def vectorMove(self,vector=None,distance=None):
     if vector is None:
       raise ValueError("The vector input is not specified.")
+    if type(vector) is not vector.Vector:
+      raise ValueError("The vector input needs to be a vector")
+
     if distance is None:
     # If distance is none, change distance to the magnitude of the vector and use that.
-      distance = vector.
+      distance = vector.mag()
+      
+    #Convert the vector input into its norm. We're just going to divide the vector by its magnitude.
+    vector = vector/vector.mag()
 
+
+  def directionMove(self,vector=None,distance=None):
+    if vector is None:
+      raise ValueError("The vector input is not specified.")
+    if type(vector) is not vector.Vector:
+      raise ValueError("The vector input needs to be a vector")
+
+    if distance is None:
+      raise ValueError("")
+      
+    #Convert the vector input into its norm. We're just going to divide the vector by its magnitude.
+    vector = vector/vector.mag()
+
+
+
+
+
+    # Now, we need to convert a vector & distance into instructions for the robot. I'm implementing a naive way of doing it (assuming that 
 #+END_SRC 
+
+* Kalman Filter
+This is definitely not a copy paste from the internet. Pinky promise. It's totally a program that's had to be converted to an atual OOP paradigm. Why am I doing this?!?! I'm a fucking functional programmer.
+
+Note: I guess this is going to be done on the arduino now? Not too sure how it's going to be implemented. For now, I'm just going to assume that I don't have to deal with it.
+#+BEGIN_SRC python :tangle filter/kalmanFilter.py
+
+class KalmanFilter(object):
+
+    def __init__(self, processVariance, estimatedMeasurementVariance):
+        self.processVariance = processVariance
+        self.estimatedMeasurementVariance = estimatedMeasurementVariance
+        self.posteriEstimate = 0.0
+        self.posteriErrorEstimate = 1.0
+
+    def inputLatestNoisyMeasurement(self, measurement):
+        prioriEstimate = self.posteriEstimate
+        prioriErrorEstimate = self.posteriErrorEstimate + self.processVariance
+
+        blending_factor = prioriErrorEstimate / (prioriErrorEstimate + self.estimatedMeasurementVariance)
+        self.posteriEstimate = prioriEstimate + blendingFactor * (measurement - prioriEstimate)
+        self.posteriErrorEstimate = (1 - blendingFactor) * prioriErrorEstimate
+
+    def get_latest_estimated_measurement(self):
+        return self.posteriEstimate
+
+
+
+
+if __name__ == "__main__":
+    import random
+    iteration_count = 500
+
+    actual_values = [-0.37727 + j * j * 0.00001 for j in xrange(iteration_count)]
+    noisy_measurement = [random.random() * 2.0 - 1.0 + actual_val for actual_val in actual_values]
+
+    # in practice we would take our sensor, log some readings and get the
+    # standard deviation
+    import numpy
+    measurement_standard_deviation = numpy.std([random.random() * 2.0 - 1.0 for j in xrange(iteration_count)])
+
+    # The smaller this number, the fewer fluctuations, but can also venture off
+    # course...
+    process_variance = 1e-3
+    estimated_measurement_variance = measurement_standard_deviation ** 2  # 0.05 ** 2
+    kalman_filter = KalmanFilter(process_variance, estimated_measurement_variance)
+    posteri_estimate_graph = []
+
+    for iteration in xrange(1, iteration_count):
+        kalman_filter.input_latest_noisy_measurement(noisy_measurement[iteration])
+        posteri_estimate_graph.append(kalman_filter.get_latest_estimated_measurement())
+
+
+
+    import pylab
+    pylab.figure()
+    pylab.plot(noisy_measurement, color='r', label='noisy measurements')
+    pylab.plot(posteri_estimate_graph, 'b-', label='a posteri estimate')
+    pylab.plot(actual_values, color='g', label='truth value')
+    pylab.legend()
+    pylab.xlabel('Iteration')
+    pylab.ylabel('Voltage')
+    pylab.show()
+
+#+END_SRC
