@@ -1,7 +1,7 @@
 # 2018
 - 2018 Georgia Tech IEEE Hardware Team Repository
 - Competition: 2018 Southeastcon Robotics Competition in Jacksonville, Florida
-- Objective is to create an autonomous robot to navigate through various tasks in a minimal time frame
+- Objective: to create an autonomous robot to navigate through various tasks in a minimal time frame
 
 ### Contents
 - `Application`
@@ -25,4 +25,4 @@
 - [Rules](USF_IEEE_2018_SoutheastCon_HardwareRules_V3_2.pdf)
 
 ### To Do's
-- [ ] 
+- [ ] List TODO's 
