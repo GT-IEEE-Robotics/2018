@@ -7,10 +7,8 @@ from Tkinter import *
 # ser = serial.Serial("/dev/ttyACM0", 9600)
 
 class Application(Frame):
-    """ Example Docstring """
 
     def __init__(self, master):
-        """ another doc string """
         Frame.__init__(self, master)
         self.grid(row = 0, column = 0)
         self.speed = 0
