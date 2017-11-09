@@ -34,7 +34,8 @@ class Compass(object):
 
   def __init__(self,value):
     if isinstance(value,basestring):
-      self.value = Compass.convert(value) #If the user enters in a string instead of a number or the class defined static variables, convert it to the string.
+      self.value = Compass.convert(value) 
+      #If the user enters in a string instead of a number or the class defined static variables, convert it to the string.
     elif 1 <= value <= 10:
       self.value = value
     else:
@@ -257,8 +258,11 @@ class Instruction(object):
     self.ser = serial.Serial("/dev/ttyACM0", 9600) #The only interface we talk to.
 
     #sanitizing input
-    if direction_input == None or power_input == None or time_input == None:
-      raise ValueError('Invalid input. Please enter valid input.') # Honestly, we should be saying that the default setting is something. But I want the users to actually say something. They can put default values in later.
+    if direction == None or power == None or time == None:
+      raise ValueError('Invalid input. Please enter valid input.') 
+      # Honestly, we should be saying that the default setting is something. 
+      # But I want the users to actually say something. 
+      # They can put default values in later.
 
     if not (0 <= power <= 100):
       raise ValueError('Invalid input. Power is a quantity between 0 and 100.')

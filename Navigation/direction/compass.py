@@ -5,7 +5,8 @@ class Compass(object):
 
   def __init__(self,value):
     if isinstance(value,basestring):
-      self.value = Compass.convert(value) #If the user enters in a string instead of a number or the class defined static variables, convert it to the string.
+      self.value = Compass.convert(value) 
+      #If the user enters in a string instead of a number or the class defined static variables, convert it to the string.
     elif 1 <= value <= 10:
       self.value = value
     else:
