@@ -1,7 +1,7 @@
 #include "Motor.h"
 #include "Arduino.h"
 
-Motor::Motor(int32_t* steps, uint8_t* state, uint8_t M_PWM, uint8_t M_DIR_1, uint8_t M_DIR_2, uint8_t M_STBY, uint8_t ENC_1, uint8_t ENC_2) {
+Motor::Motor(volatile int32_t* steps, volatile uint8_t* state, uint8_t M_PWM, uint8_t M_DIR_1, uint8_t M_DIR_2, uint8_t M_STBY, uint8_t ENC_1, uint8_t ENC_2) {
   this->steps = steps;
   this->state = state;
 
@@ -24,7 +24,10 @@ Motor::Motor(int32_t* steps, uint8_t* state, uint8_t M_PWM, uint8_t M_DIR_1, uin
   pinMode(ENC_1, INPUT);
   pinMode(ENC_2, INPUT);
   
-  if (digitalRead(ENC_1)) *this->state |= 0x2;
+  if (digitalRead(ENC_1)) {
+    *this->state |= 0x2;
+    Serial.println("hello");
+  }
   if (digitalRead(ENC_2)) *this->state |= 0x1;
 }
 
@@ -47,7 +50,7 @@ void Motor::drive(int amount) {
       noInterrupts();
       error = amount - *steps;
       interrupts();
-
+  
       if (abs(lastError - error) < 10 && abs(error) < 100) {
         done = true;
         // break;
@@ -91,7 +94,3 @@ void Motor::PIDtuner() { /* coming soon to code near you */ }
 int32_t Motor::getSteps() { return *steps; }
 uint8_t Motor::getEncoder1Pin() { return ENC_1; }
 uint8_t Motor::getEncoder2Pin() { return ENC_2; }
-
-
-
-

@@ -5,8 +5,8 @@
 
 class Motor {
   private:
-    int32_t* steps;
-    uint8_t* state;
+    volatile int32_t* steps;
+    volatile uint8_t* state;
     int32_t kpNumer;
     int32_t kpDenom;
     int32_t kiNumer;
@@ -20,7 +20,7 @@ class Motor {
     uint8_t ENC_2;
     
   public:
-    Motor(int32_t*, uint8_t*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
+    Motor(volatile int32_t*, volatile uint8_t*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
     void drive(int);
     void PIDtuner();
     int32_t getSteps();
