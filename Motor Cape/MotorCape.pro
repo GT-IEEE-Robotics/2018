@@ -1,4 +1,4 @@
-update=9/22/2017 1:00:04 AM
+update=11/16/2017 8:38:58 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -23,6 +23,8 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
+[general]
+version=1
 [eeschema]
 version=1
 LibDir=Library
@@ -60,5 +62,4 @@ LibName30=atmel
 LibName31=contrib
 LibName32=valves
 LibName33=Library/MotorCapeComponents
-[general]
-version=1
+LibName34=arduino
