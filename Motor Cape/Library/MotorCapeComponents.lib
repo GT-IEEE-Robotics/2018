@@ -69,6 +69,26 @@ X ~ 39 800 -50 200 L 50 50 1 1 B
 ENDDRAW
 ENDDEF
 #
+# Battery_Connector
+#
+DEF Battery_Connector U 0 40 Y Y 1 F N
+F0 "U" -200 -500 60 H V C CNN
+F1 "Battery_Connector" -100 0 60 H V C CNN
+F2 "" 0 0 60 H I C CNN
+F3 "" 0 0 60 H I C CNN
+DRAW
+C -400 -350 50 0 1 0 N
+C -400 -150 50 0 1 0 N
+C -250 -350 50 0 1 0 N
+C -250 -150 50 0 1 0 N
+C -100 -350 50 0 1 0 N
+C -100 -150 50 0 1 0 N
+S 100 -450 -500 -50 0 1 0 N
+X + ~ 300 -150 200 L 50 50 1 1 B
+X - ~ 300 -350 200 L 50 50 1 1 B
+ENDDRAW
+ENDDEF
+#
 # BoneHeader
 #
 DEF BoneHeader U 0 40 Y Y 1 F N
