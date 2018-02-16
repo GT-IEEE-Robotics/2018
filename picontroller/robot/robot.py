@@ -14,10 +14,13 @@ class Robot(object):
     
     if type(direction) is compass.Compass:
       # The user has given a compass point and expects us to move to that location. This is where things can get a littlw awry.
-
+      directionMove(direction,distance)
     if type(direction) is vector.Vector:
       # The user has given a vector and expects us to move to that location. 
       #If the distance is not specified, simply take the length of the vector. If distance is specified, use the distance instead.
+      vectorMove(direction,distance)
+
+
 
   
   def vectorMove(self,vector=None,distance=None):
@@ -39,6 +42,7 @@ class Robot(object):
 
     instruction = Instruction(direction = 1, power = 100, time = 1000)
     instruction.execute()
+    instruction.stop()
 
 
 

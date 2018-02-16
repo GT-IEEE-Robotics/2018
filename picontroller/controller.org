@@ -491,8 +491,11 @@ class Sensor(object):
     A = A[np.argsort(eA)]       # Sort in terms of lower errorEstimate
     theta = np.sum(A[:2:1])
 
-    ans["x"] = 
-    return np.concat(coordinate,np.array([theta]))
+    ans["x"]     = coordinate[0]
+    ans["y"]     = coordinate[1]
+    ans["theta"] = theta 
+
+    return ans
 
 #+END_SRC
 
@@ -754,18 +757,3 @@ if __name__ == "__main__":
     pylab.show()
 
 #+END_SRC
-<<<<<<< Updated upstream
-=======
-
-
-
-
-* Library Information
-Just doing normal python library stuff. Consider it unimportant unless someone complains that they can't access something.
-
-
-
-
-
-
->>>>>>> Stashed changes

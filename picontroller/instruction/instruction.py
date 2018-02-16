@@ -1,8 +1,6 @@
 import logging #This is to send logs of instructions sent directly to robot.
 import serial # Serial interface to talk to robot's motor controllers
 
-ser = serial.Serial("/dev/ttyACM0", 9600) #The only interface we talk to.
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -13,6 +11,10 @@ logger.addHandler(handler)
 
 class Instruction(object):
   def __init__(self,direction = None, power = None, time = None):
+    
+    
+    # Serial interface. Gonna be hardcoded for now. I'm sorry, future Vi.
+    self.ser = serial.Serial("/dev/ttyACM0", 9600) #The only interface we talk to.
 
     #sanitizing input
     if direction_input == None or power_input == None or time_input == None:
@@ -36,9 +38,10 @@ class Instruction(object):
 
     instruction = convertToSerialString(self.direction,self.power,self.time)
     logger.info(instruction)
-    ser.write(instruction)         #Actually send stuff to the robot.
+    self.ser.write(instruction)         #Actually send stuff to the robot.
 
-  def stop(self):
-    instruction = Instruction(0,0,0).execute()
+  @staticmethod  
+  def stop():
+    Instruction(0,0,0).execute()
 
 
