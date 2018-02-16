@@ -6,12 +6,6 @@ K Arduino MPU Shield
 F https://www.arduino.cc/en/Main/ArduinoBoard101
 $ENDCMP
 #
-$CMP Arduino_Due_Shield
-D Shield for Arduino Due
-K Arduino MPU Shield
-F https://www.arduino.cc/en/Main/ArduinoBoardDue
-$ENDCMP
-#
 $CMP Arduino_Leonardo_Shield
 D Shield for Arduino Leonardo
 K Arduino MPU Shield
