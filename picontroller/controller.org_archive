@@ -1,3 +1,19 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/vikumar/Projects/Gatech-IEEE/2018/picontroller/controller.org
+
+
+* Old implementation
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2018-02-15 Thu 20:12
+  :ARCHIVE_FILE: ~/Projects/Gatech-IEEE/2018/picontroller/controller.org
+  :ARCHIVE_OLPATH: Kalman Filter
+  :ARCHIVE_CATEGORY: controller
+  :END:
+:ARCHIVE:
+#+BEGIN_SRC python :tangle filter/kalmanFilter.py
+
 class KalmanFilter(object):
 
     def __init__(self, processVariance, estimatedMeasurementVariance):
@@ -6,7 +22,7 @@ class KalmanFilter(object):
         self.posteriEstimate = 0.0
         self.posteriErrorEstimate = 1.0
 
-    def inputLatestNoisyMeasurement(self, measurement):
+    def inputMeasurement(self, measurement):
         prioriEstimate = self.posteriEstimate
         prioriErrorEstimate = self.posteriErrorEstimate + self.processVariance
 
@@ -14,17 +30,15 @@ class KalmanFilter(object):
         self.posteriEstimate = prioriEstimate + blendingFactor * (measurement - prioriEstimate)
         self.posteriErrorEstimate = (1 - blendingFactor) * prioriErrorEstimate
 
-    def get_latest_estimated_measurement(self):
+    def getEstimate(self):
         return self.posteriEstimate
-
-
 
 
 if __name__ == "__main__":
     import random
     iteration_count = 500
 
-    actual_values = [-0.37727 + j * j * 0.00001 for j in xrange(iteration_count)]
+    actual_values     = [-0.37727 + j * j * 0.00001 for j in xrange(iteration_count)]
     noisy_measurement = [random.random() * 2.0 - 1.0 + actual_val for actual_val in actual_values]
 
     # in practice we would take our sensor, log some readings and get the
@@ -44,7 +58,6 @@ if __name__ == "__main__":
         posteri_estimate_graph.append(kalman_filter.get_latest_estimated_measurement())
 
 
-
     import pylab
     pylab.figure()
     pylab.plot(noisy_measurement, color='r', label='noisy measurements')
@@ -54,3 +67,10 @@ if __name__ == "__main__":
     pylab.xlabel('Iteration')
     pylab.ylabel('Voltage')
     pylab.show()
+
+#+END_SRC
+
+
+
+
+
