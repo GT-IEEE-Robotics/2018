@@ -421,7 +421,7 @@ import numpy as np
 
 class Sensor(object):
 
-  def __init__(self,parameter,initialEstimate,linearTransform, offset):
+  def __init__(self,parameter,initialEstimate = None,linearTransform = None, offset = None):
 
     if parameter is None:
       raise ValueError("No parameter passed to Sensor")
@@ -441,8 +441,8 @@ class Sensor(object):
       self.estimate = initialEstimate
 
     if linearTransform is None:
-      self.linearTransform = np.array([1,0],
-                                      [0,1])
+      self.linearTransform = np.array([[1,0],
+                                       [0,1]])
     else:
       self.linearTransform = linearTransform
 
@@ -453,6 +453,7 @@ class Sensor(object):
       self.offset = offset
 
   def update(self, current):
+
     if current is None:
       raise ValueError("No current measurement passed to the filter")
     self.estimate = self.estimate * (1. - self.parameter) + current * (self.parameter)
