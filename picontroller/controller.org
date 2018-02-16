@@ -430,11 +430,305 @@ class Robot(object):
 
 #+END_SRC 
 
-* Kalman Filter
-This is definitely not a copy paste from the internet. Pinky promise. It's totally a program that's had to be converted to an atual OOP paradigm. Why am I doing this?!?! I'm a fucking functional programmer.
 
-Note: I guess this is going to be done on the arduino now? Not too sure how it's going to be implemented. For now, I'm just going to assume that I don't have to deal with it.
-#+BEGIN_SRC python :tangle filter/kalmanFilter.py
+* IIR - Infinite Impulse Response
+
+#+BEGIN_EXAMPLE
+f = Sensor(initialPosition = arg1,      # Optional Argument of type numpy array
+           parameter       = arg2       # Optional Argument of type float
+          )
+
+f.predict()       # Returns a list of position vectors
+f.update(z)       # Plugs in a numpy array to update the Kalman filter with new measurementValues
+#+END_EXAMPLE
+
+
+#+BEGIN_SRC python :tangle filter/Sensor.py
+import numpy as np
+
+class Sensor(object):
+
+  def __init__(self,parameter,initialEstimate = None,linearTransform = None, offset = None):
+
+    if parameter is None:
+      raise ValueError("No parameter passed to Sensor")
+    elif not 0 <= parameter <= 1:
+      raise ValueError("Parameter must lie between zero and one.")
+
+    if initialEstimate is None:
+      self.estimate = np.array([0.,   
+                                0.,
+                                0.,
+                                0.,
+                                0.,
+                                0.,
+                                0.,
+                                0.])
+    else:
+      self.estimate = initialEstimate
+
+    if linearTransform is None:
+      self.linearTransform = np.array([[1,0],
+                                       [0,1]])
+    else:
+      self.linearTransform = linearTransform
+
+
+    if offset is None: 
+      self.offset = np.array([0,0])
+    else:
+      self.offset = offset
+
+  def update(self, current):
+
+    if current is None:
+      raise ValueError("No current measurement passed to the filter")
+    self.estimate = self.estimate * (1. - self.parameter) + current * (self.parameter)
+    
+  def errorEstimate(self,distance):
+
+    # insert a dict for the distance error estimates.
+    # Make it a vectorized function for this.
+    return distance
+
+  def query(self):
+    A = self.estimate         
+
+    #Get the average of every two intervals.       
+    A = (A[::2] + A[1::2]) / 2
+
+    # Weight our measurements in terms of the error estimates
+    eA = errorEstimate(A)
+    denom = eA[:2] + eA[2:]
+    denom = np.concat(denom,denom)
+    A     = np.multiply(A,eA[2,3,0,1]) / denom
+
+    # Finding the difference between every other element of form [C - A, D - B]
+    coordinate = (A[2::2]  - A[0:(len(A) - 2):2]) / 2      # of form x & y
+
+    # Converting our coordinate into something someone else can use intuitively
+    coordinate = coordinate * linearTransform + offset
+    coordinate = coordinate  //  self.resolution                 # divides it by the required resolution
+
+
+    # Finding the "theta" of the inclination of the robot.
+    A = self.estimate
+
+    #Get the average of every two intervals.       
+    A = A[::2] - A[1::2]
+    A = A[np.argsort(eA)]       # Sort in terms of lower errorEstimate
+    theta = np.sum(A[:2:1])
+
+    ans["x"]     = coordinate[0]
+    ans["y"]     = coordinate[1]
+    ans["theta"] = theta 
+
+    return ans
+
+#+END_SRC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* Kalman Filter
+This is definitely not a copy paste from the internet. Pinky promise. 
+
+So we have a bunch of linear data with Gaussian noise. Best filter to use is a Kalman filter than gives us accurate-ish values.
+
+
+
+** API Reference
+
+It's pretty simple since you effectively have just two things - inserting data into the Kalman filter & querying it for an estimate.
+
+#+BEGIN_EXAMPLE
+f = Kalman(initialPosition = arg1,      # Optional Argument of type numpy array
+           timeStep        = arg2       # Optional Argument of type float
+           )
+
+f.predict()       # Returns a list of position vectors
+f.update(z)       # Plugs in a numpy array to update the Kalman filter with new measurementValues
+#+END_EXAMPLE
+
+
+#+BEGIN_SRC python :tangle filter/KalmanFilter.py :noweb yes
+from filterpy.kalman import KalmanFilter
+class Kalman(object):
+
+  def __init__(self,initialPosition,timeStep):
+
+    <<initializationKalman>>
+    <<initialPositionMatrix>>
+    <<stateTransitionMatrix>>
+    <<measurementMatrix>>
+    <<processNoiseMatrix>>
+    <<measurementNoise>>
+
+  def predict(self):
+    stuff = self.f.predict()
+
+    return [x = ,
+            y = ,
+            theta = ] 
+
+
+  def update(self,z):
+    if z is None:
+      raise ValueError("You have passed no value to update the Kalman Filter")
+    
+    self.f.update(z)
+
+#+END_SRC
+
+** Kalman Filter Initialization
+#+NAME: initializationKalman
+#+BEGIN_SRC python  :noweb yes
+# Number of types of data we're getting. Since the distance sensor only cares about position, we only use position
+dimX = 2
+# Number of distance sensor we have
+dimZ = 1
+self.f = KalmanFilter(dim_x=dimX, dim_z=dimZ)
+#+END_SRC
+
+** Initial Position Vector
+
+The initial position vector serves as the initial guess about the robot's position. The closer we are to real life, the less time it takes for the Kalman filter to reach acceptable results.
+We know that the initial velocities are always zero as the robot is at rest. The initial positions are something to figure out when it comes to actually testing out the robot.
+
+My suggestion would be to either hardcode the position into this file or make an init file that takes in some position matrix.
+
+The initial position vector is 16 * 1 in order to account for both the velocity & position of eight different sensors.
+
+#+NAME: initialPositionMatrix
+#+BEGIN_SRC python :noweb yes
+# Initial Position & Velocity Matrix
+
+if initialPosition is None: 
+  self.f.x = np.array([0., 0.,             #1
+                       0., 0.,             #2
+                       0., 0.,             #3
+                       0., 0.,             #4
+                       0., 0.,             #5
+                       0., 0.,             #6
+                       0., 0.,             #7
+                       0., 0. ])           #8
+  # Insert warning over here when you figure out which library you're using.
+
+elif isinstance(initialPosition,List):  
+  initialPosition = nd.array(initialPosition) 
+  self.f.x = initialPosition
+  # Insert warning over passing non-numpy arrays into this function
+
+
+else:
+  self.f.x = initialPosition
+  # You should really check if this is a numpy array and not some random bullshit.
+#+END_SRC
+
+** State Transition Matrix
+
+The state transition matrix is used to model the relationships between the positions and velocities.
+
+#+BEGIN_LATEX
+\begin{equation}
+x_i = x_i + x_i* * deltat
+v_i = x_i*
+\end{equation}
+#+END_LATEX
+
+The term delta t is the timestep between measurements. We could make it slower than the actual refresh rate of the sensors but it would be best to experiment with an actual value.
+
+#+NAME: stateTransitionMatrix
+#+BEGIN_SRC python :noweb yes
+# State transition matrix
+if timeStep is None:
+  dt = 0.001     # Time step is in the order of milliseconds
+else:
+  dt = timeStep
+
+self.f.F = np.array([[1., dt, 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 1., dt, 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 1., dt, 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 1., dt, 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 1., dt, 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., dt, 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., dt, 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., dt],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1.]])
+#+END_SRC     
+
+** Measurement Matrix
+
+The measurement matrix is a way to convert the matrices that the kalman filter uses into the matrices that we want to see. 
+In our case, we only care about the positions given by the Kalman filter and not the velocity - dumping the velocity makes sense here.
+
+matrixA is one way of converting a vector of cardinality 16 into a vector of cardinality 8 while skipping every second element.
+#+NAME: measurementMatrix
+#+BEGIN_SRC python :noweb yes
+# Measurement function
+
+# Effectively reduces the position & velocity vector to just a position vector
+matrixA =  np.array([[1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0.],
+                     [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0.]])
+
+self.f.H = matrixA       # Why am I calling this matrixA instead of just assigning it directly? Because I might needto switch out stuff later. Fuck YAGNI.
+#+END_SRC
+
+** Process Noise
+
+So the process noise is a a matrix that lists the variance between the different sensors. In reality, some sensors will have a high degree of covariance if they are on the same face ie they will have (almost) the same data.
+For now, we've assumed that there is no dependence on each other because Vi is too fucking lazy to read theory.
+
+#+NAME: processNoiseMatrix
+#+BEGIN_SRC python :noweb yes
+# The process noise is np.eye(dim_x) by default so you can just multiply by some constant
+# This assumes that each sensor is independent from each other.
+self.f.P *= 1000.
+#+END_SRC
+** Measurement Noise
+
+No clue what this is. Philip, pls halp.
+#+NAME: measurementNoise
+#+BEGIN_SRC python :noweb yes
+# Measurement noise
+self.f.R = 5
+#+END_SRC
+
+
+
+** Old implementation
+:ARCHIVE:
+#+BEGIN_SRC python :tangle no
+
+# filter/kalmanFilter.py
 
 class KalmanFilter(object):
 
@@ -444,7 +738,7 @@ class KalmanFilter(object):
         self.posteriEstimate = 0.0
         self.posteriErrorEstimate = 1.0
 
-    def inputLatestNoisyMeasurement(self, measurement):
+    def inputMeasurement(self, measurement):
         prioriEstimate = self.posteriEstimate
         prioriErrorEstimate = self.posteriErrorEstimate + self.processVariance
 
@@ -452,17 +746,15 @@ class KalmanFilter(object):
         self.posteriEstimate = prioriEstimate + blendingFactor * (measurement - prioriEstimate)
         self.posteriErrorEstimate = (1 - blendingFactor) * prioriErrorEstimate
 
-    def get_latest_estimated_measurement(self):
+    def getEstimate(self):
         return self.posteriEstimate
-
-
 
 
 if __name__ == "__main__":
     import random
     iteration_count = 500
 
-    actual_values = [-0.37727 + j * j * 0.00001 for j in xrange(iteration_count)]
+    actual_values     = [-0.37727 + j * j * 0.00001 for j in xrange(iteration_count)]
     noisy_measurement = [random.random() * 2.0 - 1.0 + actual_val for actual_val in actual_values]
 
     # in practice we would take our sensor, log some readings and get the
@@ -480,7 +772,6 @@ if __name__ == "__main__":
     for iteration in xrange(1, iteration_count):
         kalman_filter.input_latest_noisy_measurement(noisy_measurement[iteration])
         posteri_estimate_graph.append(kalman_filter.get_latest_estimated_measurement())
-
 
 
     import pylab
