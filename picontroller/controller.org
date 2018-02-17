@@ -10,6 +10,7 @@ This is why the convertDirectionsToNumber function exists - you can think in ter
 
 Keep in mind that all directions are in terms of the robot's frame of reference and not the frame of reference of the arena.
 
+#+CAPTION: Compass directions and their corresponding number
 |-----------+--------|
 | Direction | Number |
 |-----------+--------|
@@ -26,92 +27,18 @@ Keep in mind that all directions are in terms of the robot's frame of reference 
 |-----------+--------|
 
 #+NAME: direction
-#+BEGIN_SRC python :tangle direction/compass.py 
+#+BEGIN_SRC python :tangle compass.py 
 class Compass(object):
   N, NE, E, SE, S, SW, W, NW = range(1,9)
   CW, CCW = range(9,11)
 
-
-  def __init__(self,value):
-    if isinstance(value,basestring):
-      self.value = Compass.convert(value) 
-      #If the user enters in a string instead of a number or the class defined static variables, convert it to the string.
-    elif 1 <= value <= 10:
-      self.value = value
-    else:
-      raise CompassError
-
-  def __repr__(self):
-    if 1 <= self.value <= 10:
-      return "Compass." + Compass.convert(self.value)  #Should return the string representation of the value
-    else:
-      raise CompassError('Value contained is unrepresentable.')
-  @staticmethod
-  def convert(direction = None):
-
-    #Sanitizing inputs
-    if direction == None:
-        raise CompassError('No input. Please enter valid input')
-
-
-    # If the input is a number, return a string
-    if 1 <= direction <= 10:
-
-      directionList = {
-        1:"N",
-        2:"NE",
-        3:"E",
-        4:"SE",
-        5:"S",
-        6:"SW",
-        7:"W",
-        8:"NW",
-        9:"CW",
-        10:"CCW"
-      }
-      direction_raw = directionList.get(direction, None)
-      if direction_raw is not None:
-          return direction_raw
-      else:
-          raise CompassError('Please enter valid integer number from 1 to 10')
-
-
-
-    # If the input is a string, return a number
-    if isinstance(direction, basestring):
-      
-      directionList = {
-          # Actual Directions
-          "N"   : Compass.N,
-          "NE"  : Compass.NE,
-          "E"   : Compass.E,
-          "SE"  : Compass.SE,
-          "S"   : Compass.S,
-          "SW"  : Compass.SW,
-          "W"   : Compass.W,
-          "NW"  : Compass.NW,
-          # Spins the robot
-          "CW"  : Compass.CW,
-          "CCW" : Compass.CCW
-      }
-      direction_raw = directionList.get(direction, None)
-      if 1 <= direction_raw <= 10:
-          return direction_raw
-      else:
-          raise CompassError('Invalid input. Please enter valid string')
-
-      # Somehow, you've reached here. This should not happen but whatever, raise the error
-      
-      raise CompassError('Invalid input - input entered is neither string nor number')
-
-
-
+  <<directionInit>>
+  <<directionRepr>>
+  <<directionConvert>>
 
 # Defining keywords for people to use
 # When this package is imported, the user should be able to use the keywords without worrying about refering to the correct class name.
 # In short, they can use N, NW and so on without saying CompassDirection.N or anything like that.
-
-
 N   = Compass.N
 NE  = Compass.NE
 E   = Compass.E
@@ -122,28 +49,102 @@ W   = Compass.W
 NW  = Compass.NW
 CW  = Compass.CW
 CCW = Compass.CCW
-#+END_SRC 
-
-*** CompassError
-Compass Error exists because ValueError is kind of vague and I'd like my errors to be be a bit more specific. 
-I'd heavily discourage anyone from using this error if they're not dealing with the Compass class directly.
-#+BEGIN_SRC python :tangle direction/compass.py 
-
-class CompassError(ValueError):
-    def __init__(self,*args,**kwargs):
-        ValueError.__init__(self,*args,**kwargs)
-
 #+END_SRC
-*** Unit Tests
+*** init
+#+NAME: directionInit
+#+BEGIN_SRC python
+def __init__(self,value):
+  if isinstance(value,basestring):
+    self.value = Compass.convert(value) 
+    #If the user enters in a string instead of a number or the class defined static variables, convert it to the string.
+  elif 1 <= value <= 10:
+    self.value = value
+  else:
+    raise CompassError
+#+END_SRC
+
+*** repr
+Changing the representation from default value since it's best if the value returned is a cardinal direction with a prefix stating it's a compass direction
+#+NAME: directionRepr
+#+BEGIN_SRC python
+def __repr__(self):
+  return "Compass Direction" + Compass.convert(self.value)  #Should return the string representation of the value
+#+END_SRC
+
+*** convert
+This is the real meat of the function and I wouldn't be surprised if this was the only function used. Defined as a static function to avoid instantiating an object for no reason.
+
+#+CAPTION: Example of Compass.convert used.
+#+BEGIN_EXAMPLE
+Compass.convert(1)   == "N"
+Compass.convert("N") == 1
+#+END_EXAMPLE
+
+#+NAME: directionConvert
+#+BEGIN_SRC python
+@staticmethod
+def convert(direction = None):
+  #Sanitizing inputs
+  if direction == None:
+      raise ValueError('Compass direction is not given. Please enter valid input')
+
+  # If the input is a number, return a string
+  if 1 <= direction <= 10:
+     directionList = {
+      1:"N",
+      2:"NE",
+      3:"E",
+      4:"SE",
+      5:"S",
+      6:"SW",
+      7:"W",
+      8:"NW",
+      9:"CW",
+      10:"CCW"
+    }
+    direction_raw = directionList.get(direction, None)
+    if direction_raw is not None:
+        return direction_raw
+    else:
+        raise ValueError('Compass direction should be a valid integer number from 1 to 10')
+
+  # If the input is a string, return a number
+  if isinstance(direction, basestring):
+    directionList = {
+        # Actual Directions
+        "N"   : Compass.N,
+        "NE"  : Compass.NE,
+        "E"   : Compass.E,
+        "SE"  : Compass.SE,
+        "S"   : Compass.S,
+        "SW"  : Compass.SW,
+        "W"   : Compass.W,
+        "NW"  : Compass.NW,
+        # Spins the robot
+        "CW"  : Compass.CW,
+        "CCW" : Compass.CCW
+    }
+    direction_raw = directionList.get(direction, None)
+    if 1 <= direction_raw <= 10:
+        return direction_raw
+    else:
+        raise ValueError('Compass direction should be a valid string as an input.')
+     # Somehow, you've reached here. This should not happen but whatever, raise the error
+    
+    raise CompassError('Invalid input - input entered is neither string nor number')
+#+END_SRC
+
+*** TODO Unit Tests
+While unit tests might seem a bit odd, it might be worth it.
 #+BEGIN_SRC python :tangle tests/direction/compass.py
 
 import unittest
-import picontroller.direction.compass
+import picontroller.compass
 
 print(N)
-
-
 #+END_SRC
+
+
 
 ** Vector
 
@@ -152,8 +153,6 @@ Also, I might change from numpy to a another library but who knows.
 
 #+BEGIN_SRC python :tangle direction/vector.py
 import numpy
-
-#SDSDFDSFSD
 
 class Vector(numpy.ndarray):
 
@@ -231,9 +230,13 @@ class VectorDirectionTestCase(unittest.TestCase):
  When using this particular function, please give directions as N, NW and the like.
 
 
-So why are we not defining this as some kind of function? Because I'd like to be able to reuse commands as much as possible AND because it makes more sense to write down commands and then execute them whenever required instead of creating wrapper functions around one main function.
-- Logger 
+So why are we not defining this as some kind of function? 
+Because I'd like to be able to reuse commands as much as possible AND because it makes more sense to write down commands and then execute them whenever required instead of creating wrapper functions around one main function.
+
+- Why are we logging this since we'll be using this a lot! 
 The logger is to see what instructions are actually sent to the robot - I'm guessing that we'll need to look at the logs at some point even if we write perfect code.
+In order to avoid filling our logs with trash, I'll add logs to a seperate file.
+
 I've also written a nice bash script that clears the log instead of us having to delete the file manually - it will probably be incorporated into whatever cleanup scripts the other programmers come up with.
 
 #+NAME: Instruction
@@ -250,6 +253,7 @@ handler.setLevel(logging.INFO)
 logger.addHandler(handler)
 
 class Instruction(object):
+
   def __init__(self,direction = None, power = None, time = None):
     
     
@@ -288,11 +292,6 @@ class Instruction(object):
     Instruction(0,0,0).execute()
  #+END_SRC
 
-*** InstructionError
-Because this particular class is called really often and I'd like for my arguments to be better named.
-#+BEGIN_SRC python :tangle instruction/instruction.py
-
-#+END_SRC
 *** Bash Script to clean logs
 Bash script to clean the logs of whatever instructions are given to the robot.
 #+BEGIN_SRC bash :tangle no
@@ -482,8 +481,6 @@ def __init__(self,parameter,
   <<resolutionCheck>>
   <<linearTransformCheck>>
   <<offsetCheck>>
-  
-
 #+END_SRC
 *** Parameter
 #+NAME: parameterCheck
