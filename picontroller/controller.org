@@ -253,44 +253,46 @@ handler.setLevel(logging.INFO)
 logger.addHandler(handler)
 
 class Instruction(object):
+  <<instructionInit>>
+  <<instructionExecute>>
+#+END_SRC
 
-  def __init__(self,direction = None, power = None, time = None):
-    
-    
-    # Serial interface. Gonna be hardcoded for now. I'm sorry, future Vi.
-    self.ser = serial.Serial("/dev/ttyACM0", 9600) #The only interface we talk to.
+** init
 
-    #sanitizing input
-    if direction == None or power == None or time == None:
-      raise ValueError('Invalid input. Please enter valid input.') 
-      # Honestly, we should be saying that the default setting is something. 
-      # But I want the users to actually say something. 
-      # They can put default values in later.
+Init checks if the inputs given are good 
+#+NAME: instructionInit
+#+BEGIN_SRC python
+def __init__(self,direction = None, power = None, time = None):
+  # Serial interface. Gonna be hardcoded for now. I'm sorry, future Vi.
+  self.ser = serial.Serial("/dev/ttyACM0", 9600) 
 
-    if not (0 <= power <= 100):
-      raise ValueError('Invalid input. Power is a quantity between 0 and 100.')
+  #Ensuring that all outputs are non-empty.
+  if direction == None or power == None or time == None:
+    raise ValueError('Instruction is given empty arguments. Please enter valid direction, power and time.') 
 
-    if not (time >= 0):
-      raise ValueError('Invalid input. Time must always be a positive quantity.')
-
-    # Actually saving input.
-    self.direction = direction
+  if not (0 <= power <= 100):
+    raise ValueError('Instruction is given an invalid power. Power is a quantity between 0 and 100.')
+  else:
     self.power = power
+
+  if not (time >= 0):
+    raise ValueError('Instruction is given an invalid time. Time must always be a positive quantity.')
+  else:
     self.time = time
+#+END_SRC
 
-  def execute(self):
+** execute
+#+NAME: instructionExecute
+#+BEGIN_SRC python
+def execute(self):
     
-    def convertToSerialString(direction,power,time):
-      return str(direction) + " " + str(power) + " " + str(time)
+  def convertToSerialString(direction,power,time):
+    return str(direction) + " " + str(power) + " " + str(time)
 
-    instruction = convertToSerialString(self.direction,self.power,self.time)
-    logger.info(instruction)
-    self.ser.write(instruction)         #Actually send stuff to the robot.
-
-  @staticmethod  
-  def sgit config --global pull.ff onlytop():
-    Instruction(0,0,0).execute()
- #+END_SRC
+  instruction = convertToSerialString(self.direction,self.power,self.time)
+  logger.info(instruction)
+  self.ser.write(instruction)         #Actually send stuff to the robot.
+#+END_SRC
 
 *** Bash Script to clean logs
 Bash script to clean the logs of whatever instructions are given to the robot.
@@ -305,6 +307,13 @@ Bash script to clean the logs of whatever instructions are given to the robot.
 
 
 #+END_SRC
+*** What is this?
+No idea what this is.
+#+BEGIN_SRC python
+  @staticmethod  
+  def sgit config --global pull.ff onlytop():
+    Instruction(0,0,0).execute()
+ #+END_SRC
 * Position
 ** Coordinate
  #+BEGIN_SRC python :tangle position/coordinate.py
