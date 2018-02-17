@@ -1,7 +1,7 @@
 * Objective
-
 To define a useful library for people to control the robot without worrying too much about the low level implementation.
 Effectively, think high level and let my library deal with low level control of motor controllers.
+
 
 * Direction
 ** Compass
@@ -34,7 +34,8 @@ class Compass(object):
 
   def __init__(self,value):
     if isinstance(value,basestring):
-      self.value = Compass.convert(value) #If the user enters in a string instead of a number or the class defined static variables, convert it to the string.
+      self.value = Compass.convert(value) 
+      #If the user enters in a string instead of a number or the class defined static variables, convert it to the string.
     elif 1 <= value <= 10:
       self.value = value
     else:
@@ -223,7 +224,6 @@ class VectorDirectionTestCase(unittest.TestCase):
         """Is five successfully determined to be prime?"""
         self.assertTrue()
 #+END_SRC 
-
 * Instruction
 
  So this is the function that sends instructions to the motor controller using the serial library.
@@ -257,8 +257,11 @@ class Instruction(object):
     self.ser = serial.Serial("/dev/ttyACM0", 9600) #The only interface we talk to.
 
     #sanitizing input
-    if direction_input == None or power_input == None or time_input == None:
-      raise ValueError('Invalid input. Please enter valid input.') # Honestly, we should be saying that the default setting is something. But I want the users to actually say something. They can put default values in later.
+    if direction == None or power == None or time == None:
+      raise ValueError('Invalid input. Please enter valid input.') 
+      # Honestly, we should be saying that the default setting is something. 
+      # But I want the users to actually say something. 
+      # They can put default values in later.
 
     if not (0 <= power <= 100):
       raise ValueError('Invalid input. Power is a quantity between 0 and 100.')
@@ -281,7 +284,7 @@ class Instruction(object):
     self.ser.write(instruction)         #Actually send stuff to the robot.
 
   @staticmethod  
-  def stop():
+  def sgit config --global pull.ff onlytop():
     Instruction(0,0,0).execute()
  #+END_SRC
 
@@ -303,7 +306,6 @@ Bash script to clean the logs of whatever instructions are given to the robot.
 
 
 #+END_SRC
-
 * Position
 ** Coordinate
  #+BEGIN_SRC python :tangle position/coordinate.py
@@ -343,7 +345,6 @@ if __name__=="__main__":
     distance = finish - start
     print(distance)
  #+END_SRC
-
 * Robot
 
 Acts as an adapter between the higher-level interface users use and the Instruction class that sends instructions to the robot.
@@ -368,10 +369,28 @@ class Robot(object):
     if type(direction) is compass.Compass:
       # The user has given a compass point and expects us to move to that location. This is where things can get a littlw awry.
       directionMove(direction,distance)
+
+
+
     if type(direction) is vector.Vector:
       # The user has given a vector and expects us to move to that location. 
       #If the distance is not specified, simply take the length of the vector. If distance is specified, use the distance instead.
       vectorMove(direction,distance)
+
+
+
+    if type(direction) is coordinate.Coordinate:
+      # The user has given a coordinate and expects us to move to that coordinate.
+
+
+
+  def directionMove(self,direction=None,distance=None):
+    # So I'm going to convert the distance into power and time values. Not very clean but it should work for now.
+
+    instruction = Instruction(direction = 1, power = 100, time = 1000)
+    instruction.execute()
+    instruction.stop()
+
 
 
 
@@ -389,9 +408,7 @@ class Robot(object):
     #Convert the vector input into its norm. We're just going to divide the vector by its magnitude.
     vector = vector/vector.mag()
 
-
-  def directionMove(self,direction=None,distance=None):
-    # So I'm going to convert the distance into power and time values. Not very clean but it should work for now.
+    #Voodoo magic here
 
     instruction = Instruction(direction = 1, power = 100, time = 1000)
     instruction.execute()
@@ -399,13 +416,27 @@ class Robot(object):
 
 
 
+  def coordinateMove(self,coordinate = None):
+    if vector is None:
+      raise ValueError("The coordinate input is not specified.")
+    if type(vector) is not vector.Vector:
+      raise ValueError("The coordinate input needs to be a coordinate")
 
-    # Now, we need to convert a vector & distance into instructions for the robot. I'm implementing a naive way of doing it (assuming that 
+
+    # Voodoo magic happens here
+
+
+
+
+
 #+END_SRC 
 
 
-* IIR - Infinite Impulse Response
+* Distance Sensor Filter
 
+The type of filter we're using is a IIR - Infinite Impulse Response. It's the easist kind of filter you can think of and we'll be messing around with it for now.
+
+#+NAME: API Reference
 #+BEGIN_EXAMPLE
 f = Sensor(initialPosition = arg1,      # Optional Argument of type numpy array
            parameter       = arg2       # Optional Argument of type float
@@ -418,71 +449,163 @@ f.update(z)       # Plugs in a numpy array to update the Kalman filter with new 
 
 #+BEGIN_SRC python :tangle filter/Sensor.py
 import numpy as np
+import warnings #Used primarily to give warnings about default values
+import logging #Used to log information that might help with debugging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
 
 class Sensor(object):
 
-  def __init__(self,parameter,initialEstimate = None,linearTransform = None, offset = None):
-
-    if parameter is None:
-      raise ValueError("No parameter passed to Sensor")
-    elif not 0 <= parameter <= 1:
-      raise ValueError("Parameter must lie between zero and one.")
-
-    if initialEstimate is None:
-      self.estimate = np.array([0.,   
-                                0.,
-                                0.,
-                                0.,
-                                0.,
-                                0.,
-                                0.,
-                                0.])
-    else:
-      self.estimate = initialEstimate
-
-    if linearTransform is None:
-      self.linearTransform = np.array([[1,0],
-                                       [0,1]])
-    else:
-      self.linearTransform = linearTransform
+  <<init>>
+#+END_SRC
 
 
-    if offset is None: 
-      self.offset = np.array([0,0])
-    else:
-      self.offset = offset
 
+** init function
+
+Creates a sensor object that filters your distance sensor inputs. We'll be doing argument checks to ensure that the inputs given are valid.
+We'll also raise warnings in case the sensor has a default argument - explicit values are always better than assuming the default works.
+
+#+NAME: init
+#+BEGIN_SRC python
+def __init__(self,parameter,
+                  resolution,
+                  initialEstimate,
+                  linearTransform,
+                  offset):
+
+  logger.info('Creating a Sensor Object')
+  <<parameterCheck>>
+  <<initialEstimateCheck>>
+  <<resolutionCheck>>
+  <<linearTransformCheck>>
+  <<offsetCheck>>
+  
+
+#+END_SRC
+*** Parameter
+#+NAME: parameterCheck
+#+BEGIN_SRC python
+if parameter is None:
+  raise ValueError("No sensitivity parameter passed to Sensor. Must lie between 1 & 0.
+                    This parameter decides the relative importance between your current estimate and the measurements you give it.
+                    The closer to zero, the less sensitive you are to new inputs and vice versa.")
+elif not 0 < parameter < 1:
+  raise ValueError("Parameter must lie between zero and one.")
+else:
+  self.parameter = parameter
+
+logger.debug('Parameter passed to Sensor object: %s',self.parameter)
+#+END_SRC
+
+*** Initial estimate
+#+NAME: initialEstimateCheck
+#+BEGIN_SRC python
+if initialEstimate is None:
+  warnings.warn("Initial sensor estimate is not provided.
+                 Defaulting to numpy array of zeros.
+                 Sensor is better if initial estimate is given.")
+  self.estimate = np.array([0.,   #1
+                            0.,   #2
+                            0.,   #3
+                            0.,   #4
+                            0.,   #5
+                            0.,   #6
+                            0.,   #7
+                            0.])  #8
+else:
+  self.estimate = initialEstimate
+
+logger.debug('Initial Estimate passed to Sensor object: %s',self.estimate)
+#+END_SRC
+
+*** Resolution
+Why does this parameter exist?
+#+NAME: resolutionCheck
+#+BEGIN_SRC python
+if resolution is None:
+  raise ValueError("Invalid argument: Enter valid resolution")
+else:
+  self.resolution = resolution
+
+logger.debug('Resolution passed to Sensor object: %s',self.resolution)
+#+END_SRC
+
+*** Linear transform
+#+NAME: linearTransformCheck
+#+BEGIN_SRC python
+if linearTransform is None:
+  self.linearTransform = np.eye(2)*100
+else:
+  self.linearTransform = linearTransform
+
+logger.debug('linear transform passed to Sensor object: %s',self.linearTransform)
+#+END_SRC
+
+*** Offset
+#+NAME: offsetCheck
+#+BEGIN_SRC python
+if offset is None: 
+  self.offset = np.array([0,0])
+  warnings.warn("Initial offset is not provided.
+                 Defaulting to numpy array of zeros.
+                 ")
+else:
+  self.offset = offset
+
+logger.debug('Offset passed to Sensor object: %s',self.offset)
+#+END_SRC
+
+
+** Update
+#+NAME: update
+#+BEGIN_SRC python
   def update(self, current):
-
     if current is None:
       raise ValueError("No current measurement passed to the filter")
     self.estimate = self.estimate * (1. - self.parameter) + current * (self.parameter)
-    
+#+END_SRC
+** Error Estimate Function
+#+NAME: errorEstimate
+#+BEGIN_SRC python
   def errorEstimate(self,distance):
-
     # insert a dict for the distance error estimates.
     # Make it a vectorized function for this.
-    return distance
+    return np.ones(distance.shape)
+#+END_SRC
 
+** Query Function
+#+NAME: query
+#+BEGIN_SRC python
   def query(self):
-    A = self.estimate         
+    A = self.estimate
 
     #Get the average of every two intervals.       
     A = (A[::2] + A[1::2]) / 2
 
     # Weight our measurements in terms of the error estimates
-    eA = errorEstimate(A)
+    eA = self.errorEstimate(A)
     denom = eA[:2] + eA[2:]
-    denom = np.concat(denom,denom)
-    A     = np.multiply(A,eA[2,3,0,1]) / denom
+
+    denom = np.concatenate((denom,denom))
+    A     = np.multiply(A,eA[   [2,3,0,1]   ]) / denom
+
+
+
 
     # Finding the difference between every other element of form [C - A, D - B]
-    coordinate = (A[2::2]  - A[0:(len(A) - 2):2]) / 2      # of form x & y
+    coordinate = (A[[2,3]]  - A[[0,1]]) / 2      # of form x & y
+    print "poop"
+    print coordinate
 
     # Converting our coordinate into something someone else can use intuitively
-    coordinate = coordinate * linearTransform + offset
+    coordinate = coordinate
+    coordinate = np.dot(self.linearTransform,coordinate) + self.offset
+    print coordinate
     coordinate = coordinate  //  self.resolution                 # divides it by the required resolution
-
+    print coordinate
 
     # Finding the "theta" of the inclination of the robot.
     A = self.estimate
@@ -492,22 +615,13 @@ class Sensor(object):
     A = A[np.argsort(eA)]       # Sort in terms of lower errorEstimate
     theta = np.sum(A[:2:1])
 
+    ans = {}
     ans["x"]     = coordinate[0]
     ans["y"]     = coordinate[1]
-    ans["theta"] = theta 
+    ans["theta"] = theta
 
     return ans
-
 #+END_SRC
-
-
-
-
-
-
-
-
-
 
 
 
@@ -758,3 +872,16 @@ if __name__ == "__main__":
     pylab.show()
 
 #+END_SRC
+
+
+
+
+
+* Library Information
+Just doing normal python library stuff. Consider it unimportant unless someone complains that they can't access something.
+
+
+
+
+
+
