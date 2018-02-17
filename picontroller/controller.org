@@ -1,3 +1,7 @@
+
+
+{{{modification-time(FORMAT, VC)}}}
+
 * Objective
 To define a useful library for people to control the robot without worrying too much about the low level implementation.
 Effectively, think high level and let my library deal with low level control of motor controllers.
@@ -227,20 +231,21 @@ class VectorDirectionTestCase(unittest.TestCase):
 
  So this is the function that sends instructions to the motor controller using the serial library.
  The serial port used is /dev/ttyACM0 with baud rate 9600.
- When using this particular function, please give directions as N, NW and the like.
 
+- Is this where compass is useful?
+Yeah! Use the compass directions instead of passing hardcoded values. Of course, I won't insist on you doing so but I'll pass a warning.
 
-So why are we not defining this as some kind of function? 
+- So why are we not defining this as some kind of function? 
 Because I'd like to be able to reuse commands as much as possible AND because it makes more sense to write down commands and then execute them whenever required instead of creating wrapper functions around one main function.
 
 - Why are we logging this since we'll be using this a lot! 
 The logger is to see what instructions are actually sent to the robot - I'm guessing that we'll need to look at the logs at some point even if we write perfect code.
 In order to avoid filling our logs with trash, I'll add logs to a seperate file.
 
-I've also written a nice bash script that clears the log instead of us having to delete the file manually - it will probably be incorporated into whatever cleanup scripts the other programmers come up with.
+# I've also written a nice bash script that clears the log instead of us having to delete the file manually - it will probably be incorporated into whatever cleanup scripts the other programmers come up with.
 
 #+NAME: Instruction
-#+BEGIN_SRC python :tangle instruction/instruction.py
+#+BEGIN_SRC python :tangle instruction.py
 import logging #This is to send logs of instructions sent directly to robot.
 import serial # Serial interface to talk to robot's motor controllers
 
@@ -258,7 +263,6 @@ class Instruction(object):
 #+END_SRC
 
 ** init
-
 Init checks if the inputs given are good 
 #+NAME: instructionInit
 #+BEGIN_SRC python
@@ -282,47 +286,47 @@ def __init__(self,direction = None, power = None, time = None):
 #+END_SRC
 
 ** execute
+execute sends an instruction the motor controller using a serial port. This might be a janky way of doing things since we're parsing strings on the other end, but it's working for now.
 #+NAME: instructionExecute
 #+BEGIN_SRC python
 def execute(self):
     
-  def convertToSerialString(direction,power,time):
+  def convertToSerialString(direction,
+                            power,
+                            time):
     return str(direction) + " " + str(power) + " " + str(time)
-
-  instruction = convertToSerialString(self.direction,self.power,self.time)
+  instruction = convertToSerialString(self.direction,
+                                      self.power,
+                                      self.time)
   logger.info(instruction)
   self.ser.write(instruction)         #Actually send stuff to the robot.
 #+END_SRC
-
-*** Bash Script to clean logs
-Bash script to clean the logs of whatever instructions are given to the robot.
-#+BEGIN_SRC bash :tangle no
-
-
-
-#+END_SRC
-*** Unit Tests
-#+BEGIN_SRC bash :tangle no
-
-
-
-#+END_SRC
-*** What is this?
-No idea what this is.
-#+BEGIN_SRC python
-  @staticmethod  
-  def sgit config --global pull.ff onlytop():
-    Instruction(0,0,0).execute()
- #+END_SRC
 * Position
 ** Coordinate
- #+BEGIN_SRC python :tangle position/coordinate.py
+
+Since we'll be passing coordinates all the time, I thought it would make sense to treat it as a numpy vector to improve its efficiency.
+ #+BEGIN_SRC python :tangle coordinate.py
 import numpy
 class Coordinate(numpy.ndarray):
+  <<coordinateNew>>
+  <<coordinateArrayFinalize>>
+
+if __name__=="__main__":
+    start = Coordinate(1,2)
+    finish = Coordinate(4,5)
+    print("The distance between start and finish is")
+    distance = finish - start
+    print(distance)
+#+END_SRC
+
+*** new
+#+NAME: coordinateNew
+#+BEGIN_SRC python
     def __new__(cls, x=None, y=None, info=None):
-        # Sanitizing x and y values
+       # Sanitizing x and y values
        if x == None or y == None:
          raise ValueError('Incomplete coordinate input')
+       
        def is_number(s):
            try:
                float(s)
@@ -335,23 +339,21 @@ class Coordinate(numpy.ndarray):
     
        # We need to make ndarray instance using x and y values.
        input_array = numpy.array([x,y])
-        # We first cast to be our class type
+       # We first cast to be our class type
        obj = numpy.asarray(input_array).view(cls)
        # add the new attribute to the created instance
        obj.info = info
        # Finally, we must return the newly created object:
        return obj
+#+END_SRC
+
+*** array finalize
+#+NAME: coordinateArrayFinalize
+#+BEGIN_SRC python
     def __array_finalize__(self, obj):
        # see InfoArray.__array_finalize__ for comments
        if obj is None: return
        self.info = getattr(obj, 'info', None)
-
-if __name__=="__main__":
-    start = Coordinate(1,2)
-    finish = Coordinate(4,5)
-    print("The distance between start and finish is")
-    distance = finish - start
-    print(distance)
  #+END_SRC
 * Robot
 
