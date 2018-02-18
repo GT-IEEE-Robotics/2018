@@ -15,10 +15,28 @@ class Robot(object):
     if type(direction) is compass.Compass:
       # The user has given a compass point and expects us to move to that location. This is where things can get a littlw awry.
       directionMove(direction,distance)
+
+
+
     if type(direction) is vector.Vector:
       # The user has given a vector and expects us to move to that location. 
       #If the distance is not specified, simply take the length of the vector. If distance is specified, use the distance instead.
       vectorMove(direction,distance)
+
+
+
+    if type(direction) is coordinate.Coordinate:
+      # The user has given a coordinate and expects us to move to that coordinate.
+
+
+
+  def directionMove(self,direction=None,distance=None):
+    # So I'm going to convert the distance into power and time values. Not very clean but it should work for now.
+
+    instruction = Instruction(direction = 1, power = 100, time = 1000)
+    instruction.execute()
+    instruction.stop()
+
 
 
 
@@ -36,9 +54,7 @@ class Robot(object):
     #Convert the vector input into its norm. We're just going to divide the vector by its magnitude.
     vector = vector/vector.mag()
 
-
-  def directionMove(self,direction=None,distance=None):
-    # So I'm going to convert the distance into power and time values. Not very clean but it should work for now.
+    #Voodoo magic here
 
     instruction = Instruction(direction = 1, power = 100, time = 1000)
     instruction.execute()
@@ -46,5 +62,11 @@ class Robot(object):
 
 
 
+  def coordinateMove(self,coordinate = None):
+    if vector is None:
+      raise ValueError("The coordinate input is not specified.")
+    if type(vector) is not vector.Vector:
+      raise ValueError("The coordinate input needs to be a coordinate")
 
-    # Now, we need to convert a vector & distance into instructions for the robot. I'm implementing a naive way of doing it (assuming that
+
+    # Voodoo magic happens here
