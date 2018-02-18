@@ -2,7 +2,8 @@ import numpy as np
 import warnings #Used primarily to give warnings about default values
 import logging  #Used to log information that might help with debugging
 
-import piController.coordinate
+
+from ...2018.picontroller import coordinate
 
 
 logging.basicConfig(level=logging.INFO)
@@ -123,3 +124,8 @@ class IIR(object):
     ans["y"]     = coordinate[1]
     ans["theta"] = theta
     return ans
+
+if __name__ == "__main__":
+
+  print("Hello")
+  print(sys.modules[__name__])

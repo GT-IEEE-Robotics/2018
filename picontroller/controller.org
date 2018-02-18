@@ -461,7 +461,8 @@ import numpy as np
 import warnings #Used primarily to give warnings about default values
 import logging  #Used to log information that might help with debugging
 
-import 2018.piController.coordinate
+
+from ...2018.picontroller import coordinate
 
 
 logging.basicConfig(level=logging.INFO)
@@ -475,6 +476,11 @@ class IIR(object):
   <<sensorUpdate>>
   <<sensorErrorEstimate>>
   <<sensorQuery>>
+
+if __name__ == "__main__":
+
+  print("Hello")
+  print(sys.modules[__name__])
 #+END_SRC
 
 ** Init
