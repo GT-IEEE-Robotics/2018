@@ -1,0 +1,23 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP Arduino_Interface
+D Interface to Arduino for power and serial comm.
+K arduino interface
+$ENDCMP
+#
+$CMP CONN_01X04
+D Connector, single row, 01x04
+K connector
+$ENDCMP
+#
+$CMP IMU_LSM9DS1
+D 9DOF IMU. https://www.sparkfun.com/products/13284 
+K IMU LSM9DS1
+$ENDCMP
+#
+$CMP R_PHOTO
+D Photoresistor, light sensitive resistor, LDR
+K resistor variable light opto LDR
+$ENDCMP
+#
+#End Doc Library
