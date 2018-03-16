@@ -133,7 +133,7 @@ U 1 1 59FC44BE
 P 8950 900
 F 0 "J7" H 8950 700 50  0000 C CNN
 F 1 "i2c bus connector" H 9000 1050 50  0000 C CNN
-F 2 "" H 8950 900 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 8950 900 50  0001 C CNN
 F 3 "" H 8950 900 50  0001 C CNN
 	1    8950 900 
 	1    0    0    -1  
@@ -390,14 +390,12 @@ NoConn ~ 7200 3700
 NoConn ~ 7300 3700
 NoConn ~ 3700 1100
 NoConn ~ 3800 1100
-NoConn ~ 3900 1100
-NoConn ~ 4000 1100
 NoConn ~ 4100 1100
+NoConn ~ 3900 1100
 NoConn ~ 4200 1100
 NoConn ~ 4300 1100
 NoConn ~ 4400 1100
 NoConn ~ 4500 1100
-NoConn ~ 4600 1100
 NoConn ~ 4800 1100
 NoConn ~ 4900 1100
 NoConn ~ 5100 1100
@@ -431,21 +429,6 @@ U 5A6D7E85
 F0 "level_shifters" 60
 F1 "level_shifters.sch" 60
 $EndSheet
-$Comp
-L Raspberry_Pi_2_3 J9
-U 1 1 5A6BC98A
-P 10250 2300
-F 0 "J9" H 10950 1050 50  0000 C CNN
-F 1 "Raspberry_Pi_2_3" H 9850 3200 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_2x20" H 11250 3550 50  0001 C CNN
-F 3 "" H 10300 2150 50  0001 C CNN
-	1    10250 2300
-	-1   0    0    -1  
-$EndComp
-Text GLabel 9350 3100 0    60   Input ~ 0
-TO_Pi
-Text GLabel 9350 3000 0    60   Input ~ 0
-FROM_Pi
 Text GLabel 7900 1100 1    60   Input ~ 0
 TO_Pi
 Text GLabel 8000 1100 1    60   Input ~ 0
@@ -453,24 +436,24 @@ FROM_Pi
 $Comp
 L +5V #PWR022
 U 1 1 5A6BDFCD
-P 8450 2450
-F 0 "#PWR022" H 8450 2300 50  0001 C CNN
-F 1 "+5V" H 8450 2590 50  0000 C CNN
-F 2 "" H 8450 2450 50  0001 C CNN
-F 3 "" H 8450 2450 50  0001 C CNN
-	1    8450 2450
-	0    1    1    0   
+P 4000 1100
+F 0 "#PWR022" H 4000 950 50  0001 C CNN
+F 1 "+5V" H 4000 1240 50  0000 C CNN
+F 2 "" H 4000 1100 50  0001 C CNN
+F 3 "" H 4000 1100 50  0001 C CNN
+	1    4000 1100
+	1    0    0    -1  
 $EndComp
 $Comp
 L Earth #PWR023
 U 1 1 5A6BE144
-P 8450 2550
-F 0 "#PWR023" H 8450 2300 50  0001 C CNN
-F 1 "Earth" H 8450 2400 50  0001 C CNN
-F 2 "" H 8450 2550 50  0001 C CNN
-F 3 "" H 8450 2550 50  0001 C CNN
-	1    8450 2550
-	0    -1   -1   0   
+P 4600 1100
+F 0 "#PWR023" H 4600 850 50  0001 C CNN
+F 1 "Earth" H 4600 950 50  0001 C CNN
+F 2 "" H 4600 1100 50  0001 C CNN
+F 3 "" H 4600 1100 50  0001 C CNN
+	1    4600 1100
+	-1   0    0    1   
 $EndComp
 Text GLabel 8750 900  0    60   Input ~ 0
 SCL
@@ -480,42 +463,8 @@ Text GLabel 6900 1100 1    60   Input ~ 0
 SCL
 Text GLabel 7000 1100 1    60   Input ~ 0
 SDA
-Text GLabel 9350 1500 0    60   Input ~ 0
-SCL
-Text GLabel 9350 1400 0    60   Input ~ 0
-SDA
-NoConn ~ 11150 1600
-NoConn ~ 11150 1700
-NoConn ~ 11150 1800
-NoConn ~ 11150 1900
-NoConn ~ 11150 2000
-NoConn ~ 11150 2100
-NoConn ~ 11150 2200
-NoConn ~ 11150 2300
-NoConn ~ 11150 2400
-NoConn ~ 11150 2500
-NoConn ~ 11150 2600
-NoConn ~ 11150 2700
-NoConn ~ 11150 3000
-NoConn ~ 11150 3100
-NoConn ~ 10650 3600
-NoConn ~ 10550 3600
-NoConn ~ 10450 3600
-NoConn ~ 10350 3600
-NoConn ~ 10250 3600
-NoConn ~ 10150 3600
-NoConn ~ 10050 3600
-NoConn ~ 9950 3600
-NoConn ~ 10050 1000
-NoConn ~ 10150 1000
-NoConn ~ 10350 1000
-NoConn ~ 10450 1000
-NoConn ~ 9350 1600
-NoConn ~ 9350 1800
-NoConn ~ 9350 1900
-NoConn ~ 9350 2100
-NoConn ~ 9350 2700
-NoConn ~ 9350 2800
+NoConn ~ 8450 2450
+NoConn ~ 8450 2550
 Text GLabel 3400 6500 0    60   Input ~ 0
 MOTOR_PWR
 Text GLabel 3400 6650 0    60   Input ~ 0
@@ -534,7 +483,7 @@ U 1 1 5A6C2616
 P 2050 2900
 F 0 "F1" V 2130 2900 50  0000 C CNN
 F 1 "Fuse" V 1975 2900 50  0000 C CNN
-F 2 "" V 1980 2900 50  0001 C CNN
+F 2 "Fuse_Holders_and_Fuses:Fuseholder5x20_horiz_open_inline_Type-I" V 1980 2900 50  0001 C CNN
 F 3 "" H 2050 2900 50  0001 C CNN
 	1    2050 2900
 	0    1    1    0   
@@ -872,30 +821,6 @@ Wire Wire Line
 	6650 4850 9750 4850
 Wire Wire Line
 	6700 4950 9850 4950
-Wire Wire Line
-	8450 2650 9150 2650
-Wire Wire Line
-	8450 2350 9200 2350
-Wire Wire Line
-	9200 2350 9200 2500
-Wire Wire Line
-	9200 2500 9350 2500
-Wire Wire Line
-	9350 2400 9250 2400
-Wire Wire Line
-	9250 2400 9250 2250
-Wire Wire Line
-	9250 2250 8450 2250
-Wire Wire Line
-	8450 2150 9300 2150
-Wire Wire Line
-	9300 2150 9300 2300
-Wire Wire Line
-	9300 2300 9350 2300
-Wire Wire Line
-	9150 2650 9150 2200
-Wire Wire Line
-	9150 2200 9350 2200
 Wire Wire Line
 	9600 3950 10650 3950
 Wire Wire Line
@@ -1385,4 +1310,91 @@ F 3 "" H 6550 5150 60  0001 C CNN
 	1    5850 2400
 	0    1    1    0   
 $EndComp
+$Comp
+L CONN_01X04 P14
+U 1 1 5AA1DD33
+P 10400 1650
+F 0 "P14" H 10400 1900 50  0000 C CNN
+F 1 "CONN_01X04" V 10500 1650 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x04" H 10400 1650 50  0001 C CNN
+F 3 "" H 10400 1650 50  0000 C CNN
+	1    10400 1650
+	1    0    0    -1  
+$EndComp
+Text GLabel 10200 1700 0    60   Input ~ 0
+TO_Pi
+Text GLabel 10200 1800 0    60   Input ~ 0
+FROM_Pi
+$Comp
+L +5V #PWR040
+U 1 1 5AA1DEF8
+P 10200 1500
+F 0 "#PWR040" H 10200 1350 50  0001 C CNN
+F 1 "+5V" H 10200 1640 50  0000 C CNN
+F 2 "" H 10200 1500 50  0001 C CNN
+F 3 "" H 10200 1500 50  0001 C CNN
+	1    10200 1500
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Earth #PWR041
+U 1 1 5AA1DF4B
+P 10200 1600
+F 0 "#PWR041" H 10200 1350 50  0001 C CNN
+F 1 "Earth" H 10200 1450 50  0001 C CNN
+F 2 "" H 10200 1600 50  0001 C CNN
+F 3 "" H 10200 1600 50  0001 C CNN
+	1    10200 1600
+	0    1    1    0   
+$EndComp
+NoConn ~ 8450 2150
+NoConn ~ 8450 2250
+NoConn ~ 8450 2350
+NoConn ~ 8450 2650
+$Comp
+L IMU U1
+U 1 1 5AA1F45A
+P 9250 2200
+F 0 "U1" H 9650 2250 60  0000 C CNN
+F 1 "IMU" H 9650 2350 60  0000 C CNN
+F 2 "MotorCapeComponents:IMU" H 9250 2200 60  0001 C CNN
+F 3 "" H 9250 2200 60  0000 C CNN
+	1    9250 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Earth #PWR042
+U 1 1 5AA1F5F0
+P 10350 2550
+F 0 "#PWR042" H 10350 2300 50  0001 C CNN
+F 1 "Earth" H 10350 2400 50  0001 C CNN
+F 2 "" H 10350 2550 50  0001 C CNN
+F 3 "" H 10350 2550 50  0001 C CNN
+	1    10350 2550
+	0    -1   -1   0   
+$EndComp
+$Comp
+L +3.3V #PWR043
+U 1 1 5AA1F998
+P 10350 2650
+F 0 "#PWR043" H 10350 2500 50  0001 C CNN
+F 1 "+3.3V" H 10350 2790 50  0000 C CNN
+F 2 "" H 10350 2650 50  0000 C CNN
+F 3 "" H 10350 2650 50  0000 C CNN
+	1    10350 2650
+	0    1    1    0   
+$EndComp
+NoConn ~ 9050 2250
+NoConn ~ 9050 2350
+NoConn ~ 9050 2450
+NoConn ~ 9050 2550
+NoConn ~ 9050 2650
+NoConn ~ 9050 2750
+NoConn ~ 9050 2950
+NoConn ~ 9050 2850
+NoConn ~ 9050 3050
+Text GLabel 10350 2750 2    60   Input ~ 0
+SDA
+Text GLabel 10350 2850 2    60   Input ~ 0
+SCL
 $EndSCHEMATC
