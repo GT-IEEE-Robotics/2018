@@ -423,12 +423,6 @@ NoConn ~ 7600 1100
 NoConn ~ 7500 1100
 NoConn ~ 7400 1100
 NoConn ~ 7300 1100
-$Sheet
-S 1050 4050 850  400 
-U 5A6D7E85
-F0 "level_shifters" 60
-F1 "level_shifters.sch" 60
-$EndSheet
 Text GLabel 7900 1100 1    60   Input ~ 0
 TO_Pi
 Text GLabel 8000 1100 1    60   Input ~ 0
@@ -1260,7 +1254,7 @@ F 3 "" H 1750 2750 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 Wire Wire Line
-	1900 2900 1750 2900
+	1750 2900 1900 2900
 Wire Wire Line
 	1750 2800 1750 2750
 NoConn ~ 5000 1200
@@ -1389,12 +1383,38 @@ NoConn ~ 9050 2350
 NoConn ~ 9050 2450
 NoConn ~ 9050 2550
 NoConn ~ 9050 2650
-NoConn ~ 9050 2750
 NoConn ~ 9050 2950
-NoConn ~ 9050 2850
 NoConn ~ 9050 3050
 Text GLabel 10350 2750 2    60   Input ~ 0
 SDA
 Text GLabel 10350 2850 2    60   Input ~ 0
 SCL
+$Comp
+L +3.3V #PWR?
+U 1 1 5AAB580D
+P 8950 3000
+F 0 "#PWR?" H 8950 2850 50  0001 C CNN
+F 1 "+3.3V" H 8950 3140 50  0000 C CNN
+F 2 "" H 8950 3000 50  0000 C CNN
+F 3 "" H 8950 3000 50  0000 C CNN
+	1    8950 3000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L +3.3V #PWR?
+U 1 1 5AAB58EE
+P 8950 2750
+F 0 "#PWR?" H 8950 2600 50  0001 C CNN
+F 1 "+3.3V" H 8950 2890 50  0000 C CNN
+F 2 "" H 8950 2750 50  0000 C CNN
+F 3 "" H 8950 2750 50  0000 C CNN
+	1    8950 2750
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	8950 3000 8950 2850
+Wire Wire Line
+	8950 2850 9050 2850
+Wire Wire Line
+	9050 2750 8950 2750
 $EndSCHEMATC

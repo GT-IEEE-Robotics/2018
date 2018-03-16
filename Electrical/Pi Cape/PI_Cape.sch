@@ -34,420 +34,228 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 1
-Title ""
+Sheet 1 11
+Title "Pi_Cape"
 Date ""
 Rev ""
-Comp ""
+Comp "Gatech IEEE Hardware Team"
 Comment1 ""
 Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L CONN_01X05 J5
-U 1 1 5A963D10
-P 3900 1800
-F 0 "J5" H 3900 2100 50  0000 C CNN
-F 1 "Dist_Sensor_FR" V 4000 1800 50  0000 C CNN
-F 2 "" H 3900 1800 50  0001 C CNN
-F 3 "" H 3900 1800 50  0001 C CNN
-	1    3900 1800
-	0    -1   1    0   
-$EndComp
-$Comp
-L CONN_01X05 J7
-U 1 1 5A964137
-P 4400 2300
-F 0 "J7" H 4400 2600 50  0000 C CNN
-F 1 "Dist_Sensor_RF" V 4500 2300 50  0000 C CNN
-F 2 "" H 4400 2300 50  0001 C CNN
-F 3 "" H 4400 2300 50  0001 C CNN
-	1    4400 2300
-	-1   0    0    -1  
-$EndComp
-$Comp
-L CONN_01X05 J3
-U 1 1 5A9645AF
-P 3200 1800
-F 0 "J3" H 3200 2100 50  0000 C CNN
-F 1 "Dist_Sensor_FL" V 3300 1800 50  0000 C CNN
-F 2 "" H 3200 1800 50  0001 C CNN
-F 3 "" H 3200 1800 50  0001 C CNN
-	1    3200 1800
-	0    -1   1    0   
-$EndComp
-$Comp
-L CONN_01X05 J1
-U 1 1 5A9645EE
-P 2700 2300
-F 0 "J1" H 2700 2600 50  0000 C CNN
-F 1 "Dist_Sensor_LF" V 2800 2300 50  0000 C CNN
-F 2 "" H 2700 2300 50  0001 C CNN
-F 3 "" H 2700 2300 50  0001 C CNN
-	1    2700 2300
-	1    0    0    -1  
-$EndComp
-$Comp
-L CONN_01X05 J6
-U 1 1 5A964719
-P 3900 3500
-F 0 "J6" H 3900 3800 50  0000 C CNN
-F 1 "Dist_Sensor_BR" V 4000 3500 50  0000 C CNN
-F 2 "" H 3900 3500 50  0001 C CNN
-F 3 "" H 3900 3500 50  0001 C CNN
-	1    3900 3500
-	0    -1   -1   0   
-$EndComp
-$Comp
-L CONN_01X05 J4
-U 1 1 5A964776
-P 3200 3500
-F 0 "J4" H 3200 3800 50  0000 C CNN
-F 1 "Dist_Sensor_BL" V 3300 3500 50  0000 C CNN
-F 2 "" H 3200 3500 50  0001 C CNN
-F 3 "" H 3200 3500 50  0001 C CNN
-	1    3200 3500
-	0    -1   -1   0   
-$EndComp
-$Comp
-L CONN_01X05 J8
-U 1 1 5A9647B4
-P 4400 3000
-F 0 "J8" H 4400 3300 50  0000 C CNN
-F 1 "Dist_Sensor_RB" V 4500 3000 50  0000 C CNN
-F 2 "" H 4400 3000 50  0001 C CNN
-F 3 "" H 4400 3000 50  0001 C CNN
-	1    4400 3000
-	-1   0    0    -1  
-$EndComp
-$Comp
-L CONN_01X05 J2
-U 1 1 5A9647F9
-P 2700 3000
-F 0 "J2" H 2700 3300 50  0000 C CNN
-F 1 "Dist_Sensor_LB" V 2800 3000 50  0000 C CNN
-F 2 "" H 2700 3000 50  0001 C CNN
-F 3 "" H 2700 3000 50  0001 C CNN
-	1    2700 3000
-	1    0    0    -1  
-$EndComp
-Text GLabel 3000 1600 1    60   Input ~ 0
-Vin
-Text GLabel 3100 1600 1    60   Input ~ 0
-GND
-Text GLabel 3200 1600 1    60   Input ~ 0
-SHDN_FL
-Text GLabel 3300 1600 1    60   Input ~ 0
-SCL
-Text GLabel 3400 1600 1    60   Input ~ 0
-SDA
-Text GLabel 3700 1600 1    60   Input ~ 0
-Vin
-Text GLabel 3800 1600 1    60   Input ~ 0
-GND
-Text GLabel 3900 1600 1    60   Input ~ 0
-SHDN_FR
-Text GLabel 4000 1600 1    60   Input ~ 0
-SCL
-Text GLabel 4100 1600 1    60   Input ~ 0
-SDA
-Text GLabel 4600 2100 2    60   Input ~ 0
-Vin
-Text GLabel 4600 2200 2    60   Input ~ 0
-GND
-Text GLabel 4600 2300 2    60   Input ~ 0
-SHDN_RF
-Text GLabel 4600 2400 2    60   Input ~ 0
-SCL
-Text GLabel 4600 2500 2    60   Input ~ 0
-SDA
-Text GLabel 2500 2100 0    60   Input ~ 0
-Vin
-Text GLabel 2500 2200 0    60   Input ~ 0
-GND
-Text GLabel 2500 2300 0    60   Input ~ 0
-SHDN_LF
-Text GLabel 2500 2400 0    60   Input ~ 0
-SCL
-Text GLabel 2500 2500 0    60   Input ~ 0
-SDA
-Text GLabel 2500 2800 0    60   Input ~ 0
-Vin
-Text GLabel 2500 2900 0    60   Input ~ 0
-GND
-Text GLabel 2500 3000 0    60   Input ~ 0
-SHDN_LB
-Text GLabel 2500 3100 0    60   Input ~ 0
-SCL
-Text GLabel 2500 3200 0    60   Input ~ 0
-SDA
-Text GLabel 4600 2800 2    60   Input ~ 0
-Vin
-Text GLabel 4600 2900 2    60   Input ~ 0
-GND
-Text GLabel 4600 3000 2    60   Input ~ 0
-SHDN_RB
-Text GLabel 4600 3100 2    60   Input ~ 0
-SCL
-Text GLabel 4600 3200 2    60   Input ~ 0
-SDA
-Text GLabel 3700 3700 3    60   Input ~ 0
-Vin
-Text GLabel 3800 3700 3    60   Input ~ 0
-GND
-Text GLabel 3900 3700 3    60   Input ~ 0
-SHDN_BR
-Text GLabel 4000 3700 3    60   Input ~ 0
-SCL
-Text GLabel 4100 3700 3    60   Input ~ 0
-SDA
-Text GLabel 3000 3700 3    60   Input ~ 0
-Vin
-Text GLabel 3100 3700 3    60   Input ~ 0
-GND
-Text GLabel 3200 3700 3    60   Input ~ 0
-SHDN_BL
-Text GLabel 3300 3700 3    60   Input ~ 0
-SCL
-Text GLabel 3400 3700 3    60   Input ~ 0
-SDA
-$Comp
 L Raspberry_Pi_2_3 U1
 U 1 1 5A988C03
-P 6850 2400
-F 0 "U1" H 7550 1150 50  0000 C CNN
-F 1 "Raspberry_Pi_2_3" H 6450 3300 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_2x20" H 7850 3650 50  0001 C CNN
-F 3 "" H 6900 2250 50  0001 C CNN
-	1    6850 2400
+P 7000 3550
+F 0 "U1" H 7700 2300 50  0000 C CNN
+F 1 "Raspberry_Pi_2_3" H 6600 4450 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x20" H 8000 4800 50  0001 C CNN
+F 3 "" H 7050 3400 50  0001 C CNN
+	1    7000 3550
 	1    0    0    -1  
 $EndComp
-Text GLabel 7750 1600 2    60   Input ~ 0
-SCL
-Text GLabel 7750 1500 2    60   Input ~ 0
-SDA
-Text GLabel 950  1500 2    60   Input ~ 0
+Text GLabel 7900 2750 2    60   Input ~ 0
+I2C1_SCL
+Text GLabel 7900 2650 2    60   Input ~ 0
+I2C1_SDA
+Text GLabel 2600 3900 2    60   Input ~ 0
 GND
 Wire Wire Line
-	850  1400 850  1600
+	2500 3800 2500 4000
 $Comp
-L Earth #PWR2
+L Earth #PWR01
 U 1 1 5A989305
-P 850 1600
-F 0 "#PWR2" H 850 1350 50  0001 C CNN
-F 1 "Earth" H 850 1450 50  0001 C CNN
-F 2 "" H 850 1600 50  0000 C CNN
-F 3 "" H 850 1600 50  0000 C CNN
-	1    850  1600
+P 2500 4000
+F 0 "#PWR01" H 2500 3750 50  0001 C CNN
+F 1 "Earth" H 2500 3850 50  0001 C CNN
+F 2 "" H 2500 4000 50  0000 C CNN
+F 3 "" H 2500 4000 50  0000 C CNN
+	1    2500 4000
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR1
-U 1 1 5A98937C
-P 850 750
-F 0 "#PWR1" H 850 600 50  0001 C CNN
-F 1 "+3.3V" H 850 890 50  0000 C CNN
-F 2 "" H 850 750 50  0000 C CNN
-F 3 "" H 850 750 50  0000 C CNN
-	1    850  750 
-	1    0    0    -1  
-$EndComp
-$Comp
-L PWR_FLAG #FLG2
+L PWR_FLAG #FLG02
 U 1 1 5A9893C7
-P 850 1400
-F 0 "#FLG2" H 850 1495 50  0001 C CNN
-F 1 "PWR_FLAG" H 850 1580 50  0000 C CNN
-F 2 "" H 850 1400 50  0000 C CNN
-F 3 "" H 850 1400 50  0000 C CNN
-	1    850  1400
+P 2500 3800
+F 0 "#FLG02" H 2500 3895 50  0001 C CNN
+F 1 "PWR_FLAG" H 2500 3980 50  0000 C CNN
+F 2 "" H 2500 3800 50  0000 C CNN
+F 3 "" H 2500 3800 50  0000 C CNN
+	1    2500 3800
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7750 3100 8600 3100
+	7900 4250 8750 4250
 Wire Wire Line
-	7750 3200 8600 3200
-Text GLabel 7750 1700 2    60   Input ~ 0
-SHDN_FL
-Text GLabel 5950 1800 0    60   Input ~ 0
-SHDN_FR
-Text GLabel 5950 1900 0    60   Input ~ 0
-SHDN_RF
-Text GLabel 5950 2800 0    60   Input ~ 0
-SHDN_RB
-Text GLabel 5950 2300 0    60   Input ~ 0
-SHDN_BR
-Text GLabel 5950 2400 0    60   Input ~ 0
-SHDN_BL
-Text GLabel 5950 2500 0    60   Input ~ 0
-SHDN_LB
-Text GLabel 5950 2600 0    60   Input ~ 0
-SHDN_LF
-Text GLabel 950  850  2    60   Input ~ 0
+	7900 4350 8750 4350
+Text GLabel 7100 2250 1    60   Input ~ 0
 Vin
 Wire Wire Line
-	950  1500 850  1500
-Connection ~ 850  1500
+	2200 3900 2600 3900
+Connection ~ 2500 3900
 $Comp
-L PWR_FLAG #FLG1
+L PWR_FLAG #FLG03
 U 1 1 5A98A6CF
-P 850 950
-F 0 "#FLG1" H 850 1045 50  0001 C CNN
-F 1 "PWR_FLAG" H 850 1130 50  0000 C CNN
-F 2 "" H 850 950 50  0000 C CNN
-F 3 "" H 850 950 50  0000 C CNN
-	1    850  950 
+P 2500 3350
+F 0 "#FLG03" H 2500 3445 50  0001 C CNN
+F 1 "PWR_FLAG" H 2500 3530 50  0000 C CNN
+F 2 "" H 2500 3350 50  0000 C CNN
+F 3 "" H 2500 3350 50  0000 C CNN
+	1    2500 3350
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	850  750  850  950 
-Wire Wire Line
-	950  850  850  850 
-Connection ~ 850  850 
+	2500 2900 2500 3350
+NoConn ~ 6900 2250
 $Comp
-L +3.3V #PWR4
-U 1 1 5A98C737
-P 6950 1000
-F 0 "#PWR4" H 6950 850 50  0001 C CNN
-F 1 "+3.3V" H 6950 1140 50  0000 C CNN
-F 2 "" H 6950 1000 50  0000 C CNN
-F 3 "" H 6950 1000 50  0000 C CNN
-	1    6950 1000
-	1    0    0    -1  
-$EndComp
-$Comp
-L +3.3V #PWR6
-U 1 1 5A98C981
-P 8700 1700
-F 0 "#PWR6" H 8700 1550 50  0001 C CNN
-F 1 "+3.3V" H 8700 1840 50  0000 C CNN
-F 2 "" H 8700 1700 50  0000 C CNN
-F 3 "" H 8700 1700 50  0000 C CNN
-	1    8700 1700
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	8700 1700 8950 1700
-$Comp
-L Earth #PWR3
-U 1 1 5A98CCDE
-P 6450 3800
-F 0 "#PWR3" H 6450 3550 50  0001 C CNN
-F 1 "Earth" H 6450 3650 50  0001 C CNN
-F 2 "" H 6450 3800 50  0000 C CNN
-F 3 "" H 6450 3800 50  0000 C CNN
-	1    6450 3800
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6450 3700 6450 3800
-$Comp
-L Earth #PWR5
-U 1 1 5A98CF68
-P 8700 1600
-F 0 "#PWR5" H 8700 1350 50  0001 C CNN
-F 1 "Earth" H 8700 1450 50  0001 C CNN
-F 2 "" H 8700 1600 50  0000 C CNN
-F 3 "" H 8700 1600 50  0000 C CNN
-	1    8700 1600
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	8700 1600 8950 1600
-Text GLabel 8950 1800 0    60   Input ~ 0
-MOSI
-Text GLabel 8950 1900 0    60   Input ~ 0
-SPI_SCL
-Text GLabel 7750 2600 2    60   Input ~ 0
-SPI_SCL
-Text GLabel 7750 2500 2    60   Input ~ 0
-MOSI
-Text GLabel 7750 2400 2    60   Input ~ 0
-MISO
-Text GLabel 9750 2050 2    60   Input ~ 0
-MISO
-Text GLabel 9750 2150 2    60   Input ~ 0
-MISO
-Text GLabel 9750 1850 2    60   Input ~ 0
-CS_M
-Text GLabel 9750 1950 2    60   Input ~ 0
-CS_AG
-Text GLabel 7750 2200 2    60   Input ~ 0
-CS_M
-Text GLabel 7750 2300 2    60   Input ~ 0
-CS_AG
-NoConn ~ 9750 1350
-NoConn ~ 9750 1450
-NoConn ~ 9750 1550
-NoConn ~ 9750 1650
-NoConn ~ 9750 1750
-Wire Wire Line
-	6550 3700 6550 3750
-Wire Wire Line
-	6450 3750 7150 3750
-Wire Wire Line
-	7150 3750 7150 3700
-Wire Wire Line
-	7050 3700 7050 3750
-Connection ~ 7050 3750
-Wire Wire Line
-	6950 3700 6950 3750
-Connection ~ 6950 3750
-Wire Wire Line
-	6850 3700 6850 3750
-Connection ~ 6850 3750
-Wire Wire Line
-	6750 3700 6750 3750
-Connection ~ 6750 3750
-Wire Wire Line
-	6650 3700 6650 3750
-Connection ~ 6650 3750
-Connection ~ 6450 3750
-Connection ~ 6550 3750
-Wire Wire Line
-	6950 1000 6950 1100
-Wire Wire Line
-	7050 1100 7050 1050
-Wire Wire Line
-	7050 1050 6950 1050
-Connection ~ 6950 1050
-NoConn ~ 6750 1100
-$Comp
-L IMU_LSM9DS1 IMU?
-U 1 1 5A991F3D
-P 9350 1750
-F 0 "IMU?" H 9300 1250 50  0000 L CNN
-F 1 "IMU_LSM9DS1" H 9100 2300 50  0000 L TNN
-F 2 "" V 9400 1400 50  0000 L CNN
-F 3 "" H 9350 1600 50  0000 C CNN
-	1    9350 1750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Arduino_Interface P?
+L Arduino_Interface P1
 U 1 1 5A9921FD
-P 8950 3050
-F 0 "P?" H 8950 3300 50  0000 C CNN
-F 1 "Arduino_Interface" V 9050 3050 50  0000 C CNN
-F 2 "" H 8950 3050 50  0000 C CNN
-F 3 "" H 8950 3050 50  0000 C CNN
-	1    8950 3050
+P 9100 4200
+F 0 "P1" H 9100 4450 50  0000 C CNN
+F 1 "Arduino_Interface" V 9200 4200 50  0000 C CNN
+F 2 "" H 9100 4200 50  0000 C CNN
+F 3 "" H 9100 4200 50  0000 C CNN
+	1    9100 4200
 	1    0    0    -1  
 $EndComp
+Text GLabel 8750 4050 0    60   Input ~ 0
+5V_PWR_IN
+Text GLabel 6800 2250 1    60   Input ~ 0
+5V_PWR_IN
+NoConn ~ 6100 2850
+NoConn ~ 6100 3150
+NoConn ~ 6100 3250
+NoConn ~ 6100 3350
+NoConn ~ 6100 3850
+NoConn ~ 7900 3050
+NoConn ~ 7900 3150
+NoConn ~ 7900 3950
+NoConn ~ 7900 4050
+NoConn ~ 7200 2250
+NoConn ~ 6700 4850
+NoConn ~ 6800 4850
+NoConn ~ 6900 4850
+NoConn ~ 7000 4850
+NoConn ~ 7100 4850
+NoConn ~ 7200 4850
+NoConn ~ 7300 4850
+Text GLabel 2600 3200 2    60   Input ~ 0
+5V_PWR_IN
 $Comp
-L Earth #PWR?
-U 1 1 5A9924E9
-P 8600 3000
-F 0 "#PWR?" H 8600 2750 50  0001 C CNN
-F 1 "Earth" H 8600 2850 50  0001 C CNN
-F 2 "" H 8600 3000 50  0000 C CNN
-F 3 "" H 8600 3000 50  0000 C CNN
-	1    8600 3000
-	0    1    1    0   
+L +5V #PWR04
+U 1 1 5AAB4385
+P 2500 2900
+F 0 "#PWR04" H 2500 2750 50  0001 C CNN
+F 1 "+5V" H 2500 3040 50  0000 C CNN
+F 2 "" H 2500 2900 50  0000 C CNN
+F 3 "" H 2500 2900 50  0000 C CNN
+	1    2500 2900
+	1    0    0    -1  
 $EndComp
-Text GLabel 8600 2900 0    60   Input ~ 0
-5V_PWR_IN
-Text GLabel 6650 1100 1    60   Input ~ 0
-5V_PWR_IN
+Wire Wire Line
+	2200 3200 2600 3200
+Connection ~ 2500 3200
+Text GLabel 6100 4250 0    60   Input ~ 0
+I2C0_SDA
+Text GLabel 6100 4350 0    60   Input ~ 0
+I2C0_SCL
+$Sheet
+S 3950 2950 600  500 
+U 5AAB7920
+F0 "I2C0_Front&Back_Sensors" 60
+F1 "i2c0_sensors.sch" 60
+F2 "~EN_2~" I R 4550 3250 60 
+F3 "~EN_3~" I R 4550 3350 60 
+F4 "~EN_0~" I R 4550 3050 60 
+F5 "~EN_1~" I R 4550 3150 60 
+F6 "SDA" I L 3950 3050 60 
+F7 "SCL" I L 3950 3150 60 
+F8 "Vin" I L 3950 3250 60 
+F9 "Gnd" I L 3950 3350 60 
+$EndSheet
+$Sheet
+S 3950 3750 600  500 
+U 5AAB9EF4
+F0 "I2C1_Left&Right_Sensors" 60
+F1 "i2c0_sensors.sch" 60
+F2 "~EN_2~" I R 4550 4050 60 
+F3 "~EN_3~" I R 4550 4150 60 
+F4 "~EN_0~" I R 4550 3850 60 
+F5 "~EN_1~" I R 4550 3950 60 
+F6 "SDA" I L 3950 3850 60 
+F7 "SCL" I L 3950 3950 60 
+F8 "Vin" I L 3950 4050 60 
+F9 "Gnd" I L 3950 4150 60 
+$EndSheet
+Text GLabel 3950 3050 0    60   Input ~ 0
+I2C0_SDA
+Text GLabel 3950 3150 0    60   Input ~ 0
+I2C0_SCL
+Text GLabel 3950 3950 0    60   Input ~ 0
+I2C1_SCL
+Text GLabel 3950 3850 0    60   Input ~ 0
+I2C1_SDA
+Text GLabel 4550 3250 2    60   Input ~ 0
+nEN_BL
+Text GLabel 4550 3150 2    60   Input ~ 0
+nEN_FR
+Text GLabel 4550 3350 2    60   Input ~ 0
+nEN_BR
+Text GLabel 4550 3050 2    60   Input ~ 0
+nEN_FL
+Text GLabel 4550 3850 2    60   Input ~ 0
+nEN_LF
+Text GLabel 4550 3950 2    60   Input ~ 0
+nEN_LB
+Text GLabel 4550 4050 2    60   Input ~ 0
+nEN_RF
+Text GLabel 4550 4150 2    60   Input ~ 0
+nEN_RB
+Text GLabel 7900 2850 2    60   Input ~ 0
+nEN_FL
+Text GLabel 6100 2950 0    60   Input ~ 0
+nEN_FR
+Text GLabel 6100 3050 0    60   Input ~ 0
+nEN_BL
+Text GLabel 6100 3450 0    60   Input ~ 0
+nEN_BR
+Text GLabel 6100 3550 0    60   Input ~ 0
+nEN_LF
+Text GLabel 6100 3650 0    60   Input ~ 0
+nEN_LB
+Text GLabel 6100 3750 0    60   Input ~ 0
+nEN_RF
+Text GLabel 6100 3950 0    60   Input ~ 0
+nEN_RB
+NoConn ~ 7900 3350
+NoConn ~ 7900 3450
+NoConn ~ 7900 3550
+NoConn ~ 7900 3650
+NoConn ~ 7900 3750
+$Comp
+L CONN_01X02 P2
+U 1 1 5AABF366
+P 2000 3350
+F 0 "P2" H 2000 3500 50  0000 C CNN
+F 1 "5V_PWR_FROM_REGULATOR" V 2100 3350 50  0000 C CNN
+F 2 "" H 2000 3350 50  0000 C CNN
+F 3 "" H 2000 3350 50  0000 C CNN
+	1    2000 3350
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	2200 3300 2200 3200
+Wire Wire Line
+	2200 3400 2200 3900
+Text GLabel 3950 4050 0    60   Input ~ 0
+Vin
+Text GLabel 3950 3250 0    60   Input ~ 0
+Vin
+Text GLabel 6600 4850 3    60   Input ~ 0
+GND
+Text GLabel 3950 4150 0    60   Input ~ 0
+GND
+Text GLabel 8750 4150 0    60   Input ~ 0
+GND
 $EndSCHEMATC
