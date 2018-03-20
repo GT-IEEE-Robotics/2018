@@ -1,8 +1,7 @@
 EESchema-DOCLIB  Version 2.0
 #
 $CMP Arduino_Interface
-D Interface to Arduino for power and serial comm.
-K arduino interface
+D Arduino Interface
 $ENDCMP
 #
 $CMP CONN_01X04

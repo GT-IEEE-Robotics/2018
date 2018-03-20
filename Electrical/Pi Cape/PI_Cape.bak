@@ -35,10 +35,10 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 11
-Title ""
+Title "Pi_Cape"
 Date ""
 Rev ""
-Comp ""
+Comp "Gatech IEEE Hardware Team"
 Comment1 ""
 Comment2 ""
 Comment3 ""
@@ -85,10 +85,6 @@ F 3 "" H 2500 3800 50  0000 C CNN
 	1    2500 3800
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7900 4250 8750 4250
-Wire Wire Line
-	7900 4350 8750 4350
 Text GLabel 7100 2250 1    60   Input ~ 0
 Vin
 Wire Wire Line
@@ -108,19 +104,6 @@ $EndComp
 Wire Wire Line
 	2500 2900 2500 3350
 NoConn ~ 6900 2250
-$Comp
-L Arduino_Interface P1
-U 1 1 5A9921FD
-P 9100 4200
-F 0 "P1" H 9100 4450 50  0000 C CNN
-F 1 "Arduino_Interface" V 9200 4200 50  0000 C CNN
-F 2 "" H 9100 4200 50  0000 C CNN
-F 3 "" H 9100 4200 50  0000 C CNN
-	1    9100 4200
-	1    0    0    -1  
-$EndComp
-Text GLabel 8750 4050 0    60   Input ~ 0
-5V_PWR_IN
 Text GLabel 6800 2250 1    60   Input ~ 0
 5V_PWR_IN
 NoConn ~ 6100 2850
@@ -131,7 +114,6 @@ NoConn ~ 6100 3850
 NoConn ~ 7900 3050
 NoConn ~ 7900 3150
 NoConn ~ 7900 3950
-NoConn ~ 7900 4050
 NoConn ~ 7200 2250
 NoConn ~ 6700 4850
 NoConn ~ 6800 4850
@@ -239,7 +221,7 @@ U 1 1 5AABF366
 P 2000 3350
 F 0 "P2" H 2000 3500 50  0000 C CNN
 F 1 "5V_PWR_FROM_REGULATOR" V 2100 3350 50  0000 C CNN
-F 2 "" H 2000 3350 50  0000 C CNN
+F 2 "Pi Cape Footprints:Pin_Header_Latched_1x02" H 2000 3350 50  0001 C CNN
 F 3 "" H 2000 3350 50  0000 C CNN
 	1    2000 3350
 	-1   0    0    -1  
@@ -256,6 +238,24 @@ Text GLabel 6600 4850 3    60   Input ~ 0
 GND
 Text GLabel 3950 4150 0    60   Input ~ 0
 GND
-Text GLabel 8750 4150 0    60   Input ~ 0
+Text GLabel 3950 3350 0    60   Input ~ 0
 GND
+NoConn ~ 7900 4050
+Wire Wire Line
+	8300 4250 7900 4250
+Wire Wire Line
+	7900 4350 8300 4350
+Text GLabel 8300 4150 0    60   Input ~ 0
+GND
+$Comp
+L Arduino_Interface P?
+U 1 1 5AB07671
+P 8550 4250
+F 0 "P?" H 8550 4450 50  0000 C CNN
+F 1 "Arduino_Interface" V 8650 4250 50  0000 C CNN
+F 2 "" H 8550 4250 50  0000 C CNN
+F 3 "" H 8550 4250 50  0000 C CNN
+	1    8550 4250
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
