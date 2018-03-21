@@ -258,4 +258,25 @@ F 3 "" H 8550 4250 50  0000 C CNN
 	1    8550 4250
 	1    0    0    -1  
 $EndComp
+$Comp
+L 7-segment_LED U2
+U 1 1 5AB1C163
+P 9250 3400
+F 0 "U2" H 9250 2650 60  0000 C CNN
+F 1 "7-segment_LED" H 9250 2800 60  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x05" H 9150 3200 60  0001 C CNN
+F 3 "" H 9150 3200 60  0000 C CNN
+	1    9250 3400
+	0    -1   -1   0   
+$EndComp
+Text GLabel 9300 3200 0    60   Input ~ 0
+GND
+Text GLabel 9300 3350 0    60   Input ~ 0
+5V_PWR_IN
+Text GLabel 9300 3050 0    60   Input ~ 0
+Vin
+Text GLabel 9300 3650 0    60   Input ~ 0
+I2C1_SDA
+Text GLabel 9300 3500 0    60   Input ~ 0
+I2C1_SCL
 $EndSCHEMATC
