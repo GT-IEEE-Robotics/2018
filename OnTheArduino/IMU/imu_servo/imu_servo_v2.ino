@@ -57,7 +57,7 @@ Distributed as-is; no warranty is given.
 #include <SparkFunLSM9DS1.h>
 #include <Servo.h>
 
-Servo myservo;
+Servo my_servo;
 
 //////////////////////////
 // LSM9DS1 Library Init //
