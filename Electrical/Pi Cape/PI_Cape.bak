@@ -273,7 +273,7 @@ Text GLabel 9300 3200 0    60   Input ~ 0
 GND
 Text GLabel 9300 3350 0    60   Input ~ 0
 5V_PWR_IN
-Text GLabel 9250 3050 0    60   Input ~ 0
+Text GLabel 9300 3050 0    60   Input ~ 0
 Vin
 Text GLabel 9300 3650 0    60   Input ~ 0
 I2C1_SDA

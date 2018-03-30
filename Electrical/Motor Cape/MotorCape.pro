@@ -1,4 +1,4 @@
-update=Thu 01 Mar 2018 08:22:30 PM EST
+update=Thu 29 Mar 2018 08:02:39 PM EDT
 version=1
 last_client=kicad
 [pcbnew]
@@ -23,6 +23,8 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
+[general]
+version=1
 [eeschema]
 version=1
 LibDir=Library
@@ -62,5 +64,4 @@ LibName32=contrib
 LibName33=valves
 LibName34=Library/MotorCapeComponents
 LibName35=arduino
-[general]
-version=1
+LibName36=DueShieldComponents

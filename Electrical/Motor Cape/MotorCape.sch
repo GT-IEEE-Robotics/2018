@@ -33,12 +33,13 @@ LIBS:contrib
 LIBS:valves
 LIBS:MotorCapeComponents
 LIBS:arduino
+LIBS:DueShieldComponents
 LIBS:MotorCape-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 2
+Sheet 1 1
 Title ""
 Date ""
 Rev ""
@@ -65,7 +66,7 @@ U 1 1 59E98C23
 P 9750 6000
 F 0 "J1" H 9750 6300 50  0000 C CNN
 F 1 "back_right motor" H 9750 5600 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x06_Pitch2.54mm" H 9750 6000 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 9750 6000 50  0001 C CNN
 F 3 "" H 9750 6000 50  0001 C CNN
 	1    9750 6000
 	1    0    0    -1  
@@ -76,7 +77,7 @@ U 1 1 59E98CDE
 P 10950 5150
 F 0 "J2" H 10950 5450 50  0000 C CNN
 F 1 "front_right motor" H 10950 4750 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x06_Pitch2.54mm" H 10950 5150 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 10950 5150 50  0001 C CNN
 F 3 "" H 10950 5150 50  0001 C CNN
 	1    10950 5150
 	1    0    0    1   
@@ -87,7 +88,7 @@ U 1 1 59E98D1F
 P 2950 5050
 F 0 "J3" H 2950 5350 50  0000 C CNN
 F 1 "back_left motor" H 2950 4650 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x06_Pitch2.54mm" H 2950 5050 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 2950 5050 50  0001 C CNN
 F 3 "" H 2950 5050 50  0001 C CNN
 	1    2950 5050
 	-1   0    0    -1  
@@ -98,7 +99,7 @@ U 1 1 59E98DF3
 P 2950 4200
 F 0 "J4" H 2950 4500 50  0000 C CNN
 F 1 "front_left motor" H 2950 3800 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x06_Pitch2.54mm" H 2950 4200 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 2950 4200 50  0001 C CNN
 F 3 "" H 2950 4200 50  0001 C CNN
 	1    2950 4200
 	-1   0    0    1   
@@ -109,7 +110,7 @@ U 1 1 59E98E3C
 P 2950 7000
 F 0 "J6" H 2950 7300 50  0000 C CNN
 F 1 "flag_wheel motor" H 2900 6600 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x06_Pitch2.54mm" H 2950 7000 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 2950 7000 50  0001 C CNN
 F 3 "" H 2950 7000 50  0001 C CNN
 	1    2950 7000
 	-1   0    0    -1  
@@ -120,7 +121,7 @@ U 1 1 59E98E90
 P 2950 6100
 F 0 "J5" H 2950 6400 50  0000 C CNN
 F 1 "draw_bridge motor" H 2950 5700 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x06_Pitch2.54mm" H 2950 6100 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x06" H 2950 6100 50  0001 C CNN
 F 3 "" H 2950 6100 50  0001 C CNN
 	1    2950 6100
 	-1   0    0    1   
@@ -254,7 +255,7 @@ U 1 1 5A0ED002
 P 8700 3750
 F 0 "J11" H 8700 3950 50  0000 C CNN
 F 1 "flag_wheel servo" H 8700 3550 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Angled_1x03_Pitch2.54mm" H 8700 3750 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x03" H 8700 3750 50  0001 C CNN
 F 3 "" H 8700 3750 50  0001 C CNN
 	1    8700 3750
 	1    0    0    -1  
@@ -1294,17 +1295,6 @@ Wire Wire Line
 Wire Wire Line
 	9300 4200 9300 4350
 $Comp
-L Arduino_Due_Shield ARD1
-U 1 1 5A993409
-P 5850 2400
-F 0 "ARD1" V 5950 2400 60  0000 C CNN
-F 1 "Arduino_Due_Shield" V 5750 2400 60  0000 C CNN
-F 2 "MotorCapeComponents:Arduino_Due_Shield" H 6550 5150 60  0001 C CNN
-F 3 "" H 6550 5150 60  0001 C CNN
-	1    5850 2400
-	0    1    1    0   
-$EndComp
-$Comp
 L CONN_01X04 P14
 U 1 1 5AA1DD33
 P 10400 1650
@@ -1346,17 +1336,6 @@ NoConn ~ 8450 2250
 NoConn ~ 8450 2350
 NoConn ~ 8450 2650
 $Comp
-L IMU U1
-U 1 1 5AA1F45A
-P 9250 2200
-F 0 "U1" H 9650 2250 60  0000 C CNN
-F 1 "IMU" H 9650 2350 60  0000 C CNN
-F 2 "MotorCapeComponents:IMU" H 9250 2200 60  0001 C CNN
-F 3 "" H 9250 2200 60  0000 C CNN
-	1    9250 2200
-	1    0    0    -1  
-$EndComp
-$Comp
 L Earth #PWR042
 U 1 1 5AA1F5F0
 P 10350 2550
@@ -1390,10 +1369,10 @@ SDA
 Text GLabel 10350 2850 2    60   Input ~ 0
 SCL
 $Comp
-L +3.3V #PWR?
+L +3.3V #PWR044
 U 1 1 5AAB580D
 P 8950 3000
-F 0 "#PWR?" H 8950 2850 50  0001 C CNN
+F 0 "#PWR044" H 8950 2850 50  0001 C CNN
 F 1 "+3.3V" H 8950 3140 50  0000 C CNN
 F 2 "" H 8950 3000 50  0000 C CNN
 F 3 "" H 8950 3000 50  0000 C CNN
@@ -1401,10 +1380,10 @@ F 3 "" H 8950 3000 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L +3.3V #PWR?
+L +3.3V #PWR045
 U 1 1 5AAB58EE
 P 8950 2750
-F 0 "#PWR?" H 8950 2600 50  0001 C CNN
+F 0 "#PWR045" H 8950 2600 50  0001 C CNN
 F 1 "+3.3V" H 8950 2890 50  0000 C CNN
 F 2 "" H 8950 2750 50  0000 C CNN
 F 3 "" H 8950 2750 50  0000 C CNN
@@ -1417,4 +1396,26 @@ Wire Wire Line
 	8950 2850 9050 2850
 Wire Wire Line
 	9050 2750 8950 2750
+$Comp
+L IMU U1
+U 1 1 5ABDC0C0
+P 9250 2200
+F 0 "U1" H 9650 2250 60  0000 C CNN
+F 1 "IMU" H 9650 2350 60  0000 C CNN
+F 2 "MotorCapeComponents:IMU" H 9250 2200 60  0001 C CNN
+F 3 "" H 9250 2200 60  0000 C CNN
+	1    9250 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Arduino_Due_Shield-NEW ARD1
+U 1 1 5ABDC643
+P 5850 2400
+F 0 "ARD1" V 5950 2400 60  0000 C CNN
+F 1 "Arduino_Due_Shield-NEW" V 5750 2400 60  0000 C CNN
+F 2 "MotorCapeComponents:Arduino_Due_Shield" H 6550 5150 60  0001 C CNN
+F 3 "" H 6550 5150 60  0001 C CNN
+	1    5850 2400
+	0    1    1    0   
+$EndComp
 $EndSCHEMATC
