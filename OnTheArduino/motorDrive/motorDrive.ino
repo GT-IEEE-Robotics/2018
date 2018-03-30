@@ -1,10 +1,23 @@
+// put your setup code here, to run once:
+// F = forward, B = backward
+// R = right side, L = left side
+// define pins for each motor speed & direction:
+// not sure on these but I'm guessing: 
+#define FL (8)
+#define FR (9)
+#define BL (10)
+#define BR (11)
+// we'll update this tomorrow once we define our motor pins
+
 void setup() {
-  // put your setup code here, to run once:
+  // speed pins (pwm. analog write values from 0-255)
   pinMode(8,OUTPUT);
   pinMode(9,OUTPUT);
   pinMode(10,OUTPUT);
   pinMode(11,OUTPUT);
-  pinMode(46,OUTPUT);
+
+  // motor direction pins (GPIOs)
+  pinMode(46,OUTPUT); 
   pinMode(48,OUTPUT);
   pinMode(50,OUTPUT);
   pinMode(52,OUTPUT);
@@ -45,10 +58,12 @@ void stopRobot() {
 }
 
 void driveForward(int magnitude) {
+  // direction
   digitalWrite(46,LOW);
   digitalWrite(48,LOW);
   digitalWrite(50,LOW);
   digitalWrite(52,LOW);
+  // speed
   analogWrite(8,magnitude);
   analogWrite(9,magnitude);
   analogWrite(10,magnitude);
@@ -56,10 +71,12 @@ void driveForward(int magnitude) {
 }
 
 void driveBackward(int magnitude) {
+  // direction
   digitalWrite(46,HIGH);
   digitalWrite(48,HIGH);
   digitalWrite(50,HIGH);
   digitalWrite(52,HIGH);
+  // speed
   analogWrite(8,magnitude);
   analogWrite(9,magnitude);
   analogWrite(10,magnitude);
@@ -68,8 +85,8 @@ void driveBackward(int magnitude) {
 
 void driveLeft(int magnitude) {
   digitalWrite(46,LOW);
-  digitalWrite(48,HIGH);
-  digitalWrite(50,HIGH);
+  digitalWrite(48,HIGH); // reverse
+  digitalWrite(50,HIGH); // reverse 
   digitalWrite(52,LOW);
   analogWrite(8,magnitude);
   analogWrite(9,magnitude);
@@ -78,10 +95,10 @@ void driveLeft(int magnitude) {
 }
 
 void driveRight(int magnitude) {
-  digitalWrite(46,HIGH);
+  digitalWrite(46,HIGH); // FR?
   digitalWrite(48,LOW);
   digitalWrite(50,LOW);
-  digitalWrite(52,HIGH);
+  digitalWrite(52,HIGH); // BL?
   analogWrite(8,magnitude);
   analogWrite(9,magnitude);
   analogWrite(10,magnitude);
