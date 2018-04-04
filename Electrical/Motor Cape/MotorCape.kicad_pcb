@@ -2,8 +2,8 @@
 
   (general
     (links 98)
-    (no_connects 96)
-    (area 0 0 0 0)
+    (no_connects 98)
+    (area 13.724999 60.820237 163.494001 133.325)
     (thickness 1.6)
     (drawings 24)
     (tracks 0)
@@ -1172,7 +1172,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Straight_1x06 (layer F.Cu) (tedit 0) (tstamp 5ABD8B68)
-    (at 21 87.5)
+    (at 18.6 90.7)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /59E98E90)
@@ -1213,7 +1213,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Straight_1x06 (layer F.Cu) (tedit 0) (tstamp 5ABD8B72)
-    (at 21 87.5)
+    (at 29.75 88)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /59E98E3C)
@@ -1254,7 +1254,7 @@
   )
 
   (module Pin_Headers:Pin_Header_Straight_1x03 (layer F.Cu) (tedit 0) (tstamp 5ABD8B79)
-    (at 21 87.5)
+    (at 27.35 75.85)
     (descr "Through hole pin header")
     (tags "pin header")
     (path /5A0ED002)
