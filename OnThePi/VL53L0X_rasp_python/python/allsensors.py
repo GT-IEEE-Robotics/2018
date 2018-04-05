@@ -16,7 +16,6 @@ while(1):
     oneBus = readBus1()
     prettyPrint(1, oneBus)
     time.sleep(delay)
-
     print ()
 
 

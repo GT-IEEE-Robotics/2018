@@ -27,7 +27,18 @@ import time
 import VL53L0X
 import RPi.GPIO as GPIO
 
+
+tof1 = 0
+tof2 = 0
+tof3 = 0
+tof4 = 0
+
 def initBus0():
+    global tof1
+    global tof2
+    global tof3
+    global tof4
+
 	# GPIO for Sensor 1 shutdown pin
 	sensor1_shutdown = 20
 	# GPIO for sensor 3 shutdown pin
@@ -95,23 +106,32 @@ def initBus0():
     #print ("Timing %d ms" % (timing/1000))
 
 def stopBus0():
-  tof1.stop_ranging()
-  GPIO.output(sensor1_shutdown, GPIO.LOW)
-  tof2.stop_ranging()
-  GPIO.output(sensor2_shutdown, GPIO.LOW)
-  tof3.stop_ranging()
-  GPIO.output(sensor3_shutdown, GPIO.LOW)
-  tof4.stop_ranging()
-  GPIO.output(sensor4_shutdown, GPIO.LOW)
+    global tof1
+    global tof2
+    global tof3
+    global tof4
+
+    tof1.stop_ranging()
+    GPIO.output(sensor1_shutdown, GPIO.LOW)
+    tof2.stop_ranging()
+    GPIO.output(sensor2_shutdown, GPIO.LOW)
+    tof3.stop_ranging()
+    GPIO.output(sensor3_shutdown, GPIO.LOW)
+    tof4.stop_ranging()
+    GPIO.output(sensor4_shutdown, GPIO.LOW)
 
 def readBus0():
-  distances = [0,0,0,0]
-  distances[0] = tof1.get_distance()
-  distances[1] = tof2.get_distance()
-  distances[2] = tof3.get_distance()
-  distances[3] = tof4.get_distance()
-  time.sleep(timing/1000000)
-  return distances
+    global tof1
+    global tof2
+    global tof3
+    global tof4
+    distances = [0,0,0,0]
+    distances[0] = tof1.get_distance()
+    distances[1] = tof2.get_distance()
+    distances[2] = tof3.get_distance()
+    distances[3] = tof4.get_distance()
+    time.sleep(timing/1000000)
+    return distances
 
 
  
