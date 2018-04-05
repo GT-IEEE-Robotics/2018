@@ -33,13 +33,7 @@ tof7 = 0
 tof8 = 0
 timing = 0
 
-def initBus1():
-    global tof5
-    global tof6
-    global tof7
-    global tof8
-    global timing
-
+def initBus1(gpio_arr):
     # GPIO for Sensor 1 shutdown pin
     sensor5_shutdown = 12
     # GPIO for sensor 3 shutdown pin
@@ -50,10 +44,10 @@ def initBus1():
     sensor8_shutdown = 21
 
 
-    GPIO1.setwarnings(False)
+    GPIO.setwarnings(False)
 
     # Setup GPIO for shutdown pins on each VL53L0X
-    GPIO1.setmode(GPIO1.BCM)
+    GPIO.setmode(GPIO.BCM)
     GPIO1.setup(sensor5_shutdown, GPIO1.OUT)
     GPIO1.setup(sensor6_shutdown, GPIO1.OUT)
     GPIO1.setup(sensor7_shutdown, GPIO1.OUT)
@@ -135,3 +129,4 @@ def readBus1():
     time.sleep(timing1/1000000)
     return distances1
 
+sensor1_shutdown
