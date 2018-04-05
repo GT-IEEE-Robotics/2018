@@ -31,12 +31,14 @@ tof5 = 0
 tof6 = 0
 tof7 = 0
 tof8 = 0
+timing = 0
 
 def initBus1():
     global tof5
     global tof6
     global tof7
     global tof8
+    global timing
 
     # GPIO for Sensor 1 shutdown pin
     sensor5_shutdown = 12

@@ -32,12 +32,14 @@ tof1 = 0
 tof2 = 0
 tof3 = 0
 tof4 = 0
+timing = 0
 
 def initBus0():
-    global tof1
-    global tof2
-    global tof3
-    global tof4
+    	global tof1
+    	global tof2
+    	global tof3
+    	global tof4
+	global timing
 
 	# GPIO for Sensor 1 shutdown pin
 	sensor1_shutdown = 20
@@ -95,14 +97,14 @@ def initBus0():
 	tof3.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
 
 	# Set shutdown pin high for the first VL53L0X then 
-    # call to start ranging 
-    GPIO.output(sensor4_shutdown, GPIO.HIGH)
-    time.sleep(0.50)
-    tof4.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
+    	# call to start ranging 
+    	GPIO.output(sensor4_shutdown, GPIO.HIGH)
+    	time.sleep(0.50)
+    	tof4.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
 
-    timing = tof1.get_timing()
-    if (timing < 20000):
-        timing = 20000
+    	timing = tof1.get_timing()
+    	if (timing < 20000):
+        	timing = 20000
     #print ("Timing %d ms" % (timing/1000))
 
 def stopBus0():
