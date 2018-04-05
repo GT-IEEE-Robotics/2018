@@ -58,10 +58,10 @@ time.sleep(0.50)
 
 # Create one object per VL53L0X passing the address to give to
 # each.
-tof5 = VL53L0X_bus1.VL53L0X1(address=0x20)
-tof6 = VL53L0X_bus1.VL53L0X1(address=0x21)
-tof7 = VL53L0X_bus1.VL53L0X1(address=0x22)
-tof8 = VL53L0X_bus1.VL53L0X1(address=0x23)
+tof5 = VL53L0X_bus1.VL53L0X(address=0x20)
+tof6 = VL53L0X_bus1.VL53L0X(address=0x21)
+tof7 = VL53L0X_bus1.VL53L0X(address=0x22)
+tof8 = VL53L0X_bus1.VL53L0X(address=0x23)
 
 
 # Set shutdown pin high for the first VL53L0X then 
@@ -88,57 +88,49 @@ GPIO.output(sensor8_shutdown, GPIO.HIGH)
 time.sleep(0.50)
 tof8.start_ranging(VL53L0X_bus1.VL53L0X_BETTER_ACCURACY_MODE)
 
-timing1 = tof5.get_timing()
-if (timing1 < 20000):
-    timing1 = 20000
-print ("Timing %d ms" % (timing1/1000))
+timing = tof5.get_timing()
+if (timing < 20000):
+    timing = 20000
+print ("Timing %d ms" % (timing/1000))
 
-#while(1):
-#    distance = tof5.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof5.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof5.my_object_number)
+while(1):
+    distance = tof5.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof5.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof5.my_object_number)
 
-#    distance = tof6.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof6.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof6.my_object_number)
+    distance = tof6.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof6.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof6.my_object_number)
 
-#    distance = tof7.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof7.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof7.my_object_number)
+    distance = tof7.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof7.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof7.my_object_number)
 
-#    distance = tof8.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof8.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof8.my_object_number)
-
-
-
-#    time.sleep(timing/1000000.00)
+    distance = tof8.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof8.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof8.my_object_number)
 
 
-def stopBus1():
-  tof5.stop_ranging()
-  GPIO.output(sensor5_shutdown, GPIO.LOW)
-  tof6.stop_ranging()
-  GPIO.output(sensor6_shutdown, GPIO.LOW)
-  tof7.stop_ranging()
-  GPIO.output(sensor7_shutdown, GPIO.LOW)
-  tof8.stop_ranging()
-  GPIO.output(sensor8_shutdown, GPIO.LOW)
 
-def readBus1():
-  distances1 = [0,0,0,0]
-  distances1[0] = tof5.get_distance()
-  distances1[1] = tof6.get_distance()
-  distances1[2] = tof7.get_distance()
-  distances1[3] = tof8.get_distance()
-  time.sleep(timing1/1000000)
-  return distances1
+    time.sleep(timing/1000000.00)
+
+tof5.stop_ranging()
+GPIO.output(sensor5_shutdown, GPIO.LOW)
+tof6.stop_ranging()
+GPIO.output(sensor6_shutdown, GPIO.LOW)
+tof7.stop_ranging()
+GPIO.output(sensor7_shutdown, GPIO.LOW)
+tof8.stop_ranging()
+GPIO.output(sensor8_shutdown, GPIO.LOW)
+
+
+
 

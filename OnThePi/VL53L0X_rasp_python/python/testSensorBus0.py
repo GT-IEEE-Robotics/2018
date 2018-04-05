@@ -91,54 +91,46 @@ tof4.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
 timing = tof1.get_timing()
 if (timing < 20000):
     timing = 20000
-#print ("Timing %d ms" % (timing/1000))
+print ("Timing %d ms" % (timing/1000))
 
-#while(1):
-#    distance = tof1.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof1.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof1.my_object_number)
+while(1):
+    distance = tof1.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof1.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof1.my_object_number)
 
-#    distance = tof3.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof2.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof2.my_object_number)
+    distance = tof3.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof2.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof2.my_object_number)
 
-#    distance = tof3.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof3.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof3.my_object_number)
+    distance = tof3.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof3.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof3.my_object_number)
 
-#    distance = tof4.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof4.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof4.my_object_number)
+    distance = tof4.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof4.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof4.my_object_number)
 
 
 
-#    time.sleep(timing/1000000.00)
+    time.sleep(timing/1000000.00)
 
-def stopBus0():
-  tof1.stop_ranging()
-  GPIO.output(sensor1_shutdown, GPIO.LOW)
-  tof2.stop_ranging()
-  GPIO.output(sensor2_shutdown, GPIO.LOW)
-  tof3.stop_ranging()
-  GPIO.output(sensor3_shutdown, GPIO.LOW)
-  tof4.stop_ranging()
-  GPIO.output(sensor4_shutdown, GPIO.LOW)
+tof1.stop_ranging()
+GPIO.output(sensor1_shutdown, GPIO.LOW)
+tof3.stop_ranging()
+GPIO.output(sensor2_shutdown, GPIO.LOW)
+tof6.stop_ranging()
+GPIO.output(sensor3_shutdown, GPIO.LOW)
+tof8.stop_ranging()
+GPIO.output(sensor4_shutdown, GPIO.LOW)
 
-def readBus0():
-  distances = [0,0,0,0]
-  distances[0] = tof1.get_distance()
-  distances[1] = tof2.get_distance()
-  distances[2] = tof3.get_distance()
-  distances[3] = tof4.get_distance()
-  time.sleep(timing/1000000)
-  return distances
+
 
 

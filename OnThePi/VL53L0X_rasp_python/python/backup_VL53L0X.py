@@ -79,10 +79,12 @@ write_func = WRITEFUNC(i2c_write)
 tof_lib.VL53L0X_set_i2c(read_func, write_func)
 
 class VL53L0X(object):
+    """VL53L0X ToF."""
 
     object_number = 0
 
     def __init__(self, address=0x29, TCA9548A_Num=255, TCA9548A_Addr=0, **kwargs):
+        """Initialize the VL53L0X ToF Sensor from ST"""
         self.device_address = address
         self.TCA9548A_Device = TCA9548A_Num
         self.TCA9548A_Address = TCA9548A_Addr
@@ -90,12 +92,15 @@ class VL53L0X(object):
         VL53L0X.object_number += 1
 
     def start_ranging(self, mode = VL53L0X_GOOD_ACCURACY_MODE):
+        """Start VL53L0X ToF Sensor Ranging"""
         tof_lib.startRanging(self.my_object_number, mode, self.device_address, self.TCA9548A_Device, self.TCA9548A_Address)
-
+        
     def stop_ranging(self):
+        """Stop VL53L0X ToF Sensor Ranging"""
         tof_lib.stopRanging(self.my_object_number)
 
     def get_distance(self):
+        """Get distance from VL53L0X ToF Sensor"""
         return tof_lib.getDistance(self.my_object_number)
 
     # This function included to show how to access the ST library directly

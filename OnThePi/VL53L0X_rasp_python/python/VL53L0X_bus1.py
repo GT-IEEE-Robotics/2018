@@ -78,7 +78,7 @@ write_func = WRITEFUNC(i2c_write)
 # pass i2c read and write function pointers to VL53L0X library
 tof_lib.VL53L0X_set_i2c(read_func, write_func)
 
-class VL53L0X(object):
+class VL53L0X1(object):
     """VL53L0X ToF."""
 
     object_number = 0
@@ -88,8 +88,8 @@ class VL53L0X(object):
         self.device_address = address
         self.TCA9548A_Device = TCA9548A_Num
         self.TCA9548A_Address = TCA9548A_Addr
-        self.my_object_number = VL53L0X.object_number
-        VL53L0X.object_number += 1
+        self.my_object_number = VL53L0X1.object_number
+        VL53L0X1.object_number += 1
 
     def start_ranging(self, mode = VL53L0X_GOOD_ACCURACY_MODE):
         """Start VL53L0X ToF Sensor Ranging"""
