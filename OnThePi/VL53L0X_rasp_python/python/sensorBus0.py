@@ -27,7 +27,7 @@ import time
 import VL53L0X
 import RPi.GPIO as GPIO
 
-def initSensor():
+def initBus0():
 	# GPIO for Sensor 1 shutdown pin
 	sensor1_shutdown = 20
 	# GPIO for sensor 3 shutdown pin
@@ -84,44 +84,15 @@ def initSensor():
 	tof3.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
 
 	# Set shutdown pin high for the first VL53L0X then 
-# call to start ranging 
-GPIO.output(sensor4_shutdown, GPIO.HIGH)
-time.sleep(0.50)
-tof4.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
+    # call to start ranging 
+    GPIO.output(sensor4_shutdown, GPIO.HIGH)
+    time.sleep(0.50)
+    tof4.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
 
-timing = tof1.get_timing()
-if (timing < 20000):
-    timing = 20000
-#print ("Timing %d ms" % (timing/1000))
-
-#while(1):
-#    distance = tof1.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof1.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof1.my_object_number)
-
-#    distance = tof3.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof2.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof2.my_object_number)
-
-#    distance = tof3.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof3.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof3.my_object_number)
-
-#    distance = tof4.get_distance()
-#    if (distance > 0):
-#        print ("sensor %d - %d mm, %d cm" % (tof4.my_object_number, distance, (distance/10)))
-#    else:
-#        print ("%d - Error" % tof4.my_object_number)
-
-
-
-#    time.sleep(timing/1000000.00)
+    timing = tof1.get_timing()
+    if (timing < 20000):
+        timing = 20000
+    #print ("Timing %d ms" % (timing/1000))
 
 def stopBus0():
   tof1.stop_ranging()
@@ -143,3 +114,4 @@ def readBus0():
   return distances
 
 
+ 
