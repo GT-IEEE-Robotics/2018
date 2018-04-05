@@ -25,7 +25,7 @@
 
 import time
 import VL53L0X_bus1
-import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO1
 
 # GPIO for Sensor 1 shutdown pin
 sensor5_shutdown = 12
@@ -37,54 +37,54 @@ sensor7_shutdown = 19
 sensor8_shutdown = 21
 
 
-GPIO.setwarnings(False)
+GPIO1.setwarnings(False)
 
 # Setup GPIO for shutdown pins on each VL53L0X
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(sensor5_shutdown, GPIO.OUT)
-GPIO.setup(sensor6_shutdown, GPIO.OUT)
-GPIO.setup(sensor7_shutdown, GPIO.OUT)
-GPIO.setup(sensor8_shutdown, GPIO.OUT)
+GPIO1.setmode(GPIO1.BCM)
+GPIO1.setup(sensor5_shutdown, GPIO1.OUT)
+GPIO1.setup(sensor6_shutdown, GPIO1.OUT)
+GPIO1.setup(sensor7_shutdown, GPIO1.OUT)
+GPIO1.setup(sensor8_shutdown, GPIO1.OUT)
 
 
 # Set all shutdown pins low to turn off each VL53L0X
-GPIO.output(sensor5_shutdown, GPIO.LOW)
-GPIO.output(sensor6_shutdown, GPIO.LOW)
-GPIO.output(sensor7_shutdown, GPIO.LOW)
-GPIO.output(sensor8_shutdown, GPIO.LOW)
+GPIO1.output(sensor5_shutdown, GPIO1.LOW)
+GPIO1.output(sensor6_shutdown, GPIO1.LOW)
+GPIO1.output(sensor7_shutdown, GPIO1.LOW)
+GPIO1.output(sensor8_shutdown, GPIO1.LOW)
 
 # Keep all low for 500 ms or so to make sure they reset
 time.sleep(0.50)
 
 # Create one object per VL53L0X passing the address to give to
 # each.
-tof5 = VL53L0X_bus1.VL53L0X1(address=0x20)
-tof6 = VL53L0X_bus1.VL53L0X1(address=0x21)
-tof7 = VL53L0X_bus1.VL53L0X1(address=0x22)
-tof8 = VL53L0X_bus1.VL53L0X1(address=0x23)
+tof5 = VL53L0X_bus1.VL53L0X1(address=0x24)
+tof6 = VL53L0X_bus1.VL53L0X1(address=0x25)
+tof7 = VL53L0X_bus1.VL53L0X1(address=0x26)
+tof8 = VL53L0X_bus1.VL53L0X1(address=0x27)
 
 
 # Set shutdown pin high for the first VL53L0X then 
 # call to start ranging 
-GPIO.output(sensor5_shutdown, GPIO.HIGH)
+GPIO1.output(sensor5_shutdown, GPIO1.HIGH)
 time.sleep(0.50)
 tof5.start_ranging(VL53L0X_bus1.VL53L0X_BETTER_ACCURACY_MODE)
 
 # Set shutdown pin high for the first VL53L0X then 
 # call to start ranging 
-GPIO.output(sensor6_shutdown, GPIO.HIGH)
+GPIO1.output(sensor6_shutdown, GPIO1.HIGH)
 time.sleep(0.50)
 tof6.start_ranging(VL53L0X_bus1.VL53L0X_BETTER_ACCURACY_MODE)
 
 # Set shutdown pin high for the first VL53L0X then 
 # call to start ranging 
-GPIO.output(sensor7_shutdown, GPIO.HIGH)
+GPIO1.output(sensor7_shutdown, GPIO1.HIGH)
 time.sleep(0.50)
 tof7.start_ranging(VL53L0X_bus1.VL53L0X_BETTER_ACCURACY_MODE)
 
 # Set shutdown pin high for the first VL53L0X then 
 # call to start ranging 
-GPIO.output(sensor8_shutdown, GPIO.HIGH)
+GPIO1.output(sensor8_shutdown, GPIO1.HIGH)
 time.sleep(0.50)
 tof8.start_ranging(VL53L0X_bus1.VL53L0X_BETTER_ACCURACY_MODE)
 

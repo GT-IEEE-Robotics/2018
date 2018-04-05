@@ -81,7 +81,7 @@ tof_lib.VL53L0X_set_i2c(read_func, write_func)
 class VL53L0X1(object):
     """VL53L0X ToF."""
 
-    object_number = 0
+    object_number = 4
 
     def __init__(self, address=0x29, TCA9548A_Num=255, TCA9548A_Addr=0, **kwargs):
         """Initialize the VL53L0X ToF Sensor from ST"""

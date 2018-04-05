@@ -96,31 +96,32 @@ print ("Timing %d ms" % (timing/1000))
 while(1):
     distance = tof1.get_distance()
     if (distance > 0):
-        print ("sensor %d - %d mm, %d cm" % (tof1.my_object_number, distance, (distance/10)))
+        print ("sensor %3d - %3d mm, %3d cm" % (tof1.my_object_number, distance, (distance/10)))
     else:
         print ("%d - Error" % tof1.my_object_number)
 
-    distance = tof3.get_distance()
+    distance = tof2.get_distance()
     if (distance > 0):
-        print ("sensor %d - %d mm, %d cm" % (tof2.my_object_number, distance, (distance/10)))
+        print ("sensor %3d - %3d mm, %3d cm" % (tof2.my_object_number, distance, (distance/10)))
     else:
         print ("%d - Error" % tof2.my_object_number)
 
     distance = tof3.get_distance()
     if (distance > 0):
-        print ("sensor %d - %d mm, %d cm" % (tof3.my_object_number, distance, (distance/10)))
+        print ("sensor %3d - %3d mm, %3d cm" % (tof3.my_object_number, distance, (distance/10)))
     else:
         print ("%d - Error" % tof3.my_object_number)
 
     distance = tof4.get_distance()
     if (distance > 0):
-        print ("sensor %d - %d mm, %d cm" % (tof4.my_object_number, distance, (distance/10)))
+        print ("sensor %3d - %3d mm, %3d cm" % (tof4.my_object_number, distance, (distance/10)))
     else:
         print ("%d - Error" % tof4.my_object_number)
 
 
 
-    time.sleep(timing/1000000.00)
+    #time.sleep(timing/1000000.00)
+    time.sleep(.10)
 
 tof1.stop_ranging()
 GPIO.output(sensor1_shutdown, GPIO.LOW)

@@ -58,10 +58,10 @@ time.sleep(0.50)
 
 # Create one object per VL53L0X passing the address to give to
 # each.
-tof5 = VL53L0X_bus1.VL53L0X(address=0x20)
-tof6 = VL53L0X_bus1.VL53L0X(address=0x21)
-tof7 = VL53L0X_bus1.VL53L0X(address=0x22)
-tof8 = VL53L0X_bus1.VL53L0X(address=0x23)
+tof5 = VL53L0X_bus1.VL53L0X1(address=0x20)
+tof6 = VL53L0X_bus1.VL53L0X1(address=0x21)
+tof7 = VL53L0X_bus1.VL53L0X1(address=0x22)
+tof8 = VL53L0X_bus1.VL53L0X1(address=0x23)
 
 
 # Set shutdown pin high for the first VL53L0X then 
@@ -96,31 +96,32 @@ print ("Timing %d ms" % (timing/1000))
 while(1):
     distance = tof5.get_distance()
     if (distance > 0):
-        print ("sensor %d - %d mm, %d cm" % (tof5.my_object_number, distance, (distance/10)))
+        print ("sensor %3d - %3d mm, %3d cm" % (tof5.my_object_number, distance, (distance/10)))
     else:
-        print ("%d - Error" % tof5.my_object_number)
+        print ("%3d - Error" % tof5.my_object_number)
 
     distance = tof6.get_distance()
     if (distance > 0):
-        print ("sensor %d - %d mm, %d cm" % (tof6.my_object_number, distance, (distance/10)))
+        print ("sensor %3d - %3d mm, %3d cm" % (tof6.my_object_number, distance, (distance/10)))
     else:
         print ("%d - Error" % tof6.my_object_number)
 
     distance = tof7.get_distance()
     if (distance > 0):
-        print ("sensor %d - %d mm, %d cm" % (tof7.my_object_number, distance, (distance/10)))
+        print ("sensor %3d - %3d mm, %3d cm" % (tof7.my_object_number, distance, (distance/10)))
     else:
         print ("%d - Error" % tof7.my_object_number)
 
     distance = tof8.get_distance()
     if (distance > 0):
-        print ("sensor %d - %d mm, %d cm" % (tof8.my_object_number, distance, (distance/10)))
+        print ("sensor %3d - %3d mm, %3d cm" % (tof8.my_object_number, distance, (distance/10)))
     else:
         print ("%d - Error" % tof8.my_object_number)
 
 
 
-    time.sleep(timing/1000000.00)
+    #time.sleep(timing/1000000.00)
+    time.sleep(.1)
 
 tof5.stop_ranging()
 GPIO.output(sensor5_shutdown, GPIO.LOW)
