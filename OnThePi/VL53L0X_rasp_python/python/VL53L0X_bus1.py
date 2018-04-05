@@ -78,7 +78,7 @@ write_func = WRITEFUNC(i2c_write)
 # pass i2c read and write function pointers to VL53L0X library
 tof_lib.VL53L0X_set_i2c(read_func, write_func)
 
-class VL53L0X1(object):
+class VL53L0X(object):
     """VL53L0X ToF."""
 
     object_number = 4

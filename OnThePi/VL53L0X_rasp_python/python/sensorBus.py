@@ -25,12 +25,18 @@
 
 import time
 import VL53L0X
+import VL53L0X_bus1
 import RPi.GPIO as GPIO
 
 
 
-def initBus(gpio_arr, addr_arr):
+def initBus(bus_num, gpio_arr, addr_arr):
     GPIO.setwarnings(False)
+
+    if bus_num == 0:
+        vl_lib = VL53L0X
+    else:
+        vl_lib = VL53L0X_bus1
 
     # Setup GPIO for shutdown pins on each VL53L0X
     GPIO.setmode(GPIO.BCM)
@@ -44,7 +50,7 @@ def initBus(gpio_arr, addr_arr):
 
     # Create one object per VL53L0X passing the address to give to
     # each.
-    tof_arr = [VL53L0X.VL53L0X(address=addr) for addr in addr_arr]
+    tof_arr = [vl_lib.VL53L0X(address=addr) for addr in addr_arr]
 
 
     for i in range(len(gpio_arr)):
