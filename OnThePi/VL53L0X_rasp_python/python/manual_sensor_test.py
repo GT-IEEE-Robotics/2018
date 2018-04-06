@@ -57,7 +57,7 @@ time.sleep(0.50)
 # each.
 tof1_arr = []
 for addr in addr_arr:
-    tof1_arr.append(VL53L0x.VL53L0X(address=addr))
+    tof1_arr.append(VL53L0X.VL53L0X(address=addr))
 
 
 tof1 = tof1_arr[0]
