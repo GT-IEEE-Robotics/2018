@@ -38,8 +38,6 @@ def initBus(bus_num, gpio_arr, addr_arr):
     else:
 	import VL53L0X_bus1 as vl_lib
 
-    print ('vllib', vl_lib)
-
     # Setup GPIO for shutdown pins on each VL53L0X
     # Set all shutdown pins low to turn off each VL53L0X
     GPIO.setmode(GPIO.BCM)
@@ -59,10 +57,7 @@ def initBus(bus_num, gpio_arr, addr_arr):
     tof4 = vl_lib.VL53L0X(address=addr_arr[3])
     tof_arr = [tof1, tof2, tof3, tof4]
 
-    # for addr in addr_arr:
-    #     tof_arr.append(vl_lib.VL53L0X(address=addr))
-    # tof_arr = [vl_lib.VL53L0X(address=addr) for addr in addr_arr]
-
+    print('finished tof_arr')
 
     for i in range(len(gpio_arr)):
         pin = gpio_arr[i]
