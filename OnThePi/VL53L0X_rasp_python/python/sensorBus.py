@@ -33,6 +33,9 @@ import RPi.GPIO as GPIO
 def initBus(bus_num, gpio_arr, addr_arr):
     GPIO.setwarnings(False)
 
+    print("Init w/ GPIOS: ", gpio_arr)
+    print("Init w/ ADDRS: ", addr_arr)
+
     if bus_num == 0:
 	import VL53L0X as vl_lib
     else:
@@ -66,7 +69,7 @@ def initBus(bus_num, gpio_arr, addr_arr):
         GPIO.output(pin, GPIO.HIGH)
         time.sleep(0.50)
         tof.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
-
+	time.sleep(0.5)
 
     return tof_arr
 
