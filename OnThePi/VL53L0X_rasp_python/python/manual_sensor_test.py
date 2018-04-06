@@ -36,22 +36,17 @@ sensor3_shutdown = 13
 # GPIO for sensor 8 shutdown pin
 sensor4_shutdown = 6
 
+bus0_pins = [20, 26, 13, 6]
 
 GPIO.setwarnings(False)
 
 # Setup GPIO for shutdown pins on each VL53L0X
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(sensor1_shutdown, GPIO.OUT)
-GPIO.setup(sensor2_shutdown, GPIO.OUT)
-GPIO.setup(sensor3_shutdown, GPIO.OUT)
-GPIO.setup(sensor4_shutdown, GPIO.OUT)
-
-
 # Set all shutdown pins low to turn off each VL53L0X
-GPIO.output(sensor1_shutdown, GPIO.LOW)
-GPIO.output(sensor2_shutdown, GPIO.LOW)
-GPIO.output(sensor3_shutdown, GPIO.LOW)
-GPIO.output(sensor4_shutdown, GPIO.LOW)
+
+GPIO.setmode(GPIO.BCM)
+for pin in bus0_pins:
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, GPIO.LOW)
 
 # Keep all low for 500 ms or so to make sure they reset
 time.sleep(0.50)
@@ -122,18 +117,6 @@ else:
 #time.sleep(timing/1000000.00)
 time.sleep(.10)
 
-tof1.stop_ranging()
-GPIO.output(sensor1_shutdown, GPIO.LOW)
-tof2.stop_ranging()
-GPIO.output(sensor2_shutdown, GPIO.LOW)
-tof3.stop_ranging()
-GPIO.output(sensor3_shutdown, GPIO.LOW)
-tof4.stop_ranging()
-GPIO.output(sensor4_shutdown, GPIO.LOW)
-
-
-
-
 #!/usr/bin/python
 
 # MIT License
@@ -174,19 +157,15 @@ sensor8_shutdown = 21
 
 GPIO.setwarnings(False)
 
-# Setup GPIO for shutdown pins on each VL53L0X
+bus1_pins = [12, 16, 19, 21]
+
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(sensor5_shutdown, GPIO.OUT)
-GPIO.setup(sensor6_shutdown, GPIO.OUT)
-GPIO.setup(sensor7_shutdown, GPIO.OUT)
-GPIO.setup(sensor8_shutdown, GPIO.OUT)
 
-
+# Setup GPIO for shutdown pins on each VL53L0X
 # Set all shutdown pins low to turn off each VL53L0X
-GPIO.output(sensor5_shutdown, GPIO.LOW)
-GPIO.output(sensor6_shutdown, GPIO.LOW)
-GPIO.output(sensor7_shutdown, GPIO.LOW)
-GPIO.output(sensor8_shutdown, GPIO.LOW)
+for pin in bus1_pins:
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, GPIO.LOW)
 
 # Keep all low for 500 ms or so to make sure they reset
 time.sleep(0.50)
@@ -256,6 +235,16 @@ else:
 
 #time.sleep(timing/1000000.00)
 time.sleep(.1)
+
+tof1.stop_ranging()
+GPIO.output(sensor1_shutdown, GPIO.LOW)
+tof2.stop_ranging()
+GPIO.output(sensor2_shutdown, GPIO.LOW)
+tof3.stop_ranging()
+GPIO.output(sensor3_shutdown, GPIO.LOW)
+tof4.stop_ranging()
+GPIO.output(sensor4_shutdown, GPIO.LOW)
+
 
 tof5.stop_ranging()
 GPIO.output(sensor5_shutdown, GPIO.LOW)
