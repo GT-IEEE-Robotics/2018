@@ -25,6 +25,7 @@
 
 import time
 import VL53L0X
+import VL53L0X_bus1
 import RPi.GPIO as GPIO
 
 # GPIO for Sensor 1 shutdown pin
@@ -37,6 +38,7 @@ sensor3_shutdown = 13
 sensor4_shutdown = 6
 
 bus0_pins = [20, 26, 13, 6]
+addr_arr = [0x20, 0x21, 0x22, 0x23]
 
 GPIO.setwarnings(False)
 
@@ -53,11 +55,12 @@ time.sleep(0.50)
 
 # Create one object per VL53L0X passing the address to give to
 # each.
-tof1 = VL53L0X.VL53L0X(address=0x20)
-tof2 = VL53L0X.VL53L0X(address=0x21)
-tof3 = VL53L0X.VL53L0X(address=0x22)
-tof4 = VL53L0X.VL53L0X(address=0x23)
+tof1_arr = [VL53L0X.VL53L0X(address=addr) for addr in addr_arr]
 
+tof1 = tof1_arr[0]
+tof2 = tof1_arr[1]
+tof3 = tof1_arr[2]
+tof4 = tof1_arr[3]
 
 # Set shutdown pin high for the first VL53L0X then 
 # call to start ranging 
@@ -117,33 +120,6 @@ else:
 #time.sleep(timing/1000000.00)
 time.sleep(.10)
 
-#!/usr/bin/python
-
-# MIT License
-# 
-# Copyright (c) 2017 John Bryan Moore
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
-import time
-import VL53L0X_bus1
-import RPi.GPIO as GPIO
 
 # GPIO for Sensor 1 shutdown pin
 sensor5_shutdown = 12
@@ -172,10 +148,12 @@ time.sleep(0.50)
 
 # Create one object per VL53L0X passing the address to give to
 # each.
-tof5 = VL53L0X_bus1.VL53L0X(address=0x20)
-tof6 = VL53L0X_bus1.VL53L0X(address=0x21)
-tof7 = VL53L0X_bus1.VL53L0X(address=0x22)
-tof8 = VL53L0X_bus1.VL53L0X(address=0x23)
+tof2_arr = [VL53L0x_bus1.VL53L0X(address=addr) for addr in addr_arr]
+
+tof5 = tof2_arr[0]
+tof6 = tof2_arr[1]
+tof7 = tof2_arr[2]
+tof8 = tof2_arr[3]
 
 
 # Set shutdown pin high for the first VL53L0X then 
