@@ -41,11 +41,11 @@ def initBus(bus_num, gpio_arr, addr_arr):
     print ('vllib', vl_lib)
 
     # Setup GPIO for shutdown pins on each VL53L0X
-    GPIO.setmode(GPIO.BCM)
-    map(lambda pin: GPIO.setup(pin, GPIO.OUT), gpio_arr)
-
     # Set all shutdown pins low to turn off each VL53L0X
-    map(lambda pin: GPIO.output(pin, GPIO.LOW), gpio_arr)
+    GPIO.setmode(GPIO.BCM)
+    for pin in gpio_arr:
+        GPIO.setup(pin, GPIO.OUT)
+        GPIO.output(pin, GPIO.LOW)
 
     # Keep all low for 500 ms or so to make sure they reset
     time.sleep(0.50)
