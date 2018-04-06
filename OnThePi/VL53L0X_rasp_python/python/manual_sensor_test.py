@@ -55,7 +55,10 @@ time.sleep(0.50)
 
 # Create one object per VL53L0X passing the address to give to
 # each.
-tof1_arr = [VL53L0X.VL53L0X(address=addr) for addr in addr_arr]
+tof1_arr = []
+for addr in addr_arr:
+    tof1_arr.append(VL53L0x.VL53L0X(address=addr))
+
 
 tof1 = tof1_arr[0]
 tof2 = tof1_arr[1]
@@ -148,12 +151,12 @@ time.sleep(0.50)
 
 # Create one object per VL53L0X passing the address to give to
 # each.
-tof2_arr = [VL53L0x_bus1.VL53L0X(address=addr) for addr in addr_arr]
+tof2_arr = [VL53L0x_bus1.VL53L0X(address=addr) for addr in a]
 
-tof5 = tof2_arr[0]
-tof6 = tof2_arr[1]
-tof7 = tof2_arr[2]
-tof8 = tof2_arr[3]
+tof5 = VL53L0X_bus1.VL53L0X(address=0x20)
+tof6 = VL53L0X_bus1.VL53L0X(address=0x21)
+tof7 = VL53L0X_bus1.VL53L0X(address=0x22)
+tof8 = VL53L0X_bus1.VL53L0X(address=0x23)
 
 
 # Set shutdown pin high for the first VL53L0X then 
