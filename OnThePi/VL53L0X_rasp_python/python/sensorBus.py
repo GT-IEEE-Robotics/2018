@@ -33,9 +33,6 @@ import RPi.GPIO as GPIO
 def initBus(bus_num, gpio_arr, addr_arr):
     GPIO.setwarnings(False)
 
-    print("Init w/ GPIOS: ", gpio_arr)
-    print("Init w/ ADDRS: ", addr_arr)
-
     if bus_num == 0:
     	import VL53L0X as vl_lib
     else:
@@ -53,14 +50,7 @@ def initBus(bus_num, gpio_arr, addr_arr):
 
     # Create one object per VL53L0X passing the address to give to
     # each.
-    #dont use a list comprehension here it doesnt work
-    tof1 = vl_lib.VL53L0X(address=addr_arr[0])
-    tof2 = vl_lib.VL53L0X(address=addr_arr[1])
-    tof3 = vl_lib.VL53L0X(address=addr_arr[2])
-    tof4 = vl_lib.VL53L0X(address=addr_arr[3])
-    tof_arr = [tof1, tof2, tof3, tof4]
-
-    print('finished tof_arr')
+    tof_arr = [vl_lib.VL53L0x(address=addr) for addr in addr_arr]
 
     for i in range(len(gpio_arr)):
         pin = gpio_arr[i]
