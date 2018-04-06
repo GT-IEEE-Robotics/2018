@@ -124,11 +124,11 @@ time.sleep(.10)
 
 tof1.stop_ranging()
 GPIO.output(sensor1_shutdown, GPIO.LOW)
-tof3.stop_ranging()
+tof2.stop_ranging()
 GPIO.output(sensor2_shutdown, GPIO.LOW)
-tof6.stop_ranging()
+tof3.stop_ranging()
 GPIO.output(sensor3_shutdown, GPIO.LOW)
-tof8.stop_ranging()
+tof4.stop_ranging()
 GPIO.output(sensor4_shutdown, GPIO.LOW)
 
 
