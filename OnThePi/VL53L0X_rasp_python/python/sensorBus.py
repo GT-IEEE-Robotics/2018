@@ -52,10 +52,15 @@ def initBus(bus_num, gpio_arr, addr_arr):
 
     # Create one object per VL53L0X passing the address to give to
     # each.
-    tof_arr = []
     #dont use a list comprehension here it doesnt work
-    for addr in addr_arr:
-        tof_arr.append(vl_lib.VL53L0X(address=addr))
+    tof1 = vl_lib.VL53L0X(address=addr_arr[0])
+    tof2 = vl_lib.VL53L0X(address=addr_arr[1])
+    tof3 = vl_lib.VL53L0X(address=addr_arr[2])
+    tof4 = vl_lib.VL53L0X(address=addr_arr[3])
+    tof_arr = [tof1, tof2, tof3, tof4]
+
+    # for addr in addr_arr:
+    #     tof_arr.append(vl_lib.VL53L0X(address=addr))
     # tof_arr = [vl_lib.VL53L0X(address=addr) for addr in addr_arr]
 
 
