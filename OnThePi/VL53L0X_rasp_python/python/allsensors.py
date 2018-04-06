@@ -6,16 +6,15 @@ delay = 0.1
 gpio0_arr = [20, 26, 13, 6]
 gpio1_arr = [12, 16, 19, 21]
 
-addr_arr0 = [0x20,0x21,0x22,0x23]
-addr_arr1 = [0x24,0x25,0x26,0x27]
+addr_arr = [0x20,0x21,0x22,0x23]
 
-tof_arr0 = initBus(0, gpio0_arr, addr_arr0)
-tof_arr1 = initBus(1, gpio1_arr, addr_arr1)
+tof_arr0 = initBus(0, gpio0_arr, addr_arr)
+tof_arr1 = initBus(1, gpio1_arr, addr_arr)
 
 def prettyPrint(busnum, arr):
     print 'bus%d: %3s %3s %3s %3s' % (busnum, arr[0], arr[1], arr[2], arr[3])
 
-while(1):
+for i in range(10):
     zeroBus = readBus(tof_arr0)
     prettyPrint(0, zeroBus)
     time.sleep(delay)
@@ -25,5 +24,5 @@ while(1):
     time.sleep(delay)
     print ()
 
-
-
+stopBus(tof_arr0, gpio0_arr)
+stopBus(tof_arr1, gpio1_arr)
