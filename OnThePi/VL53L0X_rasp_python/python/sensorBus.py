@@ -34,9 +34,11 @@ def initBus(bus_num, gpio_arr, addr_arr):
     GPIO.setwarnings(False)
 
     if bus_num == 0:
-        vl_lib = VL53L0X
+	import VL53L0X as vl_lib
     else:
-        vl_lib = VL53L0X_bus1
+	import VL53L0X_bus1 as vl_lib
+
+    print ('vllib', vl_lib)
 
     # Setup GPIO for shutdown pins on each VL53L0X
     GPIO.setmode(GPIO.BCM)

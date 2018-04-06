@@ -41,7 +41,7 @@ static unsigned long lastPrint = 0; // Keep track of print time
 #define DECLINATION 5.167 // Declination (degrees) in Boulder, CO.
 
 // PID
-double Kp=2, Ki=0, Kd=0;
+double Kp=3, Ki=0, Kd=0;
 PID leftPID(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
 PID rightPID(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
 
