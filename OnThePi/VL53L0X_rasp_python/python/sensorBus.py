@@ -62,14 +62,38 @@ def initBus(bus_num, gpio_arr, addr_arr):
 
     print('finished tof_arr')
 
-    for i in range(len(gpio_arr)):
-        pin = gpio_arr[i]
-        tof = tof_arr[i]
+    # Set shutdown pin high for the first VL53L0X then 
+    # call to start ranging 
+    GPIO.output(gpio_arr[0], GPIO.HIGH)
+    time.sleep(0.50)
+    tof1.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
 
-        GPIO.output(pin, GPIO.HIGH)
-        time.sleep(0.50)
-        tof.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
-	time.sleep(0.5)
+    # Set shutdown pin high for the first VL53L0X then 
+    # call to start ranging 
+    GPIO.output(gpio_arr[1], GPIO.HIGH)
+    time.sleep(0.50)
+    tof2.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
+
+    # Set shutdown pin high for the first VL53L0X then 
+    # call to start ranging 
+    GPIO.output(gpio_arr[2], GPIO.HIGH)
+    time.sleep(0.50)
+    tof3.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
+
+    # Set shutdown pin high for the first VL53L0X then 
+    # call to start ranging 
+    GPIO.output(gpio_arr[3], GPIO.HIGH)
+    time.sleep(0.50)
+    tof4.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
+
+
+    # for i in range(len(gpio_arr)):
+    #     pin = gpio_arr[i]
+    #     tof = tof_arr[i]
+
+    #     GPIO.output(pin, GPIO.HIGH)
+    #     time.sleep(0.50)
+    #     tof.start_ranging(VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
 
     return tof_arr
 
