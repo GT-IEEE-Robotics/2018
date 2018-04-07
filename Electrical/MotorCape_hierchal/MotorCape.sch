@@ -218,9 +218,9 @@ NoConn ~ 4300 5500
 NoConn ~ 4300 5600
 NoConn ~ 4300 5900
 NoConn ~ 4300 6000
-Text GLabel 6000 5700 2    60   Input ~ 0
+Text GLabel 6200 5700 2    60   Input ~ 0
 SDA
-Text GLabel 6000 5900 2    60   Input ~ 0
+Text GLabel 6500 5850 2    60   Input ~ 0
 SCL
 $Comp
 L IMU U1
@@ -403,24 +403,13 @@ Servo_SPD
 $Comp
 L R R2
 U 1 1 5ACFD3ED
-P 5800 5900
-F 0 "R2" V 5880 5900 50  0000 C CNN
-F 1 "R" V 5800 5900 50  0000 C CNN
-F 2 "Resistors_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 5730 5900 50  0001 C CNN
-F 3 "" H 5800 5900 50  0001 C CNN
-	1    5800 5900
-	0    1    1    0   
-$EndComp
-$Comp
-L R R1
-U 1 1 5ACFD510
-P 5800 5700
-F 0 "R1" V 5880 5700 50  0000 C CNN
-F 1 "R" V 5800 5700 50  0000 C CNN
-F 2 "Resistors_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 5730 5700 50  0001 C CNN
-F 3 "" H 5800 5700 50  0001 C CNN
-	1    5800 5700
-	0    1    1    0   
+P 6500 5600
+F 0 "R2" V 6580 5600 50  0000 C CNN
+F 1 "R" V 6500 5600 50  0000 C CNN
+F 2 "Resistors_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 6430 5600 50  0001 C CNN
+F 3 "" H 6500 5600 50  0001 C CNN
+	1    6500 5600
+	1    0    0    -1  
 $EndComp
 Text GLabel 10550 1400 1    60   Input ~ 0
 Tx_To_Pi
@@ -539,12 +528,12 @@ $EndComp
 $Comp
 L +3.3V #PWR011
 U 1 1 5ACCD4EB
-P 5900 5500
-F 0 "#PWR011" H 5900 5350 50  0001 C CNN
-F 1 "+3.3V" H 5900 5640 50  0000 C CNN
-F 2 "" H 5900 5500 50  0001 C CNN
-F 3 "" H 5900 5500 50  0001 C CNN
-	1    5900 5500
+P 5900 5250
+F 0 "#PWR011" H 5900 5100 50  0001 C CNN
+F 1 "+3.3V" H 5900 5390 50  0000 C CNN
+F 2 "" H 5900 5250 50  0001 C CNN
+F 3 "" H 5900 5250 50  0001 C CNN
+	1    5900 5250
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -690,19 +679,11 @@ Wire Wire Line
 Wire Wire Line
 	5700 5500 5600 5500
 Wire Wire Line
-	5900 5500 5900 5600
+	5900 5250 5900 5600
 Wire Wire Line
 	5900 5600 5600 5600
 Wire Wire Line
-	5650 5700 5600 5700
-Wire Wire Line
-	5600 5800 5650 5800
-Wire Wire Line
-	5650 5800 5650 5900
-Wire Wire Line
-	6000 5700 5950 5700
-Wire Wire Line
-	6000 5900 5950 5900
+	5600 5700 6200 5700
 Wire Wire Line
 	5050 3900 5000 3900
 Wire Wire Line
@@ -845,4 +826,30 @@ F 3 "" H 9200 5450 60  0001 C CNN
 	1    8500 2700
 	0    1    1    0   
 $EndComp
+$Comp
+L R R1
+U 1 1 5ACFD510
+P 6100 5500
+F 0 "R1" V 6180 5500 50  0000 C CNN
+F 1 "R" V 6100 5500 50  0000 C CNN
+F 2 "Resistors_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 6030 5500 50  0001 C CNN
+F 3 "" H 6100 5500 50  0001 C CNN
+	1    6100 5500
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5900 5350 6500 5350
+Connection ~ 5900 5350
+Wire Wire Line
+	6100 5650 6100 5700
+Connection ~ 6100 5700
+Wire Wire Line
+	6500 5900 6500 5750
+Wire Wire Line
+	6500 5350 6500 5450
+Connection ~ 6100 5350
+Wire Wire Line
+	5600 5900 6500 5900
+Wire Wire Line
+	5600 5800 5600 5900
 $EndSCHEMATC

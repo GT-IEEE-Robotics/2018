@@ -68,7 +68,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 3 4
+Sheet 2 4
 Title ""
 Date ""
 Rev ""
@@ -159,18 +159,6 @@ F 3 "" H 4400 2200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3300 1700 3300 1950
-Wire Wire Line
-	3300 1950 2700 1950
-Wire Wire Line
-	3200 1700 3200 2050
-Wire Wire Line
-	3200 2050 2700 2050
-Wire Wire Line
-	3700 1700 3700 2050
-Wire Wire Line
-	3700 2050 4250 2050
-Wire Wire Line
 	3600 1700 3600 1950
 Wire Wire Line
 	3600 1950 4250 1950
@@ -224,4 +212,16 @@ F 4 "XXX-00000" H 3500 3900 60  0000 C CNN "Field4"
 	1    3500 3400
 	0    -1   -1   0   
 $EndComp
+Wire Wire Line
+	3300 1700 3300 1950
+Wire Wire Line
+	3300 1950 2700 1950
+Text HLabel 2700 2050 2    60   Input ~ 0
+Motor_GND
+Text HLabel 3200 1700 0    60   Input ~ 0
+Motor_GND
+Text HLabel 3700 1700 2    60   Input ~ 0
+Motor_GND
+Text HLabel 4250 2050 0    60   Input ~ 0
+Motor_GND
 $EndSCHEMATC
