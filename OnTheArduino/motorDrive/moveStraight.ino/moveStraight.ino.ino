@@ -41,7 +41,7 @@ static unsigned long lastPrint = 0; // Keep track of print time
 #define DECLINATION 5.167 // Declination (degrees) in Boulder, CO.
 
 // PID
-double Kp=3, Ki=0, Kd=0;
+double Kp=2, Ki=2, Kd=0.5;
 PID leftPID(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
 PID rightPID(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
 
@@ -87,6 +87,8 @@ void setup() {
   rightPID.SetMode(AUTOMATIC);
 }
 
+boolean shouldRun = true;
+
 void loop() {
 //  driveForward(100, 150);
 //  delay(3000);+
@@ -94,20 +96,32 @@ void loop() {
 //  stopRobot();
 //  while(1) {
 //    };
-  Serial.print("Set Heading: ");
-  Serial.println(setPointHeading);
-  currHeading = getHeading();
-  Serial.print("Heading: ");
-  Serial.println(currHeading);
-  leftPID.Compute();
-  rightPID.Compute();
-  Serial.print("leftVel: ");
-  Serial.println(leftVel);
-  Serial.print("rightVel: ");
-  Serial.println(rightVel);
-  driveForward((int) leftVel, (int) rightVel);
-  delay(100);
-//  while(1) {}
+  if (shouldRun) {
+    Serial.print("Set Heading: ");
+    Serial.println(setPointHeading);
+    currHeading = getHeading();
+    Serial.print("Heading: ");
+    Serial.println(currHeading);
+    leftPID.Compute();
+    rightPID.Compute();
+    Serial.print("leftVel: ");
+    Serial.println(leftVel);
+    Serial.print("rightVel: ");
+    Serial.println(rightVel);
+    driveForward((int) leftVel, (int) rightVel);
+  }
+//  delay(100);
+  if(Serial.available() > 0) {
+    while(Serial.available()) {
+      Serial.read();
+    }
+    stopRobot();
+    if (shouldRun) {
+      shouldRun = false;
+    } else {
+      shouldRun = true;
+    }
+  }
 }
 
 void driveForward(int leftVel, int rightVel) {
