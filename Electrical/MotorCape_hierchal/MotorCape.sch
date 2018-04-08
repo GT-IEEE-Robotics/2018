@@ -102,25 +102,13 @@ F 3 "" H 4600 4150 50  0001 C CNN
 	1    4600 4150
 	-1   0    0    -1  
 $EndComp
-NoConn ~ 6350 4000
-NoConn ~ 6450 4000
-NoConn ~ 6550 4000
-NoConn ~ 6650 4000
 NoConn ~ 6750 4000
-NoConn ~ 6850 4000
 NoConn ~ 6950 4000
-NoConn ~ 7050 4000
 NoConn ~ 7150 4000
-NoConn ~ 7250 4000
 NoConn ~ 7350 4000
-NoConn ~ 7450 4000
 NoConn ~ 7550 4000
-NoConn ~ 7650 4000
 NoConn ~ 9550 4000
 NoConn ~ 9650 4000
-NoConn ~ 9750 4000
-NoConn ~ 9850 4000
-NoConn ~ 9950 4000
 NoConn ~ 6350 1400
 NoConn ~ 6450 1400
 NoConn ~ 6550 1400
@@ -354,49 +342,49 @@ Text GLabel 9450 4000 3    60   Input ~ 0
 FrontLeft_DIR
 Text GLabel 10650 4000 3    60   Input ~ 0
 FrontLeft_SPD
-Text GLabel 9150 4000 3    60   Input ~ 0
+Text GLabel 8850 4000 3    60   Input ~ 0
 BackLeft_DIR
 Text GLabel 10550 4000 3    60   Input ~ 0
 BackLeft_SPD
-Text GLabel 9350 4000 3    60   Input ~ 0
-FrontLeft_ENC_A
 Text GLabel 9250 4000 3    60   Input ~ 0
-FrontLeft_ENC_B
+FrontLeft_ENC_A
 Text GLabel 9050 4000 3    60   Input ~ 0
+FrontLeft_ENC_B
+Text GLabel 8650 4000 3    60   Input ~ 0
 BackLeft_ENC_A
-Text GLabel 8950 4000 3    60   Input ~ 0
+Text GLabel 8450 4000 3    60   Input ~ 0
 BackLeft_ENC_B
 Text GLabel 10450 4000 3    60   Input ~ 0
 FrontRight_SPD
 Text GLabel 10350 4000 3    60   Input ~ 0
 BackRight_SPD
-Text GLabel 8250 4000 3    60   Input ~ 0
+Text GLabel 7050 4000 3    60   Input ~ 0
 FlagWheel_DIR
 Text GLabel 10250 4000 3    60   Input ~ 0
 FlagWheel_SPD
-Text GLabel 7950 4000 3    60   Input ~ 0
+Text GLabel 6550 4000 3    60   Input ~ 0
 DrawBridge_DIR
 Text GLabel 10150 4000 3    60   Input ~ 0
 DrawBridge_SPD
-Text GLabel 8150 4000 3    60   Input ~ 0
+Text GLabel 6850 4000 3    60   Input ~ 0
 FlagWheel_ENC_A
-Text GLabel 8050 4000 3    60   Input ~ 0
+Text GLabel 6650 4000 3    60   Input ~ 0
 FlagWheel_ENC_B
-Text GLabel 7850 4000 3    60   Input ~ 0
+Text GLabel 6450 4000 3    60   Input ~ 0
 DrawBridge_ENC_A
-Text GLabel 7750 4000 3    60   Input ~ 0
+Text GLabel 6350 4000 3    60   Input ~ 0
 DrawBridge_ENC_B
-Text GLabel 8850 4000 3    60   Input ~ 0
+Text GLabel 8250 4000 3    60   Input ~ 0
 FrontRight_DIR
-Text GLabel 8750 4000 3    60   Input ~ 0
+Text GLabel 8050 4000 3    60   Input ~ 0
 FrontRight_ENC_A
-Text GLabel 8650 4000 3    60   Input ~ 0
+Text GLabel 7850 4000 3    60   Input ~ 0
 FrontRight_ENC_B
-Text GLabel 8550 4000 3    60   Input ~ 0
+Text GLabel 7650 4000 3    60   Input ~ 0
 BackRight_DIR
-Text GLabel 8450 4000 3    60   Input ~ 0
+Text GLabel 7450 4000 3    60   Input ~ 0
 BackRight_ENC_A
-Text GLabel 8350 4000 3    60   Input ~ 0
+Text GLabel 7250 4000 3    60   Input ~ 0
 BackRight_ENC_B
 Text GLabel 10050 4000 3    60   Input ~ 0
 Servo_SPD
@@ -816,17 +804,6 @@ Wire Wire Line
 Wire Wire Line
 	7250 1150 7250 1400
 $Comp
-L Arduino_Due_Shield ARD1
-U 1 1 5AC90C45
-P 8500 2700
-F 0 "ARD1" V 8600 2700 60  0000 C CNN
-F 1 "Arduino_Due_Shield" V 8400 2700 60  0000 C CNN
-F 2 "MotorCapeComponents:Arduino_Due_Shield" H 9200 5450 60  0001 C CNN
-F 3 "" H 9200 5450 60  0001 C CNN
-	1    8500 2700
-	0    1    1    0   
-$EndComp
-$Comp
 L R R1
 U 1 1 5ACFD510
 P 6100 5500
@@ -852,4 +829,27 @@ Wire Wire Line
 	5600 5900 6500 5900
 Wire Wire Line
 	5600 5800 5600 5900
+NoConn ~ 7750 4000
+NoConn ~ 7950 4000
+NoConn ~ 8150 4000
+NoConn ~ 8350 4000
+NoConn ~ 8550 4000
+NoConn ~ 8750 4000
+NoConn ~ 8950 4000
+NoConn ~ 9150 4000
+NoConn ~ 9350 4000
+NoConn ~ 9750 4000
+$Comp
+L Arduino_Due_Shield ARD1
+U 1 1 5AC90C45
+P 8500 2700
+F 0 "ARD1" V 8600 2700 60  0000 C CNN
+F 1 "Arduino_Due_Shield" V 8400 2700 60  0000 C CNN
+F 2 "MotorCapeComponents:Arduino_Due_Shield" H 9200 5450 60  0001 C CNN
+F 3 "" H 9200 5450 60  0001 C CNN
+	1    8500 2700
+	0    1    1    0   
+$EndComp
+NoConn ~ 9850 4000
+NoConn ~ 9950 4000
 $EndSCHEMATC
