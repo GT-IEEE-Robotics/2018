@@ -1,0 +1,23 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP DualMotorController_Power
+D Dual Motor Controller Power Connector
+K connector motor controller dual power
+$ENDCMP
+#
+$CMP DualMotorController_Signal
+D Dual Motor Controller Signal Connector
+K connector motor controller dual signal
+$ENDCMP
+#
+$CMP Level_Shifter
+D Logic Level Shifter
+K logic level shifter 3v3 5v
+$ENDCMP
+#
+$CMP MotorConnector
+D MotorConnector, single row, 01x06, pin header
+K connector motor
+$ENDCMP
+#
+#End Doc Library
