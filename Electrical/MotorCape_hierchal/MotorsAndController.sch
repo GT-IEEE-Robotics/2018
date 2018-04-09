@@ -68,7 +68,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 4
+Sheet 3 4
 Title ""
 Date ""
 Rev ""
@@ -79,14 +79,14 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L DualMotorController_Signal J4
+L DualMotorController_Signal Left_SIG1
 U 1 1 5AC8852E
 P 3500 5350
-AR Path="/5AC8802A/5AC8852E" Ref="J4"  Part="1" 
+AR Path="/5AC8802A/5AC8852E" Ref="Left_SIG1"  Part="1" 
 AR Path="/5ACA5F87/5AC8852E" Ref="J?"  Part="1" 
-AR Path="/5ACB9F03/5AC8852E" Ref="J10"  Part="1" 
-AR Path="/5ACC6682/5AC8852E" Ref="J16"  Part="1" 
-F 0 "J4" H 3500 5700 50  0000 C CNN
+AR Path="/5ACB9F03/5AC8852E" Ref="Top_SIG1"  Part="1" 
+AR Path="/5ACC6682/5AC8852E" Ref="Right_SIG1"  Part="1" 
+F 0 "Right_SIG1" H 3500 5700 50  0000 C CNN
 F 1 "DualMotorController_SIG" V 3300 5400 50  0000 C CNN
 F 2 "MotorCapeComponents:Pin_Header_Latched_1x05" H 3150 5350 50  0001 C CNN
 F 3 "" H 3150 5350 50  0001 C CNN
@@ -114,14 +114,14 @@ M2_SPD
 Text HLabel 3450 5100 1    60   Input ~ 0
 M2_DIR
 $Comp
-L DualMotorController_Power J2
+L DualMotorController_Power Left_PWR1
 U 1 1 5AC89C0C
 P 3450 1450
-AR Path="/5AC8802A/5AC89C0C" Ref="J2"  Part="1" 
+AR Path="/5AC8802A/5AC89C0C" Ref="Left_PWR1"  Part="1" 
 AR Path="/5ACA5F87/5AC89C0C" Ref="J?"  Part="1" 
-AR Path="/5ACB9F03/5AC89C0C" Ref="J8"  Part="1" 
-AR Path="/5ACC6682/5AC89C0C" Ref="J14"  Part="1" 
-F 0 "J2" H 3450 1800 50  0000 C CNN
+AR Path="/5ACB9F03/5AC89C0C" Ref="Top_PWR1"  Part="1" 
+AR Path="/5ACC6682/5AC89C0C" Ref="Right_PWR1"  Part="1" 
+F 0 "Right_PWR1" H 3450 1800 50  0000 C CNN
 F 1 "DualMotorController_PWR" V 3650 1450 50  0000 C CNN
 F 2 "Connectors_Phoenix:PhoenixContact_MSTBA-G_06x5.08mm_Angled" H 3350 1450 50  0001 C CNN
 F 3 "" H 3350 1450 50  0001 C CNN
@@ -129,14 +129,14 @@ F 3 "" H 3350 1450 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L MotorConnector J1
+L MotorConnector FL1
 U 1 1 5AC89F1B
 P 2350 2200
-AR Path="/5AC8802A/5AC89F1B" Ref="J1"  Part="1" 
+AR Path="/5AC8802A/5AC89F1B" Ref="FL1"  Part="1" 
 AR Path="/5ACA5F87/5AC89F1B" Ref="J?"  Part="1" 
-AR Path="/5ACB9F03/5AC89F1B" Ref="J6"  Part="1" 
-AR Path="/5ACC6682/5AC89F1B" Ref="J13"  Part="1" 
-F 0 "J1" H 2350 2550 50  0000 C CNN
+AR Path="/5ACB9F03/5AC89F1B" Ref="FlagWheel1"  Part="1" 
+AR Path="/5ACC6682/5AC89F1B" Ref="FR1"  Part="1" 
+F 0 "FR1" H 2350 2550 50  0000 C CNN
 F 1 "Motor1" V 2700 2200 50  0000 C CNN
 F 2 "MotorCapeComponents:Pin_Header_Latched_1x06" H 2150 2200 50  0001 C CNN
 F 3 "" H 2150 2200 50  0001 C CNN
@@ -144,14 +144,14 @@ F 3 "" H 2150 2200 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L MotorConnector J5
+L MotorConnector BL1
 U 1 1 5AC89F69
 P 4600 2200
-AR Path="/5AC8802A/5AC89F69" Ref="J5"  Part="1" 
+AR Path="/5AC8802A/5AC89F69" Ref="BL1"  Part="1" 
 AR Path="/5ACA5F87/5AC89F69" Ref="J?"  Part="1" 
-AR Path="/5ACB9F03/5AC89F69" Ref="J12"  Part="1" 
-AR Path="/5ACC6682/5AC89F69" Ref="J17"  Part="1" 
-F 0 "J5" H 4600 2550 50  0000 C CNN
+AR Path="/5ACB9F03/5AC89F69" Ref="DrawBridge1"  Part="1" 
+AR Path="/5ACC6682/5AC89F69" Ref="BR1"  Part="1" 
+F 0 "BR1" H 4600 2550 50  0000 C CNN
 F 1 "Motor2" V 4950 2200 50  0000 C CNN
 F 2 "MotorCapeComponents:Pin_Header_Latched_1x06" H 4400 2200 50  0001 C CNN
 F 3 "" H 4400 2200 50  0001 C CNN
@@ -201,10 +201,10 @@ L SPARKFUN_LOGIC_LEVEL_CONVERTER B?
 U 1 1 5AC8C87A
 P 3500 3400
 AR Path="/5AC8C87A" Ref="B?"  Part="1" 
-AR Path="/5AC8802A/5AC8C87A" Ref="B1"  Part="1" 
-AR Path="/5ACC6682/5AC8C87A" Ref="B3"  Part="1" 
-AR Path="/5ACB9F03/5AC8C87A" Ref="B2"  Part="1" 
-F 0 "B1" H 2950 3850 45  0000 L BNN
+AR Path="/5AC8802A/5AC8C87A" Ref="Left_Shifters1"  Part="1" 
+AR Path="/5ACC6682/5AC8C87A" Ref="Right_Shifters1"  Part="1" 
+AR Path="/5ACB9F03/5AC8C87A" Ref="Top_Shifters1"  Part="1" 
+F 0 "Right_Shifters1" H 2950 3850 45  0000 L BNN
 F 1 "SPARKFUN_LOGIC_LEVEL_CONVERTER" H 2950 3000 45  0000 L BNN
 F 2 "Sparkfun_Boards:SPARKFUN_LOGIC_LEVEL_CONVERTER" H 3500 3850 20  0001 C CNN
 F 3 "" H 3500 3400 60  0001 C CNN

@@ -81,21 +81,10 @@ $EndDescr
 Text Notes 7000 6950 0    60   ~ 0
 MOTOR_PWR=12V\nfor motors:\n1 - 12V (red)       3 - encoder gnd(green)       5 - encoder A (yellow)\n2 - Gnd (black)     4 - encoder Vcc(5V)(blue)    6 - encoder B (white)\n
 $Comp
-L Conn_01x02 J7
-U 1 1 59FC44BE
-P 4550 2450
-F 0 "J7" H 4550 2250 50  0000 C CNN
-F 1 "i2c bus connector" H 4600 2600 50  0000 C CNN
-F 2 "MotorCapeComponents:Pin_Header_Latched_1x02" H 4550 2450 50  0001 C CNN
-F 3 "" H 4550 2450 50  0001 C CNN
-	1    4550 2450
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Conn_01x03 J11
+L Conn_01x03 servo1
 U 1 1 5A0ED002
 P 4600 4150
-F 0 "J11" H 4600 3950 50  0000 C CNN
+F 0 "servo1" H 4600 3950 50  0000 C CNN
 F 1 "flag_wheel servo" H 4550 4350 50  0000 C CNN
 F 2 "MotorCapeComponents:Pin_Header_Latched_1x03" H 4600 4150 50  0001 C CNN
 F 3 "" H 4600 4150 50  0001 C CNN
@@ -143,10 +132,6 @@ NoConn ~ 10250 1400
 NoConn ~ 10150 1400
 NoConn ~ 10050 1400
 NoConn ~ 9950 1400
-Text GLabel 4800 2450 2    60   Input ~ 0
-SCL
-Text GLabel 4800 2550 2    60   Input ~ 0
-SDA
 Text GLabel 9550 1400 1    60   Input ~ 0
 SCL
 Text GLabel 9650 1400 1    60   Input ~ 0
@@ -181,10 +166,10 @@ F 3 "" H 2850 1250 50  0000 C CNN
 $EndComp
 NoConn ~ 7650 1500
 $Comp
-L CONN_01X04 P14
+L CONN_01X04 Pi_Bus1
 U 1 1 5AA1DD33
 P 4550 3150
-F 0 "P14" H 4550 2900 50  0000 C CNN
+F 0 "Pi_Bus1" H 4550 2900 50  0000 C CNN
 F 1 "Pi_Connector" H 4550 3400 50  0000 C CNN
 F 2 "MotorCapeComponents:Pin_Header_Latched_1x04" H 4550 3150 50  0001 C CNN
 F 3 "" H 4550 3150 50  0000 C CNN
@@ -358,33 +343,33 @@ Text GLabel 10450 4000 3    60   Input ~ 0
 FrontRight_SPD
 Text GLabel 10350 4000 3    60   Input ~ 0
 BackRight_SPD
-Text GLabel 7050 4000 3    60   Input ~ 0
+Text GLabel 8050 4000 3    60   Input ~ 0
 FlagWheel_DIR
 Text GLabel 10250 4000 3    60   Input ~ 0
 FlagWheel_SPD
-Text GLabel 6550 4000 3    60   Input ~ 0
+Text GLabel 7450 4000 3    60   Input ~ 0
 DrawBridge_DIR
 Text GLabel 10150 4000 3    60   Input ~ 0
 DrawBridge_SPD
-Text GLabel 6850 4000 3    60   Input ~ 0
+Text GLabel 7850 4000 3    60   Input ~ 0
 FlagWheel_ENC_A
-Text GLabel 6650 4000 3    60   Input ~ 0
+Text GLabel 7650 4000 3    60   Input ~ 0
 FlagWheel_ENC_B
-Text GLabel 6450 4000 3    60   Input ~ 0
+Text GLabel 7250 4000 3    60   Input ~ 0
 DrawBridge_ENC_A
-Text GLabel 6350 4000 3    60   Input ~ 0
+Text GLabel 7050 4000 3    60   Input ~ 0
 DrawBridge_ENC_B
 Text GLabel 8250 4000 3    60   Input ~ 0
 FrontRight_DIR
-Text GLabel 8050 4000 3    60   Input ~ 0
+Text GLabel 6850 4000 3    60   Input ~ 0
 FrontRight_ENC_A
-Text GLabel 7850 4000 3    60   Input ~ 0
+Text GLabel 6650 4000 3    60   Input ~ 0
 FrontRight_ENC_B
-Text GLabel 7650 4000 3    60   Input ~ 0
+Text GLabel 6550 4000 3    60   Input ~ 0
 BackRight_DIR
-Text GLabel 7450 4000 3    60   Input ~ 0
+Text GLabel 6450 4000 3    60   Input ~ 0
 BackRight_ENC_A
-Text GLabel 7250 4000 3    60   Input ~ 0
+Text GLabel 6350 4000 3    60   Input ~ 0
 BackRight_ENC_B
 Text GLabel 10050 4000 3    60   Input ~ 0
 Servo_SPD
@@ -660,10 +645,6 @@ Wire Wire Line
 	4750 3200 4800 3200
 Wire Wire Line
 	4800 3300 4750 3300
-Wire Wire Line
-	4800 2450 4750 2450
-Wire Wire Line
-	4750 2550 4800 2550
 Wire Wire Line
 	5700 5500 5600 5500
 Wire Wire Line
