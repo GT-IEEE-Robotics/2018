@@ -32,17 +32,21 @@ VL53L0X_BEST_ACCURACY_MODE      = 2   # Best Accuracy mode
 VL53L0X_LONG_RANGE_MODE         = 3   # Longe Range mode
 VL53L0X_HIGH_SPEED_MODE         = 4   # High Speed mode
 
-i2cbus = smbus.SMBus(0)
+i2cbus_zero = smbus.SMBus(0)
+i2cbus_one = smbus.SMBus(1)
 
 # i2c bus read callback
-def i2c_read(address, reg, data_p, length):
+def i2c_read(address, reg, data_p, length, bus_number):
     ret_val = 0;
     result = []
- 
+
     try:
-        result = i2cbus.read_i2c_block_data(address, reg, length)
+        if (bus_number == 0):
+            result = i2cbus_zero.read_i2c_block_data(address, reg, length)
+        if (bus_number == 1):
+            result = i2cbus_one.read_i2c_block_data(address, reg, length)
     except IOError:
-        ret_val = -1; 
+        ret_val = -1;
 
     if (ret_val == 0):
         for index in range(length):
@@ -51,20 +55,23 @@ def i2c_read(address, reg, data_p, length):
     return ret_val
 
 # i2c bus write callback
-def i2c_write(address, reg, data_p, length):
+def i2c_write(address, reg, data_p, length, bus_number):
     ret_val = 0;
     data = []
 
     for index in range(length):
         data.append(data_p[index])
     try:
-        i2cbus.write_i2c_block_data(address, reg, data)
+        if (bus_number == 0):
+            i2cbus_zero.write_i2c_block_data(address, reg, data)
+        if (bus_number == 1):
+            i2cbus_one.write_i2c_block_data(address, reg, data)
     except IOError:
-        ret_val = -1; 
+        ret_val = -1;
 
     return ret_val
 
-# Load VL53L0X shared lib 
+# Load VL53L0X shared lib
 tof_lib = CDLL("../bin/vl53l0x_python.so")
 
 # Create read function pointer
