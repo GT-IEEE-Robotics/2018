@@ -1,7 +1,7 @@
 from sensorBus import *
 import time
 
-delay = .1
+delay = .5
 
 gpio0_arr = [20, 26, 13, 6]
 gpio1_arr = [12, 16, 19, 21]

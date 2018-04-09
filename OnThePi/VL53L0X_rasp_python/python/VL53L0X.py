@@ -34,9 +34,10 @@ VL53L0X_HIGH_SPEED_MODE         = 4   # High Speed mode
 
 i2cbus_zero = smbus.SMBus(0)
 i2cbus_one = smbus.SMBus(1)
+bus_number = 0
 
 # i2c bus read callback
-def i2c_read(address, reg, data_p, length, bus_number):
+def i2c_read(address, reg, data_p, length):
     ret_val = 0;
     result = []
 
@@ -55,7 +56,7 @@ def i2c_read(address, reg, data_p, length, bus_number):
     return ret_val
 
 # i2c bus write callback
-def i2c_write(address, reg, data_p, length, bus_number):
+def i2c_write(address, reg, data_p, length):
     ret_val = 0;
     data = []
 
@@ -89,11 +90,12 @@ class VL53L0X(object):
 
     object_number = 0
 
-    def __init__(self, address=0x29, TCA9548A_Num=255, TCA9548A_Addr=0, **kwargs):
+    def __init__(self, address=0x29, TCA9548A_Num=255, TCA9548A_Addr=0, busNumber=0, **kwargs):
         self.device_address = address
         self.TCA9548A_Device = TCA9548A_Num
         self.TCA9548A_Address = TCA9548A_Addr
         self.my_object_number = VL53L0X.object_number
+	self.device_bus_number = busNumber
         VL53L0X.object_number += 1
 
     def start_ranging(self, mode = VL53L0X_GOOD_ACCURACY_MODE):
@@ -105,6 +107,9 @@ class VL53L0X(object):
     def get_distance(self):
         return tof_lib.getDistance(self.my_object_number)
 
+    def setBusNumber(self):
+        bus_number = self.device_bus_number
+	print bus_number
     # This function included to show how to access the ST library directly
     # from python instead of through the simplified interface
     def get_timing(self):
