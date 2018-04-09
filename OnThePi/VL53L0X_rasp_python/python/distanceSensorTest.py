@@ -171,30 +171,30 @@ while(1):
     else:
         print ("%d - Error" % tof5.my_object_number)
 
-    #distance = tof6.get_distance()
-    #if (distance > 0):
-    #    print ("sensor %d - %d mm, %d cm" % (tof6.my_object_number, distance, (distance/10)))
-    #else:
-    #    print ("%d - Error" % tof6.my_object_number)
+    distance = tof6.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof6.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof6.my_object_number)
 
-    #distance = tof7.get_distance()
-    #if (distance > 0):
-    #    print ("sensor %d - %d mm, %d cm" % (tof7.my_object_number, distance, (distance/10)))
-    #else:
-    #    print ("%d - Error" % tof7.my_object_number)
+    distance = tof7.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof7.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof7.my_object_number)
 
-    #distance = tof8.get_distance()
-    #if (distance > 0):
-    #    print ("sensor %d - %d mm, %d cm" % (tof8.my_object_number, distance, (distance/10)))
-    #else:
-    #    print ("%d - Error" % tof8.my_object_number)
+    distance = tof8.get_distance()
+    if (distance > 0):
+        print ("sensor %d - %d mm, %d cm" % (tof8.my_object_number, distance, (distance/10)))
+    else:
+        print ("%d - Error" % tof8.my_object_number)
 
 
 
     time.sleep(timing/1000000.00)
 
-#tof1.stop_ranging()
-#GPIO.output(sensor1_shutdown, GPIO.LOW)
+tof1.stop_ranging()
+GPIO.output(sensor1_shutdown, GPIO.LOW)
 tof2.stop_ranging()
 GPIO.output(sensor2_shutdown, GPIO.LOW)
 tof3.stop_ranging()
@@ -203,12 +203,12 @@ tof4.stop_ranging()
 GPIO.output(sensor4_shutdown, GPIO.LOW)
 tof5.stop_ranging()
 GPIO.output(sensor5_shutdown, GPIO.LOW)
-#tof6.stop_ranging()
-#GPIO.output(sensor6_shutdown, GPIO.LOW)
-#tof7.stop_ranging()
-#GPIO.output(sensor7_shutdown, GPIO.LOW)
-#tof8.stop_ranging()
-#GPIO.output(sensor8_shutdown, GPIO.LOW)
+tof6.stop_ranging()
+GPIO.output(sensor6_shutdown, GPIO.LOW)
+tof7.stop_ranging()
+GPIO.output(sensor7_shutdown, GPIO.LOW)
+tof8.stop_ranging()
+GPIO.output(sensor8_shutdown, GPIO.LOW)
 
 
 

@@ -83,7 +83,7 @@ class VL53L0X(object):
 
     object_number = 4
 
-    def __init__(self, address=0x29, TCA9548A_Num=255, TCA9548A_Addr=0, **kwargs):
+    def __init__(self, address=0x29, TCA9548A_Num=255, TCA9548A_Addr=1, **kwargs):
         """Initialize the VL53L0X ToF Sensor from ST"""
         self.device_address = address
         self.TCA9548A_Device = TCA9548A_Num
