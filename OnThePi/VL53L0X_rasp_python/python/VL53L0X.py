@@ -42,11 +42,12 @@ def i2c_read(address, reg, data_p, length, bus_number):
 
     print("Python i2c_read to bus ", bus_number)
     try:
-        if (bus_number == 0):
-            print(i2cbus_zero)
-            result = i2cbus_zero.read_i2c_block_data(address, reg, length)
-        if (bus_number == 1):
-            result = i2cbus_one.read_i2c_block_data(address, reg, length)
+        result = i2cbus_zero.read_i2c_block_data(address, reg, length)
+        # if (bus_number == 0):
+        #     print(i2cbus_zero)
+        #     result = i2cbus_zero.read_i2c_block_data(address, reg, length)
+        # if (bus_number == 1):
+        #     result = i2cbus_one.read_i2c_block_data(address, reg, length)
     except IOError:
         ret_val = -1;
 
@@ -66,11 +67,12 @@ def i2c_write(address, reg, data_p, length, bus_number):
     for index in range(length):
         data.append(data_p[index])
     try:
-        if (bus_number == 0):
-            print(i2cbus_zero)
-            i2cbus_zero.write_i2c_block_data(address, reg, data)
-        if (bus_number == 1):
-            i2cbus_one.write_i2c_block_data(address, reg, data)
+        i2cbus_zero.write_i2c_block_data(address, reg, data)
+
+        # if (bus_number == 0):
+        #     i2cbus_zero.write_i2c_block_data(address, reg, data)
+        # if (bus_number == 1):
+        #     i2cbus_one.write_i2c_block_data(address, reg, data)
     except IOError:
         ret_val = -1;
 
