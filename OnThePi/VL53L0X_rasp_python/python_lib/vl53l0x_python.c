@@ -160,8 +160,8 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
 
     if (TCA9548A_Device < 8)
     {
-        printf ("VL53L0X Start Ranging Object %d Address 0x%02X TCA9548A Device %d TCA9548A Address 0x%02X\n\n",
-                    object_number, i2c_address, TCA9548A_Device, TCA9548A_Address);
+        printf ("VL53L0X Start Ranging Object %d Address 0x%02X TCA9548A Device %d TCA9548A Address 0x%02X Bus Number %d\n\n",
+                    object_number, i2c_address, TCA9548A_Device, TCA9548A_Address, bus_num);
     }
     else
     {
