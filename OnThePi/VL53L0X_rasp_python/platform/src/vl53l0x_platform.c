@@ -32,11 +32,11 @@ SOFTWARE.
 
 // calls read_i2c_block_data(address, reg, length)
 static int (*i2c_read_func)(uint8_t address, uint8_t reg,
-                    uint8_t *list, uint8_t length, int bus_number) = NULL;
+                    uint8_t *list, uint8_t length, int bus_num) = NULL;
 
 // calls write_i2c_block_data(address, reg, list)
 static int (*i2c_write_func)(uint8_t address, uint8_t reg,
-                    uint8_t *list, uint8_t length) = NULL;
+                    uint8_t *list, uint8_t length, int bus_num) = NULL;
 
 static pthread_mutex_t i2c_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -68,7 +68,7 @@ static int i2c_write(VL53L0X_DEV Dev, uint8_t cmd,
             // is being used so prefix each call with a call to
             // set the device at the multiplexer to the number
             // specified
-            if (i2c_write_func(Dev->TCA9548A_Address, (1 << Dev->TCA9548A_Device), NULL, 0) < 0)
+            if (i2c_write_func(Dev->TCA9548A_Address, (1 << Dev->TCA9548A_Device), NULL, 0, Dev->bus_num) < 0)
             {
                 printf("TCA9548A write error\n");
                 result = VL53L0X_ERROR_CONTROL_INTERFACE;
@@ -77,7 +77,7 @@ static int i2c_write(VL53L0X_DEV Dev, uint8_t cmd,
 
         if (result == VL53L0X_ERROR_NONE)
         {
-            if (i2c_write_func(Dev->I2cDevAddr, cmd, data, len) < 0)
+            if (i2c_write_func(Dev->I2cDevAddr, cmd, data, len, Dev->bus_num) < 0)
             {
                 result = VL53L0X_ERROR_CONTROL_INTERFACE;
             }
@@ -98,7 +98,7 @@ static int i2c_write(VL53L0X_DEV Dev, uint8_t cmd,
 }
 
 static int i2c_read(VL53L0X_DEV Dev, uint8_t cmd,
-                    uint8_t * data, uint8_t len, int bus_number)
+                    uint8_t * data, uint8_t len)
 {
     int result = VL53L0X_ERROR_NONE;
 
@@ -115,7 +115,7 @@ static int i2c_read(VL53L0X_DEV Dev, uint8_t cmd,
             // is being used so prefix each call with a call to
             // set the device at the multiplexer to the number
             // specified
-            if (i2c_write_func(Dev->TCA9548A_Address, (1 << Dev->TCA9548A_Device), NULL, 0) < 0)
+            if (i2c_write_func(Dev->TCA9548A_Address, (1 << Dev->TCA9548A_Device), NULL, 0, Dev->bus_num) < 0)
             {
                 printf("TCA9548A read error\n");
                 result =  VL53L0X_ERROR_CONTROL_INTERFACE;
@@ -124,7 +124,7 @@ static int i2c_read(VL53L0X_DEV Dev, uint8_t cmd,
 
         if (result == VL53L0X_ERROR_NONE)
         {
-            if (i2c_read_func(Dev->I2cDevAddr, cmd, data, len, bus_number) < 0)
+            if (i2c_read_func(Dev->I2cDevAddr, cmd, data, len, Dev->bus_num) < 0)
             {
                 result =  VL53L0X_ERROR_CONTROL_INTERFACE;
             }
@@ -163,9 +163,9 @@ VL53L0X_Error VL53L0X_WriteMulti(VL53L0X_DEV Dev, uint8_t index,
 }
 
 VL53L0X_Error VL53L0X_ReadMulti(VL53L0X_DEV Dev, uint8_t index,
-                                uint8_t *pdata, uint32_t count, int bus_number)
+                                uint8_t *pdata, uint32_t count)
 {
-    return i2c_read(Dev, index, pdata, count, bus_number);
+    return i2c_read(Dev, index, pdata, count);
 }
 
 VL53L0X_Error VL53L0X_WrByte(VL53L0X_DEV Dev, uint8_t index, uint8_t data)
@@ -198,7 +198,7 @@ VL53L0X_Error VL53L0X_UpdateByte(VL53L0X_DEV Dev, uint8_t index,
     int32_t status_int;
     uint8_t data;
 
-    status_int = i2c_read(Dev, index, &data, 1, 0);
+    status_int = i2c_read(Dev, index, &data, 1);
 
     if (status_int != 0)
     {
@@ -212,7 +212,7 @@ VL53L0X_Error VL53L0X_UpdateByte(VL53L0X_DEV Dev, uint8_t index,
 VL53L0X_Error VL53L0X_RdByte(VL53L0X_DEV Dev, uint8_t index, uint8_t *data)
 {
     uint8_t tmp = 0;
-    int ret = i2c_read(Dev, index, &tmp, 1, 0);
+    int ret = i2c_read(Dev, index, &tmp, 1);
     *data = tmp;
     // printf("%u\n", tmp);
     return ret;
@@ -221,7 +221,7 @@ VL53L0X_Error VL53L0X_RdByte(VL53L0X_DEV Dev, uint8_t index, uint8_t *data)
 VL53L0X_Error VL53L0X_RdWord(VL53L0X_DEV Dev, uint8_t index, uint16_t *data)
 {
     uint8_t buf[2];
-    int ret = i2c_read(Dev, index, buf, 2, 0);
+    int ret = i2c_read(Dev, index, buf, 2);
     uint16_t tmp = 0;
     tmp |= buf[1]<<0;
     tmp |= buf[0]<<8;
@@ -233,7 +233,7 @@ VL53L0X_Error VL53L0X_RdWord(VL53L0X_DEV Dev, uint8_t index, uint16_t *data)
 VL53L0X_Error  VL53L0X_RdDWord(VL53L0X_DEV Dev, uint8_t index, uint32_t *data)
 {
     uint8_t buf[4];
-    int ret = i2c_read(Dev, index, buf, 4, 0);
+    int ret = i2c_read(Dev, index, buf, 4);
     uint32_t tmp = 0;
     tmp |= buf[3]<<0;
     tmp |= buf[2]<<8;

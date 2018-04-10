@@ -146,7 +146,7 @@ VL53L0X_Error WaitStopCompleted(VL53L0X_DEV Dev)
  *              being used. If not being used, set to 0.
  *
  *****************************************************************************/
-void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9548A_Device, uint8_t TCA9548A_Address)
+void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9548A_Device, uint8_t TCA9548A_Address, int bus_num)
 {
     VL53L0X_Error Status = VL53L0X_ERROR_NONE;
     uint32_t refSpadCount;
@@ -186,6 +186,11 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
             /*
              *  Get the version of the VL53L0X API running in the firmware
              */
+
+            if (bus_num != 0) {
+              printf("Setting device bus to %d", bus_num);
+              pMyDevice[object_number]->bus_num = bus_num;
+            }
 
             // If the requested address is not the default, change it in the device
             if (i2c_address != VL53L0X_DEFAULT_ADDRESS)
@@ -441,7 +446,7 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
  * @brief   Get current distance in mm
  * @return  Current distance in mm or -1 on error
  *****************************************************************************/
-int32_t getDistance(int object_number, int bus_number)
+int32_t getDistance(int object_number)
 {
     VL53L0X_Error Status = VL53L0X_ERROR_NONE;
     int32_t current_distance = -1;
@@ -455,7 +460,7 @@ int32_t getDistance(int object_number, int bus_number)
             if(Status == VL53L0X_ERROR_NONE)
             {
                 Status = VL53L0X_GetRangingMeasurementData(pMyDevice[object_number],
-                                    pRangingMeasurementData, bus_number);
+                                    pRangingMeasurementData);
                 if(Status == VL53L0X_ERROR_NONE)
                 {
                     current_distance = pRangingMeasurementData->RangeMilliMeter;

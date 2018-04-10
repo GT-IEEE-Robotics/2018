@@ -64,6 +64,7 @@ typedef struct {
     uint8_t   I2cDevAddr;                /*!< i2c device address user specific field */
     uint8_t   TCA9548A_Device;           /*!< Device number on TCA9548A I2C Multiplexer or 255 if TCA9548A not being used */
     uint8_t   TCA9548A_Address;          /*!< Address of TCA9548A I2C Multiplexer or 255 if TCA9548A not being used */
+    int bus_num;
 } VL53L0X_Dev_t;
 
 
@@ -143,7 +144,7 @@ VL53L0X_Error VL53L0X_WriteMulti(VL53L0X_DEV Dev, uint8_t index, uint8_t *pdata,
  * @return  VL53L0X_ERROR_NONE        Success
  * @return  "Other error code"    See ::VL53L0X_Error
  */
-VL53L0X_Error VL53L0X_ReadMulti(VL53L0X_DEV Dev, uint8_t index, uint8_t *pdata, uint32_t count, int bus_number);
+VL53L0X_Error VL53L0X_ReadMulti(VL53L0X_DEV Dev, uint8_t index, uint8_t *pdata, uint32_t count);
 
 /**
  * Write single byte register
