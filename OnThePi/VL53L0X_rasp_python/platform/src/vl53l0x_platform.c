@@ -98,7 +98,7 @@ static int i2c_write(VL53L0X_DEV Dev, uint8_t cmd,
 }
 
 static int i2c_read(VL53L0X_DEV Dev, uint8_t cmd,
-                    uint8_t * data, uint8_t len, int bus_number)
+                    uint8_t * data, uint8_t len, int bus_number=0)
 {
     int result = VL53L0X_ERROR_NONE;
 
