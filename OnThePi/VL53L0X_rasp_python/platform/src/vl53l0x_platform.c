@@ -98,7 +98,7 @@ static int i2c_write(VL53L0X_DEV Dev, uint8_t cmd,
 }
 
 static int i2c_read(VL53L0X_DEV Dev, uint8_t cmd,
-                    uint8_t * data, uint8_t len, int bus_number=0)
+                    uint8_t * data, uint8_t len, int bus_number)
 {
     int result = VL53L0X_ERROR_NONE;
 
@@ -192,13 +192,13 @@ VL53L0X_Error VL53L0X_WrDWord(VL53L0X_DEV Dev, uint8_t index, uint32_t data)
 }
 
 VL53L0X_Error VL53L0X_UpdateByte(VL53L0X_DEV Dev, uint8_t index,
-                                uint8_t AndData, uint8_t OrData)
+                                uint8_t AndData, uint8_t OrData, int bus_number)
 {
 
     int32_t status_int;
     uint8_t data;
 
-    status_int = i2c_read(Dev, index, &data, 1);
+    status_int = i2c_read(Dev, index, &data, 1, bus_number);
 
     if (status_int != 0)
     {
@@ -209,19 +209,19 @@ VL53L0X_Error VL53L0X_UpdateByte(VL53L0X_DEV Dev, uint8_t index,
     return i2c_write(Dev, index, &data, 1);
 }
 
-VL53L0X_Error VL53L0X_RdByte(VL53L0X_DEV Dev, uint8_t index, uint8_t *data)
+VL53L0X_Error VL53L0X_RdByte(VL53L0X_DEV Dev, uint8_t index, uint8_t *data, int bus_number)
 {
     uint8_t tmp = 0;
-    int ret = i2c_read(Dev, index, &tmp, 1);
+    int ret = i2c_read(Dev, index, &tmp, 1, bus_number);
     *data = tmp;
     // printf("%u\n", tmp);
     return ret;
 }
 
-VL53L0X_Error VL53L0X_RdWord(VL53L0X_DEV Dev, uint8_t index, uint16_t *data)
+VL53L0X_Error VL53L0X_RdWord(VL53L0X_DEV Dev, uint8_t index, uint16_t *data, int bus_number)
 {
     uint8_t buf[2];
-    int ret = i2c_read(Dev, index, buf, 2);
+    int ret = i2c_read(Dev, index, buf, 2, bus_number);
     uint16_t tmp = 0;
     tmp |= buf[1]<<0;
     tmp |= buf[0]<<8;
@@ -230,10 +230,10 @@ VL53L0X_Error VL53L0X_RdWord(VL53L0X_DEV Dev, uint8_t index, uint16_t *data)
     return ret;
 }
 
-VL53L0X_Error  VL53L0X_RdDWord(VL53L0X_DEV Dev, uint8_t index, uint32_t *data)
+VL53L0X_Error  VL53L0X_RdDWord(VL53L0X_DEV Dev, uint8_t index, uint32_t *data, int bus_number)
 {
     uint8_t buf[4];
-    int ret = i2c_read(Dev, index, buf, 4);
+    int ret = i2c_read(Dev, index, buf, 4, bus_number);
     uint32_t tmp = 0;
     tmp |= buf[3]<<0;
     tmp |= buf[2]<<8;
