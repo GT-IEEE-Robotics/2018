@@ -59,7 +59,7 @@ def i2c_read(address, reg, data_p, length, bus_number):
 
 # i2c bus write callback
 def i2c_write(address, reg, data_p, length, bus_number):
-    ret_val = -2;
+    ret_val = 0;
     data = []
 
     print("Python i2c_write to bus ", bus_number)
