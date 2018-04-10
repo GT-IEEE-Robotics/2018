@@ -38,7 +38,7 @@ static int (*i2c_read_func)(uint8_t address, uint8_t reg,
 static int (*i2c_write_func)(uint8_t address, uint8_t reg,
                     uint8_t *list, uint8_t length) = NULL;
 
-static pthread_mutex_t i2c_mutex = PTHREAD_MUTEX_INITIALIZER; 
+static pthread_mutex_t i2c_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void VL53L0X_init(VL53L0X_DEV Dev)
 {
@@ -65,7 +65,7 @@ static int i2c_write(VL53L0X_DEV Dev, uint8_t cmd,
             pthread_mutex_lock(&i2c_mutex);
 
             // If the value is < 8 then a TCA9548A I2C Multiplexer
-            // is being used so prefix each call with a call to 
+            // is being used so prefix each call with a call to
             // set the device at the multiplexer to the number
             // specified
             if (i2c_write_func(Dev->TCA9548A_Address, (1 << Dev->TCA9548A_Device), NULL, 0) < 0)
@@ -93,7 +93,7 @@ static int i2c_write(VL53L0X_DEV Dev, uint8_t cmd,
         printf("i2c bus write not set.\n");
         result = VL53L0X_ERROR_CONTROL_INTERFACE;
     }
-    
+
     return result;
 }
 
@@ -112,12 +112,13 @@ static int i2c_read(VL53L0X_DEV Dev, uint8_t cmd,
             pthread_mutex_lock(&i2c_mutex);
 
             // If the value is < 8 then a TCA9548A I2C Multiplexer
-            // is being used so prefix each call with a call to 
+            // is being used so prefix each call with a call to
             // set the device at the multiplexer to the number
             // specified
             if (i2c_write_func(Dev->TCA9548A_Address, (1 << Dev->TCA9548A_Device), NULL, 0) < 0)
             {
                 printf("TCA9548A read error\n");
+                printf("TCA9548A i2c call made here");
                 result =  VL53L0X_ERROR_CONTROL_INTERFACE;
             }
         }
@@ -126,6 +127,7 @@ static int i2c_read(VL53L0X_DEV Dev, uint8_t cmd,
         {
             if (i2c_read_func(Dev->I2cDevAddr, cmd, data, len) < 0)
             {
+                printf("i2c_read_func called here");
                 result =  VL53L0X_ERROR_CONTROL_INTERFACE;
             }
         }
@@ -140,7 +142,7 @@ static int i2c_read(VL53L0X_DEV Dev, uint8_t cmd,
         printf("i2c bus read not set.\n");
         result =  VL53L0X_ERROR_CONTROL_INTERFACE;
     }
-    
+
     return result;
 }
 
