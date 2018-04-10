@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright © 2016, STMicroelectronics International N.V.
+ Copyright ï¿½ 2016, STMicroelectronics International N.V.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -1499,7 +1499,7 @@ VL53L0X_API VL53L0X_Error VL53L0X_GetMeasurementRefSignal(VL53L0X_DEV Dev,
  * @return  "Other error code"       See ::VL53L0X_Error
  */
 VL53L0X_API VL53L0X_Error VL53L0X_GetRangingMeasurementData(VL53L0X_DEV Dev,
-	VL53L0X_RangingMeasurementData_t *pRangingMeasurementData);
+	VL53L0X_RangingMeasurementData_t *pRangingMeasurementData, int bus_number);
 
 /**
  * @brief Retrieve the measurements from device for a given setup

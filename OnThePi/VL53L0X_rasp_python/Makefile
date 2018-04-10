@@ -2,7 +2,7 @@ CC = $(CROSS_COMPILE)gcc
 RM = rm
 
 #CFLAGS = -O0 -g -Wall -c
-CFLAGS = -O2 -Wall -c
+CFLAGS = -O2 -Wall -c -fPIC
 
 OUTPUT_DIR = bin
 OBJ_DIR = obj
@@ -51,4 +51,3 @@ $(OBJ_DIR)/%.o:%.c
 .PHONY: clean
 clean:
 	-${RM} -rf ./$(OUTPUT_DIR)/*  ./$(OBJ_DIR)/*
-

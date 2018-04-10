@@ -1,5 +1,5 @@
 /*******************************************************************************
-Copyright © 2015, STMicroelectronics International N.V.
+Copyright ï¿½ 2015, STMicroelectronics International N.V.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@ int32_t VL53L0X_i2c_close(void);
  *
  * @brief All end user OS/platform/application porting
  */
- 
+
 /**
  * @defgroup VL53L0X_platform_group VL53L0 Platform Functions
  * @brief    VL53L0 Platform Functions
@@ -143,7 +143,7 @@ VL53L0X_Error VL53L0X_WriteMulti(VL53L0X_DEV Dev, uint8_t index, uint8_t *pdata,
  * @return  VL53L0X_ERROR_NONE        Success
  * @return  "Other error code"    See ::VL53L0X_Error
  */
-VL53L0X_Error VL53L0X_ReadMulti(VL53L0X_DEV Dev, uint8_t index, uint8_t *pdata, uint32_t count);
+VL53L0X_Error VL53L0X_ReadMulti(VL53L0X_DEV Dev, uint8_t index, uint8_t *pdata, uint32_t count, int bus_number);
 
 /**
  * Write single byte register
@@ -221,7 +221,7 @@ VL53L0X_Error VL53L0X_UpdateByte(VL53L0X_DEV Dev, uint8_t index, uint8_t AndData
 
 /** @} end of VL53L0X_registerAccess_group */
 
-    
+
 /**
  * @brief execute delay in all polling API call
  *
@@ -243,6 +243,3 @@ VL53L0X_Error VL53L0X_PollingDelay(VL53L0X_DEV Dev); /* usually best implemented
 #endif
 
 #endif  /* _VL53L0X_PLATFORM_H_ */
-
-
-

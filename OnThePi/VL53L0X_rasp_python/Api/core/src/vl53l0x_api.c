@@ -2362,7 +2362,7 @@ VL53L0X_Error VL53L0X_WaitDeviceReadyForNewMeasurement(VL53L0X_DEV Dev,
 
 
 VL53L0X_Error VL53L0X_GetRangingMeasurementData(VL53L0X_DEV Dev,
-	VL53L0X_RangingMeasurementData_t *pRangingMeasurementData, int bus_number=0)
+	VL53L0X_RangingMeasurementData_t *pRangingMeasurementData, int bus_number)
 {
 	VL53L0X_Error Status = VL53L0X_ERROR_NONE;
 	uint8_t DeviceRangeStatus;
@@ -2563,7 +2563,7 @@ VL53L0X_Error VL53L0X_PerformSingleRangingMeasurement(VL53L0X_DEV Dev,
 
 	if (Status == VL53L0X_ERROR_NONE)
 		Status = VL53L0X_GetRangingMeasurementData(Dev,
-			pRangingMeasurementData);
+			pRangingMeasurementData, 0);
 
 
 	if (Status == VL53L0X_ERROR_NONE)

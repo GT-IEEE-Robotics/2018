@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright © 2016, STMicroelectronics International N.V.
+ Copyright ï¿½ 2016, STMicroelectronics International N.V.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -549,7 +549,7 @@ VL53L0X_Error get_ref_spad_map(VL53L0X_DEV Dev, uint8_t *refSpadArray)
 	VL53L0X_Error status = VL53L0X_ReadMulti(Dev,
 				VL53L0X_REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0,
 				refSpadArray,
-				6);
+				6, 0);
 	return status;
 }
 
