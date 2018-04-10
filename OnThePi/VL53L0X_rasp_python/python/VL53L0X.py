@@ -76,7 +76,7 @@ def i2c_write(address, reg, data_p, length):
 tof_lib = CDLL("../bin/vl53l0x_python.so")
 
 # Create read function pointer
-READFUNC = CFUNCTYPE(c_int, c_ubyte, c_ubyte, POINTER(c_ubyte), c_ubyte, c_ubyte)
+READFUNC = CFUNCTYPE(c_int, c_ubyte, c_ubyte, POINTER(c_ubyte), c_ubyte)
 read_func = READFUNC(i2c_read)
 
 # Create write function pointer
