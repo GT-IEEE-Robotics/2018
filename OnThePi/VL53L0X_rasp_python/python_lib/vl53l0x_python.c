@@ -165,7 +165,7 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
     }
     else
     {
-        printf ("VL53L0X Start Ranging Object %d Address 0x%02X\n\n", object_number, i2c_address);
+        printf ("VL53L0X Start Ranging Object %d Address 0x%02X Bus %d\n\n", object_number, i2c_address, bus_num);
     }
 
     if (mode >= VL53L0X_GOOD_ACCURACY_MODE &&
