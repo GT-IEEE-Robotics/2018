@@ -24,15 +24,11 @@
 # SOFTWARE.
 
 import time
+import VL53L0X as vl_lib
 import RPi.GPIO as GPIO
 
 def initBus(bus_num, gpio_arr, addr_arr):
     GPIO.setwarnings(False)
-
-    if bus_num == 0:
-    	import VL53L0X as vl_lib
-    else:
-	    import VL53L0X_bus1 as vl_lib
 
     # Setup GPIO for shutdown pins on each VL53L0X
     # Set all shutdown pins low to turn off each VL53L0X
