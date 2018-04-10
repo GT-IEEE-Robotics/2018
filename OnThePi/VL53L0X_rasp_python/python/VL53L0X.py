@@ -94,7 +94,7 @@ class VL53L0X(object):
         self.TCA9548A_Device = TCA9548A_Num
         self.TCA9548A_Address = TCA9548A_Addr
         self.my_object_number = VL53L0X.object_number
-	    self.device_bus_number = busNumber
+        self.device_bus_number = busNumber
         VL53L0X.object_number += 1
 
     def start_ranging(self, mode = VL53L0X_GOOD_ACCURACY_MODE):
