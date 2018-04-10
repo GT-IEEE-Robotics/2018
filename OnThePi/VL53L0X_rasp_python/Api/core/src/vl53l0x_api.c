@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright © 2016, STMicroelectronics International N.V.
+ Copyright ï¿½ 2016, STMicroelectronics International N.V.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -2362,7 +2362,7 @@ VL53L0X_Error VL53L0X_WaitDeviceReadyForNewMeasurement(VL53L0X_DEV Dev,
 
 
 VL53L0X_Error VL53L0X_GetRangingMeasurementData(VL53L0X_DEV Dev,
-	VL53L0X_RangingMeasurementData_t *pRangingMeasurementData)
+	VL53L0X_RangingMeasurementData_t *pRangingMeasurementData, int bus_number=0)
 {
 	VL53L0X_Error Status = VL53L0X_ERROR_NONE;
 	uint8_t DeviceRangeStatus;
@@ -2387,7 +2387,7 @@ VL53L0X_Error VL53L0X_GetRangingMeasurementData(VL53L0X_DEV Dev,
 	 * start reading at 0x14 dec20
 	 * end reading at 0x21 dec33 total 14 bytes to read
 	 */
-	Status = VL53L0X_ReadMulti(Dev, 0x14, localBuffer, 12);
+	Status = VL53L0X_ReadMulti(Dev, 0x14, localBuffer, 12, bus_number);
 
 	if (Status == VL53L0X_ERROR_NONE) {
 

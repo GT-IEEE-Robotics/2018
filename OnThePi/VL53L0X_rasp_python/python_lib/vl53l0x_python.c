@@ -119,7 +119,7 @@ VL53L0X_Error WaitStopCompleted(VL53L0X_DEV Dev)
 
     return Status;
 }
-    
+
 /******************************************************************************
  * @brief   Start Ranging
  * @param   mode - ranging mode
@@ -194,7 +194,7 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
                 // Address requested not default so set the address.
                 // This assumes that the shutdown pin has been controlled
                 // externally to this function.
-                // TODO: Why does this function divide the address by 2? To get 
+                // TODO: Why does this function divide the address by 2? To get
                 // the address we want we have to mutiply by 2 in the call so
                 // it gets set right
                 Status = VL53L0X_SetDeviceAddress(pMyDevice[object_number], (i2c_address * 2));
@@ -259,7 +259,7 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
                                     if(Status == VL53L0X_ERROR_NONE)
                                     {
                                         // Setup in continuous ranging mode
-                                        Status = VL53L0X_SetDeviceMode(pMyDevice[object_number], VL53L0X_DEVICEMODE_CONTINUOUS_RANGING); 
+                                        Status = VL53L0X_SetDeviceMode(pMyDevice[object_number], VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
 
                                         if(Status == VL53L0X_ERROR_NONE)
                                         {
@@ -282,9 +282,9 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
 
                                                             if (Status == VL53L0X_ERROR_NONE)
                                                             {
-                                                                Status = 
+                                                                Status =
                                                                     VL53L0X_SetMeasurementTimingBudgetMicroSeconds(pMyDevice[object_number], 200000);
-                                                            } 
+                                                            }
                                                         }
                                                     }
                                                     break;
@@ -296,26 +296,26 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
                                                         Status = VL53L0X_SetLimitCheckValue(pMyDevice[object_number],
                                                                     VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE,
                                                                     (FixPoint1616_t)(0.1*65536));
-                                            
+
                                                         if (Status == VL53L0X_ERROR_NONE)
                                                         {
                                                             Status = VL53L0X_SetLimitCheckValue(pMyDevice[object_number],
                                                                         VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE,
                                                                         (FixPoint1616_t)(60*65536));
-                                                
+
                                                             if (Status == VL53L0X_ERROR_NONE)
                                                             {
-                                                                Status = 
+                                                                Status =
                                                                     VL53L0X_SetMeasurementTimingBudgetMicroSeconds(pMyDevice[object_number], 33000);
-                                                    
+
                                                                 if (Status == VL53L0X_ERROR_NONE)
                                                                 {
-                                                                    Status = VL53L0X_SetVcselPulsePeriod(pMyDevice[object_number], 
+                                                                    Status = VL53L0X_SetVcselPulsePeriod(pMyDevice[object_number],
                                                                                 VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
-                                                    
+
                                                                     if (Status == VL53L0X_ERROR_NONE)
                                                                     {
-                                                                        Status = VL53L0X_SetVcselPulsePeriod(pMyDevice[object_number], 
+                                                                        Status = VL53L0X_SetVcselPulsePeriod(pMyDevice[object_number],
                                                                                     VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
                                                                     }
                                                                 }
@@ -340,7 +340,7 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
 
                                                             if (Status == VL53L0X_ERROR_NONE)
                                                             {
-                                                                Status = 
+                                                                Status =
                                                                     VL53L0X_SetMeasurementTimingBudgetMicroSeconds(pMyDevice[object_number], 20000);
                                                             }
                                                         }
@@ -351,7 +351,7 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
                                                     printf("VL53L0X_BETTER_ACCURACY_MODE\n");
                                                     if (Status == VL53L0X_ERROR_NONE)
                                                     {
-                                                        Status = 
+                                                        Status =
                                                             VL53L0X_SetMeasurementTimingBudgetMicroSeconds(pMyDevice[object_number], 66000);
                                                     }
                                                     break;
@@ -361,7 +361,7 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
                                                     printf("VL53L0X_GOOD_ACCURACY_MODE\n");
                                                     if (Status == VL53L0X_ERROR_NONE)
                                                     {
-                                                        Status = 
+                                                        Status =
                                                             VL53L0X_SetMeasurementTimingBudgetMicroSeconds(pMyDevice[object_number], 33000);
                                                     }
                                                     break;
@@ -441,7 +441,7 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
  * @brief   Get current distance in mm
  * @return  Current distance in mm or -1 on error
  *****************************************************************************/
-int32_t getDistance(int object_number)
+int32_t getDistance(int object_number, int bus_number)
 {
     VL53L0X_Error Status = VL53L0X_ERROR_NONE;
     int32_t current_distance = -1;
@@ -455,7 +455,7 @@ int32_t getDistance(int object_number)
             if(Status == VL53L0X_ERROR_NONE)
             {
                 Status = VL53L0X_GetRangingMeasurementData(pMyDevice[object_number],
-                                    pRangingMeasurementData);
+                                    pRangingMeasurementData, bus_number);
                 if(Status == VL53L0X_ERROR_NONE)
                 {
                     current_distance = pRangingMeasurementData->RangeMilliMeter;
@@ -488,7 +488,7 @@ void stopRanging(int object_number)
     VL53L0X_Error Status = VL53L0X_ERROR_NONE;
 
     printf ("Call of VL53L0X_StopMeasurement\n");
-    
+
     if (object_number < MAX_DEVICES)
     {
         if (pMyDevice[object_number] != NULL)
@@ -538,4 +538,3 @@ VL53L0X_DEV getDev(int object_number)
 
     return Dev;
 }
-

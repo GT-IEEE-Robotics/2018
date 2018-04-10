@@ -34,10 +34,9 @@ VL53L0X_HIGH_SPEED_MODE         = 4   # High Speed mode
 
 i2cbus_zero = smbus.SMBus(0)
 i2cbus_one = smbus.SMBus(1)
-bus_number = 0
 
 # i2c bus read callback
-def i2c_read(address, reg, data_p, length):
+def i2c_read(address, reg, data_p, length, bus_number):
     ret_val = 0;
     result = []
 
@@ -56,7 +55,7 @@ def i2c_read(address, reg, data_p, length):
     return ret_val
 
 # i2c bus write callback
-def i2c_write(address, reg, data_p, length):
+def i2c_write(address, reg, data_p, length, bus_number):
     ret_val = 0;
     data = []
 
@@ -76,11 +75,11 @@ def i2c_write(address, reg, data_p, length):
 tof_lib = CDLL("../bin/vl53l0x_python.so")
 
 # Create read function pointer
-READFUNC = CFUNCTYPE(c_int, c_ubyte, c_ubyte, POINTER(c_ubyte), c_ubyte)
+READFUNC = CFUNCTYPE(c_int, c_ubyte, c_ubyte, POINTER(c_ubyte), c_ubyte, c_ubyte)
 read_func = READFUNC(i2c_read)
 
 # Create write function pointer
-WRITEFUNC = CFUNCTYPE(c_int, c_ubyte, c_ubyte, POINTER(c_ubyte), c_ubyte)
+WRITEFUNC = CFUNCTYPE(c_int, c_ubyte, c_ubyte, POINTER(c_ubyte), c_ubyte, c_ubyte)
 write_func = WRITEFUNC(i2c_write)
 
 # pass i2c read and write function pointers to VL53L0X library
@@ -95,7 +94,7 @@ class VL53L0X(object):
         self.TCA9548A_Device = TCA9548A_Num
         self.TCA9548A_Address = TCA9548A_Addr
         self.my_object_number = VL53L0X.object_number
-	self.device_bus_number = busNumber
+	    self.device_bus_number = busNumber
         VL53L0X.object_number += 1
 
     def start_ranging(self, mode = VL53L0X_GOOD_ACCURACY_MODE):
@@ -105,7 +104,7 @@ class VL53L0X(object):
         tof_lib.stopRanging(self.my_object_number)
 
     def get_distance(self):
-        return tof_lib.getDistance(self.my_object_number)
+        return tof_lib.getDistance(self.my_object_number, self.device_bus_number)
 
     def setBusNumber(self):
         bus_number = self.device_bus_number
