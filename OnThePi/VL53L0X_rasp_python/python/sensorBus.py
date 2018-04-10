@@ -50,7 +50,7 @@ def initBus(bus_num, gpio_arr, addr_arr):
 
         GPIO.output(pin, GPIO.HIGH)
         time.sleep(0.50)
-        tof.start_ranging(vl_lib.VL53L0X_BETTER_ACCURACY_MODE, bus_num)
+        tof.start_ranging(vl_lib.VL53L0X_BETTER_ACCURACY_MODE)
 
     return tof_arr
 
