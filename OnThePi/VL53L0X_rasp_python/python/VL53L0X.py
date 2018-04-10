@@ -40,7 +40,7 @@ def i2c_read(address, reg, data_p, length, bus_number):
     ret_val = 0;
     result = []
 
-    # print("Python i2c_read: ", bus_number)
+    print("Python i2c_read to bus ", bus_number)
     try:
         if (bus_number == 0):
             result = i2cbus_zero.read_i2c_block_data(address, reg, length)
@@ -59,6 +59,8 @@ def i2c_read(address, reg, data_p, length, bus_number):
 def i2c_write(address, reg, data_p, length, bus_number):
     ret_val = -2;
     data = []
+
+    print("Python i2c_write to bus ", bus_number)
 
     for index in range(length):
         data.append(data_p[index])

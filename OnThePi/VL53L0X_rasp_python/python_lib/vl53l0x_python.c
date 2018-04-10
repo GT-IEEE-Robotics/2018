@@ -187,7 +187,7 @@ void startRanging(int object_number, int mode, uint8_t i2c_address, uint8_t TCA9
              *  Get the version of the VL53L0X API running in the firmware
              */
 
-            printf("Setting device bus to %d", bus_num);
+            printf("Setting device bus to %d\n", bus_num);
             pMyDevice[object_number]->bus_num = bus_num;
 
 
