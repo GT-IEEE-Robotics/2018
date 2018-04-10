@@ -57,7 +57,7 @@ def i2c_read(address, reg, data_p, length, bus_number):
 
 # i2c bus write callback
 def i2c_write(address, reg, data_p, length, bus_number):
-    ret_val = 0;
+    ret_val = -2;
     data = []
     print("i2c write called")
     print("I don't think this should ever happen")

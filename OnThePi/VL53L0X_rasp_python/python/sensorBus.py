@@ -2,19 +2,19 @@
 #!/usr/bin/python
 
 # MIT License
-# 
+#
 # Copyright (c) 2017 John Bryan Moore
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,8 +25,6 @@
 
 import time
 import RPi.GPIO as GPIO
-
-
 
 def initBus(bus_num, gpio_arr, addr_arr):
     GPIO.setwarnings(False)
@@ -48,7 +46,7 @@ def initBus(bus_num, gpio_arr, addr_arr):
 
     # Create one object per VL53L0X passing the address to give to
     # each.
-    tof_arr = [vl_lib.VL53L0X(address=addr) for addr in addr_arr]
+    tof_arr = [vl_lib.VL53L0X(address=addr, busNumber=bus_num) for addr in addr_arr]
 
     for i in range(len(gpio_arr)):
         pin = gpio_arr[i]
@@ -74,6 +72,3 @@ def readBus(tof_arr):
     time.sleep(timing/1000000)
 
     return distances
-
-
- 
