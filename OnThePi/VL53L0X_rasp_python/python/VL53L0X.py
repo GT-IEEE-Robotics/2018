@@ -100,7 +100,7 @@ class VL53L0X(object):
         self.device_bus_number = busNumber
         VL53L0X.object_number += 1
 
-    def start_ranging(self, mode = VL53L0X_GOOD_ACCURACY_MODE):
+    def start_ranging(self, mode = VL53L0X_BEST_ACCURACY_MODE):
         tof_lib.startRanging(self.my_object_number, mode, self.device_address, self.TCA9548A_Device, self.TCA9548A_Address, self.device_bus_number)
 
     def stop_ranging(self):

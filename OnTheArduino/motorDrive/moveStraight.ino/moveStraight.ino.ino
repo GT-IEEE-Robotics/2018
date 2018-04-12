@@ -45,6 +45,11 @@ double Kp=2, Ki=2, Kd=0.5;
 PID leftPID(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
 PID rightPID(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
 
+//Serial communication with pi
+String inputString = "";         // a String to hold incoming data
+boolean stringComplete = false;  // whether the string is complete
+
+
 void setup() {
   Serial.begin(115200);
   
@@ -85,10 +90,17 @@ void setup() {
   setPointHeading = getHeading();
   leftPID.SetMode(AUTOMATIC);
   rightPID.SetMode(AUTOMATIC);
+
+  //serial communication setup with pi
+  inputString.reserve(200);
+
+  //delay(100);
 }
 
 boolean shouldRun = true;
 
+//avoid using delays in loop because
+//will mess up serial pi communication
 void loop() {
 //  driveForward(100, 150);
 //  delay(3000);+
@@ -96,32 +108,62 @@ void loop() {
 //  stopRobot();
 //  while(1) {
 //    };
-  if (shouldRun) {
-    Serial.print("Set Heading: ");
-    Serial.println(setPointHeading);
-    currHeading = getHeading();
-    Serial.print("Heading: ");
-    Serial.println(currHeading);
-    leftPID.Compute();
-    rightPID.Compute();
-    Serial.print("leftVel: ");
-    Serial.println(leftVel);
-    Serial.print("rightVel: ");
-    Serial.println(rightVel);
+    //Serial.print("Set Heading: ");
+  //Serial.println(setPointHeading);
+  currHeading = getHeading();
+    //Serial.print("Heading: ");
+  //Serial.println(currHeading);
+  leftPID.Compute();
+  rightPID.Compute();
+    //Serial.print("leftVel: ");
+    //Serial.println(leftVel);
+    //Serial.print("rightVel: ");
+    //Serial.println(rightVel);
+  if (inputString == "FORWARD\n") {
     driveForward((int) leftVel, (int) rightVel);
   }
-//  delay(100);
-  if(Serial.available() > 0) {
-    while(Serial.available()) {
-      Serial.read();
-    }
+  if (inputString == "STOP\n") {
     stopRobot();
-    if (shouldRun) {
-      shouldRun = false;
-    } else {
-      shouldRun = true;
+  }
+  if (inputString == "NEWHEADING\n") {
+    setPointHeading = getHeading();
+    leftPID.Compute();
+    rightPID.Compute();
+  }
+//  delay(100);
+  //if(Serial.available() > 0) {
+  //  while(Serial.available()) {
+  //    Serial.read();
+  //  }
+  //  stopRobot();
+  //  if (shouldRun) {
+  //    shouldRun = false;
+  //  } else {
+  //    shouldRun = true;
+  //  }
+  //}
+//reads the input from the pi
+ if (stringComplete) {
+  Serial.println(inputString);
+  // clear the string:
+  inputString = "";
+  stringComplete = false;
+ }
+}
+
+void serialEvent() {
+  while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read();
+    // add it to the inputString:
+    inputString += inChar;
+    // if the incoming character is a newline, set a flag so the main loop can
+    // do something about it:
+    if (inChar == '\n') {
+      stringComplete = true;
     }
   }
+  Serial.println(inputString);
 }
 
 void driveForward(int leftVel, int rightVel) {
