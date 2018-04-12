@@ -7,7 +7,7 @@
 // F = forward, B = backward
 // R = right side, L = left side
 // define pins for each motor speed & direction:
-// not sure on these but I'm guessing: 
+// not sure on these but I'm guessing:
 #define BR (8)
 #define BL (9)
 #define FR (10)
@@ -34,14 +34,14 @@ double leftVel = 50;
 #define PRINT_SPEED 250 // 250 ms between prints
 static unsigned long lastPrint = 0; // Keep track of print time
 
-// Earth's magnetic field varies by location. Add or subtract 
-// a declination to get a more accurate heading. Calculate 
+// Earth's magnetic field varies by location. Add or subtract
+// a declination to get a more accurate heading. Calculate
 // your's here:
 // http://www.ngdc.noaa.gov/geomag-web/#declination
 #define DECLINATION 5.167 // Declination (degrees) in Boulder, CO.
 
 // PID
-double Kp=2, Ki=2, Kd=0.5;
+double Kp = 2, Ki = 2, Kd = 0.5;
 PID leftPID(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
 PID rightPID(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
 
@@ -52,18 +52,18 @@ boolean stringComplete = false;  // whether the string is complete
 
 void setup() {
   Serial.begin(115200);
-  
+
   // speed pins (pwm. analog write values from 0-255)
-  pinMode(8,OUTPUT);
-  pinMode(9,OUTPUT);
-  pinMode(10,OUTPUT);
-  pinMode(11,OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
 
   // motor direction pins (GPIOs)
-  pinMode(46,OUTPUT); 
-  pinMode(48,OUTPUT);
-  pinMode(50,OUTPUT);
-  pinMode(52,OUTPUT);
+  pinMode(46, OUTPUT);
+  pinMode(48, OUTPUT);
+  pinMode(50, OUTPUT);
+  pinMode(52, OUTPUT);
 
   // Before initializing the IMU, there are a few settings
   // we may need to adjust. Use the settings struct to set
@@ -79,14 +79,13 @@ void setup() {
     Serial.println("Failed to communicate with LSM9DS1.");
     Serial.println("Double-check wiring.");
     Serial.println("Default settings in this sketch will " \
-                  "work for an out of the box LSM9DS1 " \
-                  "Breakout, but may need to be modified " \
-                  "if the board jumpers are.");
+                   "work for an out of the box LSM9DS1 " \
+                   "Breakout, but may need to be modified " \
+                   "if the board jumpers are.");
     while (1)
       ;
   }
 
-  setPointHeading = getHeading();
   setPointHeading = getHeading();
   leftPID.SetMode(AUTOMATIC);
   rightPID.SetMode(AUTOMATIC);
@@ -99,38 +98,53 @@ void setup() {
 
 boolean shouldRun = true;
 
+
+
 //avoid using delays in loop because
 //will mess up serial pi communication
 void loop() {
-//  driveForward(100, 150);
-//  delay(3000);+
+  //  driveForward(100, 150);
+  //  delay(3000);+
 
-//  stopRobot();
-//  while(1) {
-//    };
-    //Serial.print("Set Heading: ");
+  //  stopRobot();
+  //  while(1) {
+  //    };
+  //Serial.print("Set Heading: ");
   //Serial.println(setPointHeading);
   currHeading = getHeading();
-    //Serial.print("Heading: ");
-  //Serial.println(currHeading);
+  Serial.print("Heading: ");
+  Serial.println(currHeading);
   leftPID.Compute();
   rightPID.Compute();
-    //Serial.print("leftVel: ");
-    //Serial.println(leftVel);
-    //Serial.print("rightVel: ");
-    //Serial.println(rightVel);
+  //Serial.print("leftVel: ");
+  //Serial.println(leftVel);
+  //Serial.print("rightVel: ");
+  //Serial.println(rightVel);
   if (inputString == "FORWARD\n") {
     driveForward((int) leftVel, (int) rightVel);
+  }
+  if (inputString == "BACKWARD\n") {
+    driveBackward((int) leftVel, (int) rightVel);
+  }
+  if (inputString == "LEFT\n") {
+    driveLeft((int) leftVel, (int) rightVel);
+  }
+  if (inputString == "RIGHT\n") {
+    driveRight((int) leftVel, (int) rightVel);
+  }
+  if (inputString == "CW\n") {
+    rotateCW();
+  }
+  if (inputString == "CCW\n") {
+    rotateCCW();
   }
   if (inputString == "STOP\n") {
     stopRobot();
   }
   if (inputString == "NEWHEADING\n") {
     setPointHeading = getHeading();
-    leftPID.Compute();
-    rightPID.Compute();
   }
-//  delay(100);
+  //  delay(100);
   //if(Serial.available() > 0) {
   //  while(Serial.available()) {
   //    Serial.read();
@@ -142,13 +156,13 @@ void loop() {
   //    shouldRun = true;
   //  }
   //}
-//reads the input from the pi
- if (stringComplete) {
-  Serial.println(inputString);
-  // clear the string:
-  inputString = "";
-  stringComplete = false;
- }
+  //reads the input from the pi
+  if (stringComplete) {
+    Serial.println(inputString);
+    // clear the string:
+    inputString = "";
+    stringComplete = false;
+  }
 }
 
 void serialEvent() {
@@ -172,7 +186,7 @@ void driveForward(int leftVel, int rightVel) {
   digitalWrite(48, LOW);
   digitalWrite(50, LOW);
   digitalWrite(52, LOW);
-  
+
   // speed
   analogWrite(FL, leftVel);
   analogWrite(BL, leftVel);
@@ -180,42 +194,118 @@ void driveForward(int leftVel, int rightVel) {
   analogWrite(BR, rightVel);
 }
 
+void driveBackward(int leftVel, int rightVel) {
+  // direction
+  digitalWrite(46, HIGH);
+  digitalWrite(48, HIGH);
+  digitalWrite(50, HIGH);
+  digitalWrite(52, HIGH);
+
+  // speed
+  analogWrite(FL, leftVel);
+  analogWrite(BL, leftVel);
+  analogWrite(FR, rightVel);
+  analogWrite(BR, rightVel);
+}
+
+void driveLeft(int leftVel, int rightVel) {
+  // direction
+  digitalWrite(46, LOW);
+  digitalWrite(48, HIGH);
+  digitalWrite(50, HIGH);
+  digitalWrite(52, LOW);
+
+  // speed
+  analogWrite(FL, leftVel);
+  analogWrite(BL, leftVel);
+  analogWrite(FR, rightVel);
+  analogWrite(BR, rightVel);
+}
+
+void driveRight(int leftVel, int rightVel) {
+  // direction
+  digitalWrite(46, HIGH);
+  digitalWrite(48, LOW);
+  digitalWrite(50, LOW);
+  digitalWrite(52, HIGH);
+
+  // speed
+  analogWrite(FL, leftVel);
+  analogWrite(BL, leftVel);
+  analogWrite(FR, rightVel);
+  analogWrite(BR, rightVel);
+}
+
+void rotateCW() {
+  // direction
+  digitalWrite(46, HIGH);
+  digitalWrite(48, HIGH);
+  digitalWrite(50, LOW);
+  digitalWrite(52, LOW);
+
+  // speed
+  analogWrite(FL, 50);
+  analogWrite(BL, 50);
+  analogWrite(FR, 50);
+  analogWrite(BR, 50);
+}
+
+void rotateCCW() {
+  // direction
+  digitalWrite(46, LOW);
+  digitalWrite(48, LOW);
+  digitalWrite(50, HIGH);
+  digitalWrite(52, HIGH);
+
+  // speed
+  analogWrite(FL, 50);
+  analogWrite(BL, 50);
+  analogWrite(FR, 50);
+  analogWrite(BR, 50);
+}
+
 void stopRobot() {
-  digitalWrite(46,LOW);
-  digitalWrite(48,LOW);
-  digitalWrite(50,LOW);
-  digitalWrite(52,LOW);
-  analogWrite(FL,0);
-  analogWrite(FR,0);
-  analogWrite(BL,0);
-  analogWrite(BR,0);
+  digitalWrite(46, LOW);
+  digitalWrite(48, LOW);
+  digitalWrite(50, LOW);
+  digitalWrite(52, LOW);
+  analogWrite(FL, 0);
+  analogWrite(FR, 0);
+  analogWrite(BL, 0);
+  analogWrite(BR, 0);
 }
 
 double getHeading() {
-  if (imu.magAvailable()) {
-    imu.readMag();
-  }
-  
-  float mx = -imu.mx;
-  float my = -imu.my;
-  double heading;
-  
-  if (my == 0) {
-    heading = (mx < 0) ? PI : 0;
-  } else {
-    heading = atan2(mx, my);
-  }
-    
-  heading -= DECLINATION * PI / 180;
-  
-  if (heading > PI) heading -= (2 * PI);
-  else if (heading < -PI) heading += (2 * PI);
-  else if (heading < 0) heading += 2 * PI;
-  
-  // Convert everything from radians to degrees:
-  heading *= 180.0 / PI;
+  int i = 0;
+  double headingSum = 0;
+  int averageLength = 100;
+  for (i = 0; i < averageLength; i++) {
+    if (imu.magAvailable()) {
+      imu.readMag();
+    }
 
-  return heading;
+    float mx = -imu.mx;
+    float my = -imu.my;
+    double heading;
+
+    if (my == 0) {
+      heading = (mx < 0) ? PI : 0;
+    } else {
+      heading = atan2(mx, my);
+    }
+
+    heading -= DECLINATION * PI / 180;
+
+    if (heading > PI) heading -= (2 * PI);
+    else if (heading < -PI) heading += (2 * PI);
+    else if (heading < 0) heading += 2 * PI;
+
+    // Convert everything from radians to degrees:
+    heading *= 180.0 / PI;
+    headingSum += heading;
+  }
+
+  return headingSum / averageLength;
 }
 
 //void driveBackward(int magnitude) {
@@ -234,7 +324,7 @@ double getHeading() {
 //void driveLeft(int magnitude) {
 //  digitalWrite(46,LOW);
 //  digitalWrite(48,HIGH); // reverse
-//  digitalWrite(50,HIGH); // reverse 
+//  digitalWrite(50,HIGH); // reverse
 //  digitalWrite(52,LOW);
 //  analogWrite(8,magnitude);
 //  analogWrite(9,magnitude);

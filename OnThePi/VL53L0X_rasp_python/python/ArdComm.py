@@ -16,14 +16,40 @@ def sendCommand(command):
     ard.write("RIGHT\n")
   if (command == "left"):
     ard.write("LEFT\n")
+  if (command == "cw"):
+    ard.write("CW\n")
+  if (command == "CCW\n"):
+    ard.write("CCW\n")
   if (command == "newHeading"):
     ard.write("NEWHEADING\n")
   time.sleep(.1)
 
 while(1):
   sendCommand("forward")
-  time.sleep(5)
+  time.sleep(2)
   sendCommand("stop")
-  time.sleep(5)
+  time.sleep(2)
   sendCommand("newHeading")
-  time.sleep(5)
+  time.sleep(2)
+
+  sendCommand("backward")
+  time.sleep(2)
+  sendCommand("stop")
+  time.sleep(2)
+  sendCommand("newHeading")
+  time.sleep(2)
+
+  sendCommand("left")
+  time.sleep(2)
+  sendCommand("stop")
+  time.sleep(2)
+  sendCommand("newHeading")
+  time.sleep(2)
+
+  sendCommand("right")
+  time.sleep(2)
+  sendCommand("stop")
+  time.sleep(2)
+  sendCommand("newHeading")
+
+
