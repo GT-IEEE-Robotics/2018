@@ -18,7 +18,7 @@ def sendCommand(command):
     ard.write("LEFT\n")
   if (command == "cw"):
     ard.write("CW\n")
-  if (command == "CCW\n"):
+  if (command == "ccw"):
     ard.write("CCW\n")
   if (command == "newHeading"):
     ard.write("NEWHEADING\n")
@@ -29,27 +29,29 @@ while(1):
   time.sleep(2)
   sendCommand("stop")
   time.sleep(2)
-  sendCommand("newHeading")
-  time.sleep(2)
-
-  sendCommand("backward")
-  time.sleep(2)
-  sendCommand("stop")
+  sendCommand("CCW")
   time.sleep(2)
   sendCommand("newHeading")
   time.sleep(2)
 
-  sendCommand("left")
-  time.sleep(2)
-  sendCommand("stop")
-  time.sleep(2)
-  sendCommand("newHeading")
-  time.sleep(2)
+#  sendCommand("backward")
+#  time.sleep(2)
+#  sendCommand("stop")
+#  time.sleep(2)
+#  sendCommand("newHeading")
+#  time.sleep(2)
 
-  sendCommand("right")
-  time.sleep(2)
-  sendCommand("stop")
-  time.sleep(2)
-  sendCommand("newHeading")
+#  sendCommand("left")
+#  time.sleep(2)
+#  sendCommand("stop")
+#  time.sleep(2)
+#  sendCommand("newHeading")
+#  time.sleep(2)
+
+#  sendCommand("right")
+#  time.sleep(2)
+#  sendCommand("stop")
+#  time.sleep(2)
+#  sendCommand("newHeading")
 
 

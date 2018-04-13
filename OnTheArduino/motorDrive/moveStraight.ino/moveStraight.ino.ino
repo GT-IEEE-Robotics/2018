@@ -16,8 +16,8 @@
 LSM9DS1 imu;
 double setPointHeading;
 double currHeading;
-double rightVel = 50;
-double leftVel = 50;
+double rightVel = 30;
+double leftVel = 30;
 
 ///////////////////////
 // Example I2C Setup //
@@ -42,13 +42,19 @@ static unsigned long lastPrint = 0; // Keep track of print time
 
 // PID
 double Kp = 2, Ki = 2, Kd = 0.5;
-PID leftPID(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
-PID rightPID(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
+//PID leftPID(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
+//PID rightPID(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
+PID* leftPID;
+PID* rightPID;
 
 //Serial communication with pi
 String inputString = "";         // a String to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
 
+void initPIDs() {
+  *leftPID = PID(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
+  *rightPID = PID(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);  
+}
 
 void setup() {
   Serial.begin(115200);
@@ -64,6 +70,8 @@ void setup() {
   pinMode(48, OUTPUT);
   pinMode(50, OUTPUT);
   pinMode(52, OUTPUT);
+
+  initPIDs();
 
   // Before initializing the IMU, there are a few settings
   // we may need to adjust. Use the settings struct to set
@@ -87,8 +95,8 @@ void setup() {
   }
 
   setPointHeading = getHeading();
-  leftPID.SetMode(AUTOMATIC);
-  rightPID.SetMode(AUTOMATIC);
+  leftPID->SetMode(AUTOMATIC);
+  rightPID->SetMode(AUTOMATIC);
 
   //serial communication setup with pi
   inputString.reserve(200);
@@ -114,8 +122,8 @@ void loop() {
   currHeading = getHeading();
   Serial.print("Heading: ");
   Serial.println(currHeading);
-  leftPID.Compute();
-  rightPID.Compute();
+  leftPID->Compute();
+  rightPID->Compute();
   //Serial.print("leftVel: ");
   //Serial.println(leftVel);
   //Serial.print("rightVel: ");
@@ -134,15 +142,24 @@ void loop() {
   }
   if (inputString == "CW\n") {
     rotateCW();
+    initPIDs();
   }
   if (inputString == "CCW\n") {
     rotateCCW();
+    initPIDs();
   }
   if (inputString == "STOP\n") {
     stopRobot();
   }
   if (inputString == "NEWHEADING\n") {
+    Serial.print("Heading: ");
+    Serial.println(setPointHeading);
     setPointHeading = getHeading();
+    initPIDs();
+    Serial.print("New Heading: ");
+    Serial.println(setPointHeading);
+    leftPID->Compute();
+    rightPID->Compute();
   }
   //  delay(100);
   //if(Serial.available() > 0) {
@@ -283,15 +300,20 @@ double getHeading() {
     if (imu.magAvailable()) {
       imu.readMag();
     }
+//    if (imu.gyroAvailable()) {
+//      imu.readGyro();
+//    }
 
-    float mx = -imu.mx;
-    float my = -imu.my;
+//    float xval = -imu.calcGyro(imu.gx);
+//    float yval = -imu.calcGyro(imu.gy);
+    float xval = -imu.mx;
+    float yval = -imu.my;
     double heading;
 
-    if (my == 0) {
-      heading = (mx < 0) ? PI : 0;
+    if (yval == 0) {
+      heading = (xval < 0) ? PI : 0;
     } else {
-      heading = atan2(mx, my);
+      heading = atan2(xval, yval);
     }
 
     heading -= DECLINATION * PI / 180;
