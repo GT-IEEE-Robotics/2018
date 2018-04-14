@@ -25,7 +25,7 @@ def getSensorReadings():
   dumm = distanceArray[3]
   del distanceArray[3]
   distanceArray.append(dumm)
-  print distanceArray
+#  print distanceArray
   return distanceArray
 
 def getHeadingBeach():
@@ -35,7 +35,7 @@ def getHeadingBeach():
   front = arr[1]
   leftWallMeasure = math.atan2((back - front), length)
   leftWallMeasure = leftWallMeasure / math.pi * 180
-#  print leftWallMeasure
+  print leftWallMeasure
 
 while(1):
   getHeadingBeach()

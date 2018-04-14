@@ -6,6 +6,7 @@ port = '/dev/ttyACM0'
 ard = serial.Serial(port,115200)
 
 def sendCommand(command):
+  print(command)
   if (command == "stop"):
     ard.write("STOP\n")
   if (command == "forward"):
@@ -29,7 +30,11 @@ while(1):
   time.sleep(2)
   sendCommand("stop")
   time.sleep(2)
-  sendCommand("CCW")
+#  sendCommand("ccw")
+#  time.sleep(2)
+  sendCommand("forward")
+  time.sleep(2)
+  sendCommand("stop")
   time.sleep(2)
   sendCommand("newHeading")
   time.sleep(2)

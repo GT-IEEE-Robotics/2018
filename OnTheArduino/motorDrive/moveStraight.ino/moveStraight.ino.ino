@@ -41,19 +41,31 @@ static unsigned long lastPrint = 0; // Keep track of print time
 #define DECLINATION 5.167 // Declination (degrees) in Boulder, CO.
 
 // PID
-double Kp = 2, Ki = 2, Kd = 0.5;
-//PID leftPID(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
-//PID rightPID(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
-PID* leftPID;
-PID* rightPID;
+double Kp = 1, Ki = 0, Kd = 0; //double Kp = 2, Ki = 2, Kd = 0.5;
+PID leftPID1(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
+PID rightPID1(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
+PID* leftPID = &leftPID1;
+PID* rightPID = &rightPID1;
 
 //Serial communication with pi
 String inputString = "";         // a String to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
 
 void initPIDs() {
-  *leftPID = PID(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
-  *rightPID = PID(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);  
+  //  PID leftPID1(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
+  //  PID rightPID1(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
+  //  free(leftPID);
+  //  free(rightPID);
+  //  leftPID = &leftPID1;
+  //  rightPID = &rightPID1;
+  //leftPID->SetMode(MANUAL);
+  //rightPID->SetMode(MANUAL);
+  //leftPID->SetMode(AUTOMATIC);
+  //rightPID->SetMode(AUTOMATIC);
+  leftPID->ResetFunction();
+  rightPID->ResetFunction();
+  leftPID->Compute();
+  rightPID->Compute();
 }
 
 void setup() {
@@ -71,7 +83,7 @@ void setup() {
   pinMode(50, OUTPUT);
   pinMode(52, OUTPUT);
 
-  initPIDs();
+  //initPIDs();
 
   // Before initializing the IMU, there are a few settings
   // we may need to adjust. Use the settings struct to set
@@ -100,7 +112,6 @@ void setup() {
 
   //serial communication setup with pi
   inputString.reserve(200);
-
   //delay(100);
 }
 
@@ -120,8 +131,8 @@ void loop() {
   //Serial.print("Set Heading: ");
   //Serial.println(setPointHeading);
   currHeading = getHeading();
-  Serial.print("Heading: ");
-  Serial.println(currHeading);
+  //Serial.print("Heading: ");
+  //Serial.println(currHeading);
   leftPID->Compute();
   rightPID->Compute();
   //Serial.print("leftVel: ");
@@ -142,11 +153,11 @@ void loop() {
   }
   if (inputString == "CW\n") {
     rotateCW();
-    initPIDs();
+    //initPIDs();
   }
   if (inputString == "CCW\n") {
     rotateCCW();
-    initPIDs();
+    //initPIDs();
   }
   if (inputString == "STOP\n") {
     stopRobot();
@@ -158,8 +169,10 @@ void loop() {
     initPIDs();
     Serial.print("New Heading: ");
     Serial.println(setPointHeading);
-    leftPID->Compute();
-    rightPID->Compute();
+    //leftPID1(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
+    //rightPID1(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
+    //leftPID->Compute();
+    //rightPID->Compute();
   }
   //  delay(100);
   //if(Serial.available() > 0) {
@@ -253,12 +266,12 @@ void driveRight(int leftVel, int rightVel) {
   analogWrite(BR, rightVel);
 }
 
-void rotateCW() {
+void rotateCCW() {
   // direction
-  digitalWrite(46, HIGH);
+  digitalWrite(46, LOW);
   digitalWrite(48, HIGH);
   digitalWrite(50, LOW);
-  digitalWrite(52, LOW);
+  digitalWrite(52, HIGH);
 
   // speed
   analogWrite(FL, 50);
@@ -267,12 +280,12 @@ void rotateCW() {
   analogWrite(BR, 50);
 }
 
-void rotateCCW() {
+void rotateCW() {
   // direction
-  digitalWrite(46, LOW);
+  digitalWrite(46, HIGH);
   digitalWrite(48, LOW);
   digitalWrite(50, HIGH);
-  digitalWrite(52, HIGH);
+  digitalWrite(52, LOW);
 
   // speed
   analogWrite(FL, 50);
@@ -300,12 +313,12 @@ double getHeading() {
     if (imu.magAvailable()) {
       imu.readMag();
     }
-//    if (imu.gyroAvailable()) {
-//      imu.readGyro();
-//    }
+    //    if (imu.gyroAvailable()) {
+    //      imu.readGyro();
+    //    }
 
-//    float xval = -imu.calcGyro(imu.gx);
-//    float yval = -imu.calcGyro(imu.gy);
+    //    float xval = -imu.calcGyro(imu.gx);
+    //    float yval = -imu.calcGyro(imu.gy);
     float xval = -imu.mx;
     float yval = -imu.my;
     double heading;
