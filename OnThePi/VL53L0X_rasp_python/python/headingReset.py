@@ -25,7 +25,7 @@ def getSensorReadings():
   dumm = distanceArray[3]
   del distanceArray[3]
   distanceArray.append(dumm)
-#  print distanceArray
+  print distanceArray
   return distanceArray
 
 def getHeadingBeach():
