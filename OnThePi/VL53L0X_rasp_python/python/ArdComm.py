@@ -26,16 +26,16 @@ def sendCommand(command):
   time.sleep(.1)
 
 while(1):
-  sendCommand("forward")
+  sendCommand("right")
   time.sleep(2)
   sendCommand("stop")
   time.sleep(2)
 #  sendCommand("ccw")
 #  time.sleep(2)
-  sendCommand("forward")
-  time.sleep(2)
-  sendCommand("stop")
-  time.sleep(2)
+#  sendCommand("forward")
+#  time.sleep(2)
+#  sendCommand("stop")
+#  time.sleep(2)
   sendCommand("newHeading")
   time.sleep(2)
 

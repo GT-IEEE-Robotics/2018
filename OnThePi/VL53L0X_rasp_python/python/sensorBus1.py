@@ -75,25 +75,25 @@ def initBus1(gpio_arr):
     # call to start ranging 
     GPIO1.output(sensor5_shutdown, GPIO1.HIGH)
     time.sleep(0.50)
-    tof5.start_ranging(VL53L0X_bus1.VL53L0X_GOOD_ACCURACY_MODE)
+    tof5.start_ranging(VL53L0X_bus1.VL53L0X_BEST_ACCURACY_MODE)
 
     # Set shutdown pin high for the first VL53L0X then 
     # call to start ranging 
     GPIO1.output(sensor6_shutdown, GPIO1.HIGH)
     time.sleep(0.50)
-    tof6.start_ranging(VL53L0X_bus1.VL53L0X_GOOD_ACCURACY_MODE)
+    tof6.start_ranging(VL53L0X_bus1.VL53L0X_BEST_ACCURACY_MODE)
 
     # Set shutdown pin high for the first VL53L0X then 
     # call to start ranging 
     GPIO1.output(sensor7_shutdown, GPIO1.HIGH)
     time.sleep(0.50)
-    tof7.start_ranging(VL53L0X_bus1.VL53L0X_GOOD_ACCURACY_MODE)
+    tof7.start_ranging(VL53L0X_bus1.VL53L0X_BEST_ACCURACY_MODE)
 
     # Set shutdown pin high for the first VL53L0X then 
     # call to start ranging 
     GPIO1.output(sensor8_shutdown, GPIO1.HIGH)
     time.sleep(0.50)
-    tof8.start_ranging(VL53L0X_bus1.VL53L0X_GOOD_ACCURACY_MODE)
+    tof8.start_ranging(VL53L0X_bus1.VL53L0X_BEST_ACCURACY_MODE)
 
     timing1 = tof5.get_timing()
     if (timing1 < 20000):

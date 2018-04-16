@@ -17,7 +17,7 @@ def prettyPrint(busnum, arr):
 
 while(1):
     oneBus = readBus(tof_arr1)
-    prettyPrint(1, oneBus)
+#    prettyPrint(1, oneBus)
     time.sleep(delay)
 
     zeroBus = readBus(tof_arr0)

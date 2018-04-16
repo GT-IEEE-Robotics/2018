@@ -83,6 +83,9 @@ void setup() {
   pinMode(50, OUTPUT);
   pinMode(52, OUTPUT);
 
+  //imu power gpio
+  pinMode(30, OUTPUT);
+  digitalWrite(30, HIGH);
   //initPIDs();
 
   // Before initializing the IMU, there are a few settings
@@ -102,7 +105,14 @@ void setup() {
                    "work for an out of the box LSM9DS1 " \
                    "Breakout, but may need to be modified " \
                    "if the board jumpers are.");
-    while (1)
+    while (1) {
+      digitalWrite(30, LOW);
+      delay(100);
+      digitalWrite(30, HIGH);
+      if (imu.begin()) {
+        break;
+      }
+    }
       ;
   }
 
@@ -238,7 +248,7 @@ void driveBackward(int leftVel, int rightVel) {
   analogWrite(BR, rightVel);
 }
 
-void driveLeft(int leftVel, int rightVel) {
+void driveRight(int leftVel, int rightVel) {
   // direction
   digitalWrite(46, LOW);
   digitalWrite(48, HIGH);
@@ -252,7 +262,7 @@ void driveLeft(int leftVel, int rightVel) {
   analogWrite(BR, rightVel);
 }
 
-void driveRight(int leftVel, int rightVel) {
+void driveLeft(int leftVel, int rightVel) {
   // direction
   digitalWrite(46, HIGH);
   digitalWrite(48, LOW);
@@ -274,10 +284,10 @@ void rotateCCW() {
   digitalWrite(52, HIGH);
 
   // speed
-  analogWrite(FL, 50);
-  analogWrite(BL, 50);
-  analogWrite(FR, 50);
-  analogWrite(BR, 50);
+  analogWrite(FL, 15);
+  analogWrite(BL, 15);
+  analogWrite(FR, 15);
+  analogWrite(BR, 15);
 }
 
 void rotateCW() {
@@ -288,10 +298,10 @@ void rotateCW() {
   digitalWrite(52, LOW);
 
   // speed
-  analogWrite(FL, 50);
-  analogWrite(BL, 50);
-  analogWrite(FR, 50);
-  analogWrite(BR, 50);
+  analogWrite(FL, 15);
+  analogWrite(BL, 15);
+  analogWrite(FR, 15);
+  analogWrite(BR, 15);
 }
 
 void stopRobot() {

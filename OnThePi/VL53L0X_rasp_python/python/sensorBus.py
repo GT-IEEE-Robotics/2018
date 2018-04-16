@@ -38,7 +38,7 @@ def initBus(bus_num, gpio_arr, addr_arr):
         GPIO.output(pin, GPIO.LOW)
 
     # Keep all low for 500 ms or so to make sure they reset
-    time.sleep(0.50)
+    time.sleep(0.1)
 
     # Create one object per VL53L0X passing the address to give to
     # each.
@@ -50,7 +50,7 @@ def initBus(bus_num, gpio_arr, addr_arr):
 
         GPIO.output(pin, GPIO.HIGH)
         time.sleep(0.50)
-        tof.start_ranging(vl_lib.VL53L0X_BETTER_ACCURACY_MODE)
+        tof.start_ranging(vl_lib.VL53L0X_BEST_ACCURACY_MODE)
 
     return tof_arr
 
