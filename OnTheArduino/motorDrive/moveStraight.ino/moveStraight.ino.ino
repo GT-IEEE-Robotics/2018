@@ -13,6 +13,8 @@
 #define FR (10)
 #define FL (11)
 
+#define TURN_SPEED 30
+
 LSM9DS1 imu;
 double setPointHeading;
 double currHeading;
@@ -52,16 +54,6 @@ String inputString = "";         // a String to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
 
 void initPIDs() {
-  //  PID leftPID1(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
-  //  PID rightPID1(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
-  //  free(leftPID);
-  //  free(rightPID);
-  //  leftPID = &leftPID1;
-  //  rightPID = &rightPID1;
-  //leftPID->SetMode(MANUAL);
-  //rightPID->SetMode(MANUAL);
-  //leftPID->SetMode(AUTOMATIC);
-  //rightPID->SetMode(AUTOMATIC);
   leftPID->ResetFunction();
   rightPID->ResetFunction();
   leftPID->Compute();
@@ -132,70 +124,34 @@ boolean shouldRun = true;
 //avoid using delays in loop because
 //will mess up serial pi communication
 void loop() {
-  //  driveForward(100, 150);
-  //  delay(3000);+
-
-  //  stopRobot();
-  //  while(1) {
-  //    };
-  //Serial.print("Set Heading: ");
-  //Serial.println(setPointHeading);
   currHeading = getHeading();
-  //Serial.print("Heading: ");
-  //Serial.println(currHeading);
+
   leftPID->Compute();
   rightPID->Compute();
-  //Serial.print("leftVel: ");
-  //Serial.println(leftVel);
-  //Serial.print("rightVel: ");
-  //Serial.println(rightVel);
+
   if (inputString == "FORWARD\n") {
     driveForward((int) leftVel, (int) rightVel);
-  }
-  if (inputString == "BACKWARD\n") {
+  } else if (inputString == "BACKWARD\n") {
     driveBackward((int) leftVel, (int) rightVel);
-  }
-  if (inputString == "LEFT\n") {
+  } else if (inputString == "LEFT\n") {
     driveLeft((int) leftVel, (int) rightVel);
-  }
-  if (inputString == "RIGHT\n") {
+  } else if (inputString == "RIGHT\n") {
     driveRight((int) leftVel, (int) rightVel);
-  }
-  if (inputString == "CW\n") {
+  } else if (inputString == "CW\n") {
     rotateCW();
-    //initPIDs();
-  }
-  if (inputString == "CCW\n") {
+  } else if (inputString == "CCW\n") {
     rotateCCW();
-    //initPIDs();
-  }
-  if (inputString == "STOP\n") {
+  } else if (inputString == "STOP\n") {
     stopRobot();
-  }
-  if (inputString == "NEWHEADING\n") {
+  } else if (inputString == "NEWHEADING\n") {
     Serial.print("Heading: ");
     Serial.println(setPointHeading);
     setPointHeading = getHeading();
     initPIDs();
     Serial.print("New Heading: ");
     Serial.println(setPointHeading);
-    //leftPID1(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
-    //rightPID1(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
-    //leftPID->Compute();
-    //rightPID->Compute();
   }
-  //  delay(100);
-  //if(Serial.available() > 0) {
-  //  while(Serial.available()) {
-  //    Serial.read();
-  //  }
-  //  stopRobot();
-  //  if (shouldRun) {
-  //    shouldRun = false;
-  //  } else {
-  //    shouldRun = true;
-  //  }
-  //}
+
   //reads the input from the pi
   if (stringComplete) {
     Serial.println(inputString);
@@ -284,10 +240,10 @@ void rotateCCW() {
   digitalWrite(52, HIGH);
 
   // speed
-  analogWrite(FL, 15);
-  analogWrite(BL, 15);
-  analogWrite(FR, 15);
-  analogWrite(BR, 15);
+  analogWrite(FL, TURN_SPEED);
+  analogWrite(BL, TURN_SPEED);
+  analogWrite(FR, TURN_SPEED);
+  analogWrite(BR, TURN_SPEED);
 }
 
 void rotateCW() {
@@ -298,10 +254,10 @@ void rotateCW() {
   digitalWrite(52, LOW);
 
   // speed
-  analogWrite(FL, 15);
-  analogWrite(BL, 15);
-  analogWrite(FR, 15);
-  analogWrite(BR, 15);
+  analogWrite(FL, TURN_SPEED);
+  analogWrite(BL, TURN_SPEED);
+  analogWrite(FR, TURN_SPEED);
+  analogWrite(BR, TURN_SPEED);
 }
 
 void stopRobot() {
