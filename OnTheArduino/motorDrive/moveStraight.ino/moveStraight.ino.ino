@@ -129,21 +129,21 @@ void loop() {
   leftPID->Compute();
   rightPID->Compute();
 
-  if (inputString == "FORWARD\n") {
+  if (inputString == "FORWARD") {
     driveForward((int) leftVel, (int) rightVel);
-  } else if (inputString == "BACKWARD\n") {
+  } else if (inputString == "BACKWARD") {
     driveBackward((int) leftVel, (int) rightVel);
-  } else if (inputString == "LEFT\n") {
+  } else if (inputString == "LEFT") {
     driveLeft((int) leftVel, (int) rightVel);
-  } else if (inputString == "RIGHT\n") {
+  } else if (inputString == "RIGHT") {
     driveRight((int) leftVel, (int) rightVel);
-  } else if (inputString == "CW\n") {
+  } else if (inputString == "CW") {
     rotateCW();
-  } else if (inputString == "CCW\n") {
+  } else if (inputString == "CCW") {
     rotateCCW();
-  } else if (inputString == "STOP\n") {
+  } else if (inputString == "STOP") {
     stopRobot();
-  } else if (inputString == "NEWHEADING\n") {
+  } else if (inputString == "NEWHEADING") {
     Serial.print("Heading: ");
     Serial.println(setPointHeading);
     setPointHeading = getHeading();
@@ -169,106 +169,149 @@ void serialEvent() {
     inputString += inChar;
     // if the incoming character is a newline, set a flag so the main loop can
     // do something about it:
-    if (inChar == '\n') {
+    if (inChar == '\n'){
+      int dumm = inputString.indexOf("@");
+      String speedString = inputString.substring(dumm+1, inputString.length() - 1);
+      inputString = inputString.substring(0,dumm);
+      leftVel = speedString.toInt();
+      rightVel = speedString.toInt();
       stringComplete = true;
     }
   }
   Serial.println(inputString);
 }
 
-void driveForward(int leftVel, int rightVel) {
-  // direction
-  digitalWrite(46, LOW);
-  digitalWrite(48, LOW);
-  digitalWrite(50, LOW);
-  digitalWrite(52, LOW);
+void setDirs(uint8_t dirs[]) {
+  digitalWrite(46, dirs[0]);
+  digitalWrite(48, dirs[1]);
+  digitalWrite(50, dirs[2]);
+  digitalWrite(52, dirs[3]);
+}
 
-  // speed
+void setSpeeds(int leftVel, int rightVel) {
   analogWrite(FL, leftVel);
   analogWrite(BL, leftVel);
   analogWrite(FR, rightVel);
   analogWrite(BR, rightVel);
+}
+
+void driveForward(int leftVel, int rightVel) {
+  // direction
+//  digitalWrite(46, LOW);
+//  digitalWrite(48, LOW);
+//  digitalWrite(50, LOW);
+//  digitalWrite(52, LOW);  
+  uint8_t dirs[4] = {LOW, LOW, LOW, LOW};
+  setDirs(dirs);
+
+
+  // speed
+  setSpeeds(leftVel, rightVel);
+//  analogWrite(FL, leftVel);
+//  analogWrite(BL, leftVel);
+//  analogWrite(FR, rightVel);
+//  analogWrite(BR, rightVel);
 }
 
 void driveBackward(int leftVel, int rightVel) {
   // direction
-  digitalWrite(46, HIGH);
-  digitalWrite(48, HIGH);
-  digitalWrite(50, HIGH);
-  digitalWrite(52, HIGH);
+//  digitalWrite(46, HIGH);
+//  digitalWrite(48, HIGH);
+//  digitalWrite(50, HIGH);
+//  digitalWrite(52, HIGH);
+  uint8_t dirs[4] = {HIGH, HIGH, HIGH, HIGH};
+  setDirs(dirs);
 
   // speed
-  analogWrite(FL, leftVel);
-  analogWrite(BL, leftVel);
-  analogWrite(FR, rightVel);
-  analogWrite(BR, rightVel);
+  setSpeeds(leftVel, rightVel);
+//  analogWrite(FL, leftVel);
+//  analogWrite(BL, leftVel);
+//  analogWrite(FR, rightVel);
+//  analogWrite(BR, rightVel);
 }
 
 void driveRight(int leftVel, int rightVel) {
   // direction
-  digitalWrite(46, LOW);
-  digitalWrite(48, HIGH);
-  digitalWrite(50, HIGH);
-  digitalWrite(52, LOW);
+//  digitalWrite(46, LOW);
+//  digitalWrite(48, HIGH);
+//  digitalWrite(50, HIGH);
+//  digitalWrite(52, LOW);
+  uint8_t dirs[4] = {LOW, HIGH, HIGH, LOW};
+  setDirs(dirs);
+
 
   // speed
-  analogWrite(FL, leftVel);
-  analogWrite(BL, leftVel);
-  analogWrite(FR, rightVel);
-  analogWrite(BR, rightVel);
+  setSpeeds(leftVel, rightVel);
+//  analogWrite(FL, leftVel);
+//  analogWrite(BL, leftVel);
+//  analogWrite(FR, rightVel);
+//  analogWrite(BR, rightVel);
 }
 
 void driveLeft(int leftVel, int rightVel) {
   // direction
-  digitalWrite(46, HIGH);
-  digitalWrite(48, LOW);
-  digitalWrite(50, LOW);
-  digitalWrite(52, HIGH);
+//  digitalWrite(46, HIGH);
+//  digitalWrite(48, LOW);
+//  digitalWrite(50, LOW);
+//  digitalWrite(52, HIGH);
+  uint8_t dirs[4] = {HIGH, LOW, LOW, HIGH};
+  setDirs(dirs);
 
   // speed
-  analogWrite(FL, leftVel);
-  analogWrite(BL, leftVel);
-  analogWrite(FR, rightVel);
-  analogWrite(BR, rightVel);
+  setSpeeds(leftVel, rightVel);
+//  analogWrite(FL, leftVel);
+//  analogWrite(BL, leftVel);
+//  analogWrite(FR, rightVel);
+//  analogWrite(BR, rightVel);
 }
 
 void rotateCCW() {
   // direction
-  digitalWrite(46, LOW);
-  digitalWrite(48, HIGH);
-  digitalWrite(50, LOW);
-  digitalWrite(52, HIGH);
+//  digitalWrite(46, LOW);
+//  digitalWrite(48, HIGH);
+//  digitalWrite(50, LOW);
+//  digitalWrite(52, HIGH);
+  uint8_t dirs[4] = {LOW, HIGH, LOW, HIGH};
+  setDirs(dirs);
 
   // speed
-  analogWrite(FL, TURN_SPEED);
-  analogWrite(BL, TURN_SPEED);
-  analogWrite(FR, TURN_SPEED);
-  analogWrite(BR, TURN_SPEED);
+  setSpeeds(TURN_SPEED, TURN_SPEED);
+//  analogWrite(FL, TURN_SPEED);
+//  analogWrite(BL, TURN_SPEED);
+//  analogWrite(FR, TURN_SPEED);
+//  analogWrite(BR, TURN_SPEED);
 }
 
 void rotateCW() {
   // direction
-  digitalWrite(46, HIGH);
-  digitalWrite(48, LOW);
-  digitalWrite(50, HIGH);
-  digitalWrite(52, LOW);
+//  digitalWrite(46, HIGH);
+//  digitalWrite(48, LOW);
+//  digitalWrite(50, HIGH);
+//  digitalWrite(52, LOW);
+  uint8_t dirs[4] = {HIGH, LOW, HIGH, LOW};
+  setDirs(dirs);
 
   // speed
-  analogWrite(FL, TURN_SPEED);
-  analogWrite(BL, TURN_SPEED);
-  analogWrite(FR, TURN_SPEED);
-  analogWrite(BR, TURN_SPEED);
+  setSpeeds(TURN_SPEED, TURN_SPEED);
+//  analogWrite(FL, TURN_SPEED);
+//  analogWrite(BL, TURN_SPEED);
+//  analogWrite(FR, TURN_SPEED);
+//  analogWrite(BR, TURN_SPEED);
 }
 
 void stopRobot() {
-  digitalWrite(46, LOW);
-  digitalWrite(48, LOW);
-  digitalWrite(50, LOW);
-  digitalWrite(52, LOW);
-  analogWrite(FL, 0);
-  analogWrite(FR, 0);
-  analogWrite(BL, 0);
-  analogWrite(BR, 0);
+//  digitalWrite(46, LOW);
+//  digitalWrite(48, LOW);
+//  digitalWrite(50, LOW);
+//  digitalWrite(52, LOW);
+  uint8_t dirs[4] = {LOW, LOW, LOW, LOW};
+  setDirs(dirs);
+
+  setSpeeds(0, 0);
+//  analogWrite(FL, 0);
+//  analogWrite(FR, 0);
+//  analogWrite(BL, 0);
+//  analogWrite(BR, 0);
 }
 
 double getHeading() {
