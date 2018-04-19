@@ -9,10 +9,10 @@
 //#define PRINT_CALCULATED
 
 class imuGyro {
-  // SDO_XM and SDO_G are both pulled high, so our addresses are:
-  #define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
-  #define LSM9DS1_AG  0x6B // Would be 0x6A if SDO_AG is LOW
-  
+    // SDO_XM and SDO_G are both pulled high, so our addresses are:
+#define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
+#define LSM9DS1_AG  0x6B // Would be 0x6A if SDO_AG is LOW
+
   private:
     double sum_x = 0;
     double sum_y = 0;
@@ -20,7 +20,7 @@ class imuGyro {
     double mill = 0;
     unsigned long prevTime = 0;
     LSM9DS1 imu;
-    
+
   public:
 
     // pin number is the GPIO powering the IMU (that can be used to reset IMU if necessary)
@@ -68,21 +68,26 @@ class imuGyro {
       if (imu.gyroAvailable()) {
         imu.readGyro();
         unsigned long curTime = millis();
-        sum_x = sum_x + (imu.calcGyro(imu.gx)) * (curTime - prevTime)/1000.0;
-        sum_y = sum_y + (imu.calcGyro(imu.gy)) * (curTime - prevTime)/1000.0;
-        sum_z = sum_z + (imu.calcGyro(imu.gz)) * (curTime - prevTime)/1000.0;
+        sum_x = sum_x + (imu.calcGyro(imu.gx)) * (curTime - prevTime) / 1000.0;
+        sum_y = sum_y + (imu.calcGyro(imu.gy)) * (curTime - prevTime) / 1000.0;
+        sum_z = sum_z + (imu.calcGyro(imu.gz)) * (curTime - prevTime) / 1000.0;
         prevTime = curTime;
       }
     }
     void addGyroZ() {
-       if (imu.gyroAvailable()) {
-        imu.readGyro(Z_AXIS);
+      if (imu.gyroAvailable()) {
+        double tolerance = 0.02;
+        //imu.readGyro(lsm9ds1_axis::Z_AXIS);
+        imu.readGyro();
         unsigned long curTime = millis();
-        sum_z = sum_z + (imu.calcGyro(imu.gz)) * (curTime - prevTime)/1000.0;
+        double dumm = (imu.calcGyro(imu.gz)) * (curTime - prevTime) / 1000.0;
+        if (dumm > tolerance || dumm < -(tolerance)) {
+          sum_z = sum_z + dumm;
+        }
         prevTime = curTime;
       }
     }
-    
+
     double getX() {
       return sum_x;
     }
@@ -140,13 +145,14 @@ void setup()
 
 void loop() {
   // put your main code here, to run repeatedly:
-//  gyro1.addGyro();/
-//  gyro1.printGyro();/
+  //  gyro1.addGyro();/
+  //  gyro1.printGyro();/
   //delay(.1);
 
   gyro1.addGyroZ();
-  Serial.printf("Z theta: %d\n", gyro1.getZ());
-  
+  Serial.print("Z theta: ");
+  Serial.println(gyro1.getZ());
+  delay(0.1);
 
 }
 
