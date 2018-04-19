@@ -17,14 +17,23 @@
 #define FL (11)
 #define FL_CONTROL 46
 
-#define BR_PIN_1 32
-#define BR_PIN_2 34
-#define BL_PIN_1 36
-#define BL_PIN_2 38
-#define FR_PIN_1 40
-#define FR_PIN_2 42
-#define FL_PIN_1 28
-#define FL_PIN_2 26
+#define BR_PIN_A (38)
+#define BR_PIN_B (36)
+#define BL_PIN_A (32)
+#define BL_PIN_B (34)
+#define FR_PIN_A (26)
+#define FR_PIN_B (28)
+#define FL_PIN_A (40)
+#define FL_PIN_B (42)
+
+//#define BR_PIN_1 32
+//#define BR_PIN_2 34
+//#define BL_PIN_1 36
+//#define BL_PIN_2 38
+//#define FR_PIN_1 40
+//#define FR_PIN_2 42
+//#define FL_PIN_1 28
+//#define FL_PIN_2 26
 
 #define TURN_SPEED 30
 
@@ -39,21 +48,21 @@ double blVel = 50;
 double frVel = 50;
 double flVel = 50;
 
-double brCount = 0;
-double brCountPrev = 0;
-double brRevs = 0;
+volatile int brCount = 0;
+volatile int brCountPrev = 0;
+volatile int brRevs = 0;
 
-double blCount = 0;
-double blCountPrev = 0;
-double blRevs = 0;
+volatile int blCount = 0;
+volatile int blCountPrev = 0;
+volatile int blRevs = 0;
 
-double frCount = 0;
-double frCountPrev = 0;
-double frRevs = 0;
+volatile int frCount = 0;
+volatile int frCountPrev = 0;
+volatile int frRevs = 0;
 
-double flCount = 0;
-double flCountPrev = 0;
-double flRevs = 0;
+volatile int flCount = 0;
+volatile int flCountPrev = 0;
+volatile int flRevs = 0;
 const int8_t encoder_table[] = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0};
 
 double Ep = 1, Ei = 0, Ed = 0; //double Kp = 2, Ki = 2, Kd = 0.5;
@@ -439,24 +448,24 @@ double getHeading() {
 void econder_interrupt_br() {
   static uint8_t br_enc_val = 0;
   br_enc_val = (br_enc_val << 2) | (digitalRead(BR_PIN_1) << 1) | digitalRead(BR_PIN_2);
-  brCount = encoder_table[br_enc_val & 0b1111];
+  brCount += encoder_table[br_enc_val & 0b1111];
 }
 
 void econder_interrupt_bl() {
   static uint8_t bl_enc_val = 0;
   bl_enc_val = (bl_enc_val << 2) | (digitalRead(BL_PIN_1) << 1) | digitalRead(BL_PIN_2);
-  blCount = encoder_table[bl_enc_val & 0b1111];
+  blCount += encoder_table[bl_enc_val & 0b1111];
 }
 
 void econder_interrupt_fr() {
   static uint8_t fr_enc_val = 0;
   fr_enc_val = (fr_enc_val << 2) | (digitalRead(FR_PIN_1) << 1) | digitalRead(FR_PIN_2);
-  frCount = encoder_table[fr_enc_val & 0b1111];
+  frCount += encoder_table[fr_enc_val & 0b1111];
 }
 
 void econder_interrupt_fl() {
   static uint8_t fl_enc_val = 0;
   fl_enc_val = (fl_enc_val << 2) | (digitalRead(FL_PIN_1) << 1) | digitalRead(FL_PIN_2);
-  flCount = encoder_table[fl_enc_val & 0b1111];
+  flCount += encoder_table[fl_enc_val & 0b1111];
 }
 
