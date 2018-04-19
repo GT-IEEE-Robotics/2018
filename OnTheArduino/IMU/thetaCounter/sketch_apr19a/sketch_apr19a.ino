@@ -4,42 +4,26 @@
 #include <SPI.h>
 #include <SparkFunLSM9DS1.h>
 
-//////////////////////////
-// LSM9DS1 Library Init //
-//////////////////////////
-// Use the LSM9DS1 class to create an object. [imu] can be
-// named anything, we'll refer to that throught the sketch.
-LSM9DS1 imu;
 
-///////////////////////
-// Example I2C Setup //
-///////////////////////
-// SDO_XM and SDO_G are both pulled high, so our addresses are:
-#define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
-#define LSM9DS1_AG  0x6B // Would be 0x6A if SDO_AG is LOW
-
-////////////////////////////
-// Sketch Output Settings //
-////////////////////////////
-#define PRINT_CALCULATED
-//#define PRINT_RAW
-#define PRINT_SPEED 250 // 250 ms between prints
-static unsigned long lastPrint = 0; // Keep track of print time
-
-// Earth's magnetic field varies by location. Add or subtract
-// a declination to get a more accurate heading. Calculate
-// your's here:
-// http://www.ngdc.noaa.gov/geomag-web/#declination
-#define DECLINATION -8.58 // Declination (degrees) in Boulder, CO.
+// uncomment if you want to print internal imu gyro calculations in the print function
+//#define PRINT_CALCULATED
 
 class imuGyro {
+  // SDO_XM and SDO_G are both pulled high, so our addresses are:
+  #define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
+  #define LSM9DS1_AG  0x6B // Would be 0x6A if SDO_AG is LOW
+  
   private:
     double sum_x = 0;
     double sum_y = 0;
     double sum_z = 0;
     double mill = 0;
     unsigned long prevTime = 0;
+    LSM9DS1 imu;
+    
   public:
+
+    // pin number is the GPIO powering the IMU (that can be used to reset IMU if necessary)
     void init(int pinNumber) {
       pinMode(pinNumber, OUTPUT);
       digitalWrite(pinNumber, HIGH);
@@ -60,16 +44,16 @@ class imuGyro {
                        "work for an out of the box LSM9DS1 " \
                        "Breakout, but may need to be modified " \
                        "if the board jumpers are.");
+        // added a resetting the imu loop for robustness
         while (1) {
-          digitalWrite(30, HIGH);
+          digitalWrite(pinNumber, HIGH);
           Serial.println("Retrying IMU");
-          delay(500);
+          delay(100);
           if (imu.begin()) {
             break;
           }
-          digitalWrite(30, LOW);
-          delay(300);
-
+          digitalWrite(pinNumber, LOW);
+          delay(100);
         };
       }
     }
@@ -90,13 +74,22 @@ class imuGyro {
         prevTime = curTime;
       }
     }
-    double getx() {
+    void addGyroZ() {
+       if (imu.gyroAvailable()) {
+        imu.readGyro(Z_AXIS);
+        unsigned long curTime = millis();
+        sum_z = sum_z + (imu.calcGyro(imu.gz)) * (curTime - prevTime)/1000.0;
+        prevTime = curTime;
+      }
+    }
+    
+    double getX() {
       return sum_x;
     }
-    double gety() {
+    double getY() {
       return sum_y;
     }
-    double getz() {
+    double getZ() {
       return sum_z;
     }
     void printGyro()
@@ -117,38 +110,43 @@ class imuGyro {
         Serial.print(", ");
         Serial.print(imu.calcGyro(imu.gz), 2);
         Serial.println(" deg/s");
+#endif
         Serial.print("sum_x = ");
         Serial.print(sum_x);
         Serial.print(" sum_y = ");
         Serial.print(sum_y);
         Serial.print(" sum_z = ");
         Serial.println(sum_z);
-#endif
       }
     }
 };
 
 
+
+
+// Define global IMU Gyro Sensor
 imuGyro gyro1;
 
 
 
 void setup()
 {
-
   Serial.begin(115200);
   //imu power gpio
   gyro1.init(30);
 
 }
+
+
 void loop() {
   // put your main code here, to run repeatedly:
-  gyro1.addGyro();
-  //gyro1.addx();
-  //gyro1.addy();
-  //gyro1.addz();
-  gyro1.printGyro();
+//  gyro1.addGyro();/
+//  gyro1.printGyro();/
   //delay(.1);
+
+  gyro1.addGyroZ();
+  Serial.printf("Z theta: %d\n", gyro1.getZ());
+  
 
 }
 
