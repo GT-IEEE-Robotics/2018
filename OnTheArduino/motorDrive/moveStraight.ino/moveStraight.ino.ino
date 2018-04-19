@@ -21,29 +21,137 @@ double currHeading;
 double rightVel = 30;
 double leftVel = 30;
 
-///////////////////////
-// Example I2C Setup //
-///////////////////////
-// SDO_XM and SDO_G are both pulled high, so our addresses are:
-#define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
-#define LSM9DS1_AG  0x6B // Would be 0x6A if SDO_AG is LOW
-
-////////////////////////////
-// Sketch Output Settings //
-////////////////////////////
-#define PRINT_CALCULATED
-//#define PRINT_RAW
-#define PRINT_SPEED 250 // 250 ms between prints
-static unsigned long lastPrint = 0; // Keep track of print time
 
 // Earth's magnetic field varies by location. Add or subtract
-// a declination to get a more accurate heading. Calculate
+// a declination to get a more accurate heading. CalculatePIPI
 // your's here:
 // http://www.ngdc.noaa.gov/geomag-web/#declination
 #define DECLINATION 5.167 // Declination (degrees) in Boulder, CO.
 
+class Gyro {
+    // SDO_XM and SDO_G are both pulled high, so our addresses are:
+#define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
+#define LSM9DS1_AG  0x6B // Would be 0x6A if SDO_AG is LOW
+
+  private:
+    double sum_x = 0;
+    double sum_y = 0;
+    double sum_z = 0;
+    double mill = 0;
+    unsigned long prevTime = 0;
+    LSM9DS1 imu;
+
+  public:
+
+    // pin number is the GPIO powering the IMU (that can be used to reset IMU if necessary)
+    void init(int pinNumber) {
+      pinMode(pinNumber, OUTPUT);
+      digitalWrite(pinNumber, HIGH);
+      // Before initializing the IMU, there are a few settings
+      // we may need to adjust. Use the settings struct to set
+      // the device's communication mode and addresses:
+      imu.settings.device.commInterface = IMU_MODE_I2C;
+      imu.settings.device.mAddress = LSM9DS1_M;
+      imu.settings.device.agAddress = LSM9DS1_AG;
+      // The above lines will only take effect AFTER calling
+      // imu.begin(), which verifies communication with the IMU
+      // and turns it on.
+      if (!imu.begin())
+      {
+        Serial.println("Failed to communicate with LSM9DS1.");
+        Serial.println("Double-check wiring.");
+        Serial.println("Default settings in this sketch will " \
+                       "work for an out of the box LSM9DS1 " \
+                       "Breakout, but may need to be modified " \
+                       "if the board jumpers are.");
+        // added a resetting the imu loop for robustness
+        while (1) {
+          digitalWrite(pinNumber, HIGH);
+          Serial.println("Retrying IMU");
+          delay(100);
+          if (imu.begin()) {
+            break;
+          }
+          digitalWrite(pinNumber, LOW);
+          delay(100);
+        };
+      }
+    }
+
+    void reset() {
+      sum_x = 0;
+      sum_y = 0;
+      sum_z = 0;
+    }
+
+    void addGyro() {
+      if (imu.gyroAvailable()) {
+        imu.readGyro();
+        unsigned long curTime = millis();
+        sum_x = sum_x + (imu.calcGyro(imu.gx)) * (curTime - prevTime) / 1000.0;
+        sum_y = sum_y + (imu.calcGyro(imu.gy)) * (curTime - prevTime) / 1000.0;
+        sum_z = sum_z + (imu.calcGyro(imu.gz)) * (curTime - prevTime) / 1000.0;
+        prevTime = curTime;
+      }
+    }
+    void addGyroZ() {
+      if (imu.gyroAvailable()) {
+        double tolerance = 0.02;
+        //imu.readGyro(lsm9ds1_axis::Z_AXIS);
+        imu.readGyro();
+        unsigned long curTime = millis();
+        double dumm = (imu.calcGyro(imu.gz)) * (curTime - prevTime) / 1000.0;
+        if (dumm > tolerance || dumm < -(tolerance)) {
+          sum_z = sum_z + dumm;
+        }
+        prevTime = curTime;
+      }
+    }
+
+    double getX() {
+      return sum_x;
+    }
+    double getY() {
+      return sum_y;
+    }
+    double getZ() {
+      addGyroZ();
+      return sum_z;
+    }
+    void printGyro()
+    {
+      if ( imu.gyroAvailable() )
+      {
+        imu.readGyro();
+        // Now we can use the gx, gy, and gz variables as we please.
+        // Either print them as raw ADC values, or calculated in DPS.
+        Serial.print("G: ");
+#ifdef PRINT_CALCULATED
+        // If you want to print calculated values, you can use the
+        // calcGyro helper function to convert a raw ADC value to
+        // DPS. Give the function the value that you want to convert.
+        Serial.print(imu.calcGyro(imu.gx), 2);
+        Serial.print(", ");
+        Serial.print(imu.calcGyro(imu.gy), 2);
+        Serial.print(", ");
+        Serial.print(imu.calcGyro(imu.gz), 2);
+        Serial.println(" deg/s");
+#endif
+        Serial.print("sum_x = ");
+        Serial.print(sum_x);
+        Serial.print(" sum_y = ");
+        Serial.print(sum_y);
+        Serial.print(" sum_z = ");
+        Serial.println(sum_z);
+      }
+    }
+};
+
+//imu global
+Gyro gyro1;
+
 // PID
-double Kp = 1, Ki = 0, Kd = 0; //double Kp = 2, Ki = 2, Kd = 0.5;
+double Kp = 1, Ki = 0, Kd = 0.01; //double Kp = 2, Ki = 2, Kd = 0.5;
 PID leftPID1(&currHeading, &leftVel, &setPointHeading, Kp, Ki, Kd, REVERSE);
 PID rightPID1(&currHeading, &rightVel, &setPointHeading, Kp, Ki, Kd, DIRECT);
 PID* leftPID = &leftPID1;
@@ -75,48 +183,17 @@ void setup() {
   pinMode(50, OUTPUT);
   pinMode(52, OUTPUT);
 
-  //imu power gpio
-  pinMode(30, OUTPUT);
-  digitalWrite(30, HIGH);
-  //initPIDs();
 
-  // Before initializing the IMU, there are a few settings
-  // we may need to adjust. Use the settings struct to set
-  // the device's communication mode and addresses:
-  imu.settings.device.commInterface = IMU_MODE_I2C;
-  imu.settings.device.mAddress = LSM9DS1_M;
-  imu.settings.device.agAddress = LSM9DS1_AG;
-  // The above lines will only take effect AFTER calling
-  // imu.begin(), which verifies communication with the IMU
-  // and turns it on.
-  if (!imu.begin())
-  {
-    Serial.println("Failed to communicate with LSM9DS1.");
-    Serial.println("Double-check wiring.");
-    Serial.println("Default settings in this sketch will " \
-                   "work for an out of the box LSM9DS1 " \
-                   "Breakout, but may need to be modified " \
-                   "if the board jumpers are.");
-    while (1) {
-      digitalWrite(30, HIGH);
-      Serial.println("Retrying IMU");
-      delay(500);
-      if (imu.begin()) {
-        break;
-      }
-      digitalWrite(30, LOW);
-      delay(300);
-
-    }
-    ;
-  }
-
-  setPointHeading = getHeading();
-  leftPID->SetMode(AUTOMATIC);
-  rightPID->SetMode(AUTOMATIC);
 
   //serial communication setup with pi
   inputString.reserve(200);
+
+  //imu setup
+  gyro1.init(30);
+  gyro1.reset();
+  setPointHeading = gyro1.getZ();
+  leftPID->SetMode(AUTOMATIC);
+  rightPID->SetMode(AUTOMATIC);
 }
 
 boolean shouldRun = true;
@@ -126,7 +203,7 @@ boolean shouldRun = true;
 //avoid using delays in loop because
 //will mess up serial pi communication
 void loop() {
-  currHeading = getHeading();
+  currHeading = gyro1.getZ();
 
   leftPID->Compute();
   rightPID->Compute();
@@ -146,7 +223,8 @@ void loop() {
   } else if (inputString == "STOP") {
     stopRobot();
   } else if (inputString == "NEWHEADING") {
-    setPointHeading = getHeading();
+    gyro1.reset();
+    setPointHeading = gyro1.getZ();
     initPIDs();
   }
 
@@ -167,7 +245,9 @@ void serialEvent() {
     inputString += inChar;
     // if the incoming character is a newline, set a flag so the main loop can
     // do something about it:
-    if (inChar == '\n') {
+    if (inChar == 33) {
+      inputString = "";
+    } else if (inChar == '\n') {
       int dumm = inputString.indexOf("@");
       String speedString = inputString.substring(dumm + 1, inputString.length() - 1);
       inputString = inputString.substring(0, dumm);
@@ -220,8 +300,8 @@ void driveRight(int leftVel, int rightVel) {
 
   // speed
   analogWrite(FL, leftVel);
-  analogWrite(BL, leftVel);
-  analogWrite(FR, rightVel);
+  analogWrite(BL, rightVel);
+  analogWrite(FR, leftVel);
   analogWrite(BR, rightVel);
 }
 
@@ -260,44 +340,6 @@ void stopRobot() {
   setDirs(dirs);
 
   setSpeeds(0, 0);
-}
-
-double getHeading() {
-  int i = 0;
-  double headingSum = 0;
-  int averageLength = 100;
-  for (i = 0; i < averageLength; i++) {
-    if (imu.magAvailable()) {
-      imu.readMag();
-    }
-    //    if (imu.gyroAvailable()) {
-    //      imu.readGyro();
-    //    }
-
-    //    float xval = -imu.calcGyro(imu.gx);
-    //    float yval = -imu.calcGyro(imu.gy);
-    float xval = -imu.mx;
-    float yval = -imu.my;
-    double heading;
-
-    if (yval == 0) {
-      heading = (xval < 0) ? PI : 0;
-    } else {
-      heading = atan2(xval, yval);
-    }
-
-    heading -= DECLINATION * PI / 180;
-
-    if (heading > PI) heading -= (2 * PI);
-    else if (heading < -PI) heading += (2 * PI);
-    else if (heading < 0) heading += 2 * PI;
-
-    // Convert everything from radians to degrees:
-    heading *= 180.0 / PI;
-    headingSum += heading;
-  }
-
-  return headingSum / averageLength;
 }
 
 //void driveBackward(int magnitude) {

@@ -38,7 +38,11 @@ ard = serial.Serial(port,115200)
 
 def sendCommand(command, speed=30):
   print(command)
-  commandString = command.upper() + "@" + str(speed) + "\n"
+  if (command is "reset"):
+    commandString = "!"
+  else:
+    commandString = command.upper() + "@" + str(speed) + "\n"
+  
   ard.write(commandString)
   time.sleep(.2)
 
@@ -174,8 +178,9 @@ def getAvgSensors(const=[]):
 #while(1):
 #  print(getAvgSensors([0, 0, 0, 0, 0, 0, 15]))
 
+sendCommand("reset")
 sendCommand("newHeading")
-straight("back")
+#straight("back")
 sendCommand("right")
 time.sleep(5.5)
 sendCommand("stop")
@@ -199,32 +204,39 @@ sendCommand("newHeading")
 sendCommand("forward")
 time.sleep(4.5)
 sendCommand("stop")
+sendCommand("newHeading")
 
 sendCommand("backward")
 time.sleep(1)
 sendCommand("stop")
+sendCommand("newHeading")
 
 sendCommand("ccw")
 time.sleep(2.65)
 sendCommand("stop")
+sendCommand("newHeading")
 
 sendCommand("forward")
-time.sleep(2)
+time.sleep(3)
 sendCommand("stop")
+sendCommand("newHeading")
 
 straight("right")
 
 setDistance("right", 150)
 sendCommand("stop")
+sendCommand("newHeading")
 
 straight("right")
 
 sendCommand("forward")
 time.sleep(3.5)
 sendCommand("stop")
+sendCommand("newHeading")
 
 setDistance("front", 200)
 sendCommand("stop")
+sendCommand("newHeading")
 
 straight("right")
 time.sleep(.1)
@@ -236,7 +248,8 @@ time.sleep(.1)
 center("right", "left")
 straight("front")
 sendCommand("forward")
-time.sleep(1)
+time.sleep(1.5)
+sendCommand("newHeading")
 
 sendCommand("stop")
 
