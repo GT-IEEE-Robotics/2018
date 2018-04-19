@@ -8,7 +8,7 @@ ard = serial.Serial(port,115200)
 def sendCommand(command):
   print(command)
   if (command == "stop"):
-    ard.write("STOP\n")
+    ard.write("STOP@0\n")
   if (command == "forward"):
     ard.write("FORWARD\n")
   if (command == "backward"):
@@ -26,19 +26,14 @@ def sendCommand(command):
   time.sleep(.1)
 
 while(1):
-  sendCommand("right")
-  time.sleep(2)
   sendCommand("stop")
-  time.sleep(2)
+ # time.sleep(1)
 #  sendCommand("ccw")
 #  time.sleep(2)
 #  sendCommand("forward")
 #  time.sleep(2)
 #  sendCommand("stop")
 #  time.sleep(2)
-  sendCommand("newHeading")
-  time.sleep(2)
-
 #  sendCommand("backward")
 #  time.sleep(2)
 #  sendCommand("stop")
@@ -46,7 +41,7 @@ while(1):
 #  sendCommand("newHeading")
 #  time.sleep(2)
 
-#  sendCommand("left")
+##  sendCommand("left")
 #  time.sleep(2)
 #  sendCommand("stop")
 #  time.sleep(2)

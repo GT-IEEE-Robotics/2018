@@ -16,16 +16,24 @@ tof_arr1 = initBus(1, gpio1_arr, addr_arr_bus1)
 
 def getSensorReadings():
   oneBus = readBus(tof_arr1)
-  time.sleep(delay)
+  #time.sleep(delay)
+  b10 = oneBus[0]
+  b11 = oneBus[1]
+  b12 = oneBus[2]
+  b13 = oneBus[3]
 
   zeroBus = readBus(tof_arr0)
-  time.sleep(delay)
+  #time.sleep(delay)
+  b00 = zeroBus[0]
+  b01 = zeroBus[1]
+  b02 = zeroBus[2]
+  b03 = zeroBus[3]
+  distanceArray = [b12, b01, b02, b13, b11, b00, b03, b10]
 
-  distanceArray = oneBus + zeroBus
-  dumm = distanceArray[3]
-  del distanceArray[3]
-  distanceArray.append(dumm)
-  print distanceArray
+  #dumm = distanceArray[0]
+  #distanceArray.remove(distanceArray[0])
+  #distanceArray.append(dumm)
+  #print distanceArray
   return distanceArray
 
 def getHeadingBeach():
@@ -35,11 +43,10 @@ def getHeadingBeach():
   front = arr[1]
   leftWallMeasure = math.atan2((back - front), length)
   leftWallMeasure = leftWallMeasure / math.pi * 180
-  print leftWallMeasure
+#  print leftWallMeasure
 
 while(1):
-  getHeadingBeach()
-
+  print getSensorReadings()
 stopBus(tof_arr0, gpio0_arr)
 stopBus(tof_arr1, gpio1_arr)
 

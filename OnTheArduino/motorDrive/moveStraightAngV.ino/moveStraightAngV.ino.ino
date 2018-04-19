@@ -9,11 +9,58 @@
 // define pins for each motor speed & direction:
 // not sure on these but I'm guessing:
 #define BR (8)
+#define BR_CONTROL 52
 #define BL (9)
+#define BL_CONTROL 50
 #define FR (10)
+#define FR_CONTROL 48
 #define FL (11)
+#define FL_CONTROL 46
+
+#define BR_PIN_1 32
+#define BR_PIN_2 34
+#define BL_PIN_1 36
+#define BL_PIN_2 38
+#define FR_PIN_1 40
+#define FR_PIN_2 42
+#define FL_PIN_1 28
+#define FL_PIN_2 26
 
 #define TURN_SPEED 30
+
+//Encoder PID setup
+const double TARGET_POSITION_REVS = 0.0;
+const double ENCODER_TICKS_PER_REV = 4741.44;
+double target = ENCODER_TICKS_PER_REV * TARGET_POSITION_REVS;
+double brTarget = target, blTarget = target, frTarget = target, flTarget = target;
+
+double brVel = 50;
+double blVel = 50;
+double frVel = 50;
+double flVel = 50;
+
+double brCount = 0;
+double brCountPrev = 0;
+double brRevs = 0;
+
+double blCount = 0;
+double blCountPrev = 0;
+double blRevs = 0;
+
+double frCount = 0;
+double frCountPrev = 0;
+double frRevs = 0;
+
+double flCount = 0;
+double flCountPrev = 0;
+double flRevs = 0;
+const int8_t encoder_table[] = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0};
+
+double Ep = 1, Ei = 0, Ed = 0; //double Kp = 2, Ki = 2, Kd = 0.5;
+PID backRightPID(&brRevs, &brVel, &brTarget, Ep, Ei, Ed, DIRECT);
+PID backLeftPID(&blRevs, &blVel, &blTarget, Ep, Ei, Ed, DIRECT);
+PID frontRightPID(&frRevs, &frVel, &frTarget, Ep, Ei, Ed, DIRECT);
+PID frontLeftPID(&flRevs, &flVel, &flTarget, Ep, Ei, Ed, DIRECT);
 
 LSM9DS1 imu;
 double setPointHeading;
@@ -58,6 +105,16 @@ void initPIDs() {
   rightPID->ResetFunction();
   leftPID->Compute();
   rightPID->Compute();
+}
+
+void writeMotor(int motorControlPin, int motorSpeedPin, int val) {
+  if (val < 0) {
+    digitalWrite(motorControlPin, LOW);
+  } else {
+    digitalWrite(motorControlPin, HIGH);
+  }
+
+  analogWrite(motorSpeedPin, abs(val));
 }
 
 void setup() {
@@ -107,9 +164,24 @@ void setup() {
       digitalWrite(30, LOW);
       delay(300);
 
-    }
-    ;
+    };
   }
+
+  backRightPID.SetMode(AUTOMATIC);
+  backLeftPID.SetMode(AUTOMATIC);
+  frontRightPID.SetMode(AUTOMATIC);
+  frontLeftPID.SetMode(AUTOMATIC);
+
+  attachInterrupt(digitalPinToInterrupt(FL_PIN_1), econder_interrupt_fl, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(FL_PIN_2), econder_interrupt_fl, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(FR_PIN_1), econder_interrupt_fr, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(FR_PIN_2), econder_interrupt_fr, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(BL_PIN_1), econder_interrupt_bl, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(BL_PIN_2), econder_interrupt_bl, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(BR_PIN_1), econder_interrupt_br, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(BR_PIN_2), econder_interrupt_br, CHANGE);
+  
+  
 
   setPointHeading = getHeading();
   leftPID->SetMode(AUTOMATIC);
@@ -126,10 +198,15 @@ boolean shouldRun = true;
 //avoid using delays in loop because
 //will mess up serial pi communication
 void loop() {
-  currHeading = getHeading();
-
-  leftPID->Compute();
-  rightPID->Compute();
+//  currHeading = getHeading();
+//
+//  leftPID->Compute();
+//  rightPID->Compute();
+  pidEncoders();
+  writeMotor(FL_CONTROL, FL, flVel);
+  writeMotor(FR_CONTROL, FR, frVel);
+  writeMotor(BL_CONTROL, BL, blVel);
+  writeMotor(BR_CONTROL, BR, brVel);
 
   if (inputString == "FORWARD") {
     driveForward((int) leftVel, (int) rightVel);
@@ -179,6 +256,37 @@ void serialEvent() {
   Serial.println(inputString);
 }
 
+void pidEncoders() {
+  static uint32_t lastBRTime = 0;
+  static uint32_t lastBLTime = 0;
+  static uint32_t lastFRTime = 0;
+  static uint32_t lastFLTime = 0;  
+  uint32_t timeDiff = millis() - lastBRTime;
+  brRevs = (brCount - brCountPrev) / double(timeDiff);
+  lastBRTime = millis();
+  brCountPrev = brCount;
+  
+  timeDiff = millis() - lastBLTime;
+  blRevs = (blCount - blCountPrev) / double(timeDiff);
+  lastBLTime = millis();
+  blCountPrev = blCount;
+
+  timeDiff = millis() - lastFRTime;
+  frRevs = (frCount - frCountPrev) / double(timeDiff);
+  lastFRTime = millis();
+  frCountPrev = frCount;
+
+  timeDiff = millis() - lastFLTime;
+  flRevs = (flCount - flCountPrev) / double(timeDiff);
+  lastFLTime = millis();
+  flCountPrev = flCount;
+
+  backRightPID.Compute();
+  backLeftPID.Compute();
+  frontRightPID.Compute();
+  frontLeftPID.Compute();
+}
+
 void setDirs(uint8_t dirs[]) {
   digitalWrite(46, dirs[0]);
   digitalWrite(48, dirs[1]);
@@ -195,71 +303,99 @@ void setSpeeds(int leftVel, int rightVel) {
 
 void driveForward(int leftVel, int rightVel) {
   // direction
-  uint8_t dirs[4] = {LOW, LOW, LOW, LOW};
-  setDirs(dirs);
-
-
-  // speed
-  setSpeeds(leftVel, rightVel);
+//  uint8_t dirs[4] = {LOW, LOW, LOW, LOW};
+//  setDirs(dirs);
+//
+//
+//  // speed
+//  setSpeeds(leftVel, rightVel);
+  brTarget = 2.0;
+  blTarget = 2.0;
+  frTarget = 2.0;
+  flTarget = 2.0;
 }
 
 void driveBackward(int leftVel, int rightVel) {
-  // direction
-  uint8_t dirs[4] = {HIGH, HIGH, HIGH, HIGH};
-  setDirs(dirs);
-
-  // speed
-  setSpeeds(leftVel, rightVel);
+  // directionpi
+//  uint8_t dirs[4] = {HIGH, HIGH, HIGH, HIGH};
+//  setDirs(dirs);
+//
+//  // speed
+//  setSpeeds(leftVel, rightVel);
+  brTarget = -2.0;
+  blTarget = -2.0;
+  frTarget = -2.0;
+  flTarget = -2.0;
 }
 
 void driveRight(int leftVel, int rightVel) {
   // direction
-  uint8_t dirs[4] = {LOW, HIGH, HIGH, LOW};
-  setDirs(dirs);
-
-
-  // speed
-  analogWrite(FL, leftVel);
-  analogWrite(BL, leftVel);
-  analogWrite(FR, rightVel);
-  analogWrite(BR, rightVel);
+//  uint8_t dirs[4] = {LOW, HIGH, HIGH, LOW};
+//  setDirs(dirs);
+//
+//
+//  // speed
+//  analogWrite(FL, leftVel);
+//  analogWrite(BL, leftVel);
+//  analogWrite(FR, rightVel);
+//  analogWrite(BR, rightVel);
+  flTarget = -2.0;
+  frTarget = 2.0;
+  blTarget = 2.0;
+  brTarget = -2.0;
 }
 
 void driveLeft(int leftVel, int rightVel) {
   // direction
-  uint8_t dirs[4] = {HIGH, LOW, LOW, HIGH};
-  setDirs(dirs);
-
-  // speed
-  analogWrite(FL, leftVel);
-  analogWrite(BL, leftVel);
-  analogWrite(FR, rightVel);
-  analogWrite(BR, rightVel);
+//  uint8_t dirs[4] = {HIGH, LOW, LOW, HIGH};
+//  setDirs(dirs);
+//
+//  // speed
+//  analogWrite(FL, leftVel);
+//  analogWrite(BL, leftVel);
+//  analogWrite(FR, rightVel);
+//  analogWrite(BR, rightVel);
+  flTarget = 2.0;
+  frTarget = -2.0;
+  blTarget = -2.0;
+  brTarget = 2.0;
 }
 
 void rotateCCW() {
   // direction
-  uint8_t dirs[4] = {LOW, HIGH, LOW, HIGH};
-  setDirs(dirs);
-
-  // speed
-  setSpeeds(TURN_SPEED, TURN_SPEED);
+//  uint8_t dirs[4] = {LOW, HIGH, LOW, HIGH};
+//  setDirs(dirs);
+//
+//  // speed
+//  setSpeeds(TURN_SPEED, TURN_SPEED);
+  flTarget = -2.0;
+  frTarget = 2.0;
+  blTarget = -2.0;
+  brTarget = 2.0;
 }
 
 void rotateCW() {
   // direction
-  uint8_t dirs[4] = {HIGH, LOW, HIGH, LOW};
-  setDirs(dirs);
-
-  // speed
-  setSpeeds(TURN_SPEED, TURN_SPEED);
+//  uint8_t dirs[4] = {HIGH, LOW, HIGH, LOW};
+//  setDirs(dirs);
+//
+//  // speed
+//  setSpeeds(TURN_SPEED, TURN_SPEED);
+  flTarget = 2.0;
+  frTarget = -2.0;
+  blTarget = 2.0;
+  brTarget = -2.0;
 }
 
 void stopRobot() {
-  uint8_t dirs[4] = {LOW, LOW, LOW, LOW};
-  setDirs(dirs);
-
-  setSpeeds(0, 0);
+//  uint8_t dirs[4] = {LOW, LOW, LOW, LOW};
+//  setDirs(dirs);
+//
+//  setSpeeds(0, 0);
+  flTarget = 0.0;
+  frTarget = 0.0;
+  blTarget = 0.0;
+  brTarget = 0.0;
 }
 
 double getHeading() {
@@ -300,38 +436,27 @@ double getHeading() {
   return headingSum / averageLength;
 }
 
-//void driveBackward(int magnitude) {
-//  // direction
-//  digitalWrite(46,HIGH);
-//  digitalWrite(48,HIGH);
-//  digitalWrite(50,HIGH);
-//  digitalWrite(52,HIGH);
-//  // speed
-//  analogWrite(8,magnitude);
-//  analogWrite(9,magnitude);
-//  analogWrite(10,magnitude);
-//  analogWrite(11,magnitude);
-//}
-//
-//void driveLeft(int magnitude) {
-//  digitalWrite(46,LOW);
-//  digitalWrite(48,HIGH); // reverse
-//  digitalWrite(50,HIGH); // reverse
-//  digitalWrite(52,LOW);
-//  analogWrite(8,magnitude);
-//  analogWrite(9,magnitude);
-//  analogWrite(10,magnitude);
-//  analogWrite(11,magnitude);
-//}
-//
-//void driveRight(int magnitude) {
-//  digitalWrite(46,HIGH); // FR?
-//  digitalWrite(48,LOW);
-//  digitalWrite(50,LOW);
-//  digitalWrite(52,HIGH); // BL?
-//  analogWrite(8,magnitude);
-//  analogWrite(9,magnitude);
-//  analogWrite(10,magnitude);
-//  analogWrite(11,magnitude);
-//}
+void econder_interrupt_br() {
+  static uint8_t br_enc_val = 0;
+  br_enc_val = (br_enc_val << 2) | (digitalRead(BR_PIN_1) << 1) | digitalRead(BR_PIN_2);
+  brCount = encoder_table[br_enc_val & 0b1111];
+}
+
+void econder_interrupt_bl() {
+  static uint8_t bl_enc_val = 0;
+  bl_enc_val = (bl_enc_val << 2) | (digitalRead(BL_PIN_1) << 1) | digitalRead(BL_PIN_2);
+  blCount = encoder_table[bl_enc_val & 0b1111];
+}
+
+void econder_interrupt_fr() {
+  static uint8_t fr_enc_val = 0;
+  fr_enc_val = (fr_enc_val << 2) | (digitalRead(FR_PIN_1) << 1) | digitalRead(FR_PIN_2);
+  frCount = encoder_table[fr_enc_val & 0b1111];
+}
+
+void econder_interrupt_fl() {
+  static uint8_t fl_enc_val = 0;
+  fl_enc_val = (fl_enc_val << 2) | (digitalRead(FL_PIN_1) << 1) | digitalRead(FL_PIN_2);
+  flCount = encoder_table[fl_enc_val & 0b1111];
+}
 

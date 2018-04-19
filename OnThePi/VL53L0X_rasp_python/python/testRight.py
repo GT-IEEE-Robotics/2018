@@ -82,7 +82,7 @@ def setDistance(wall, distance):
 
   currDist = (arr[sensorNums[0]] + arr[sensorNums[1]]) / 2
   while(1):
-#    print "Curr dist: ", currDist
+    print "Curr dist: ", currDist
     if (abs(currDist - distance) < tolerance):
       break
     else:
@@ -118,9 +118,9 @@ def center(side1, side2):
     side1Dist = (arr[side1S[0]] + 40 + arr[side1S[1]]) / 2
     side2Dist = (arr[side2S[0]] + arr[side2S[1]] + 40) / 2
     diff = side1Dist- side2Dist
-#    print("Side 1: ", side1Dist)
-#    print("Side 2: ", side2Dist)
-#    print "diff = ", diff
+    print("Side 1: ", side1Dist)
+    print("Side 2: ", side2Dist)
+    print "diff = ", diff
     if (abs(diff) < tolerance):
       break
     else:
@@ -140,22 +140,19 @@ def straight(side, const=[]):
   print(sensorNumbers)
   diff = arr[sensorNumbers[0]] - arr[sensorNumbers[1]]
   while(1):
-#    print diff
+    print diff
     if (abs(diff) < tolerance):
       break
     else:
       #delay = abs(timestep * (diff / tolerance))
       if (diff < 0):
   	sendCommand("ccw")
-        time.sleep(.1)
   	sendCommand("stop")
       else:
   	sendCommand("cw")
-        time.sleep(.1)
   	sendCommand("stop")
     arr = getAvgSensors()
     diff = arr[sensorNumbers[0]] - arr[sensorNumbers[1]]
-    time.sleep(.1)
 
   sendCommand("newHeading")
 
@@ -174,70 +171,7 @@ def getAvgSensors(const=[]):
 #while(1):
 #  print(getAvgSensors([0, 0, 0, 0, 0, 0, 15]))
 
-sendCommand("newHeading")
-straight("back")
-sendCommand("right")
-time.sleep(5.5)
-sendCommand("stop")
-sendCommand("newHeading")
-
-sendCommand("left")
-time.sleep(4.5)
-sendCommand("stop")
-straight("back")
-
-sendCommand("forward")
-time.sleep(6.5)
-sendCommand("stop")
-sendCommand("newHeading")
-
-sendCommand("cw")
-time.sleep(2.65)
-sendCommand("stop")
-sendCommand("newHeading")
-
-sendCommand("forward")
-time.sleep(4.5)
-sendCommand("stop")
-
-sendCommand("backward")
+time.sleep(5)
+sendCommand("right", 60)
 time.sleep(1)
 sendCommand("stop")
-
-sendCommand("ccw")
-time.sleep(2.65)
-sendCommand("stop")
-
-sendCommand("forward")
-time.sleep(2)
-sendCommand("stop")
-
-straight("right")
-
-setDistance("right", 150)
-sendCommand("stop")
-
-straight("right")
-
-sendCommand("forward")
-time.sleep(3.5)
-sendCommand("stop")
-
-setDistance("front", 200)
-sendCommand("stop")
-
-straight("right")
-time.sleep(.1)
-sendCommand("left")
-time.sleep(2)
-sendCommand("stop")
-time.sleep(.1)
-
-center("right", "left")
-straight("front")
-sendCommand("forward")
-time.sleep(1)
-
-sendCommand("stop")
-
-
