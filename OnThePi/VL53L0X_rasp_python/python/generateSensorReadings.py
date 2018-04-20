@@ -39,7 +39,7 @@ def getSensorReadings():
 
   return distanceArray
 
-fileName = "sensorReadings.txt"
+fileName = "sensorReadingsForwardBackward.txt"
 file = open(fileName, 'w')
 file.truncate()
 
