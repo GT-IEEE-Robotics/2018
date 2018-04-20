@@ -43,10 +43,17 @@ fileName = "sensorReadingsForwardBackward.txt"
 file = open(fileName, 'w')
 file.truncate()
 
-while(1):
+inp = "r"
+
+while(inp is "r"):
   outStr = str(getSensorReadings())[1:-1] + "\n"
   time.sleep(.01)
   file.write(outStr)
+  inp = input("Enter r to take a reading, anything else to exit")
 
+file.close()
+print("Exiting, writing to ", fileName)
+stopBus(tof_arr0, gpio0_arr)
+stopBus(tof_arr1, gpio1_arr)
 
 
