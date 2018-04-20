@@ -3,6 +3,17 @@ import time
 import numpy as np
 import math
 
+import signal
+import sys
+
+def singal_handler(signal, frame):
+  file.close()
+  print("Exiting, writing to ", fileName)
+  stopBus(tof_arr0, gpio0_arr)
+  stopBus(tof_arr1, gpio1_arr)
+  sys.exit(0)
+
+
 gpio0_arr = [20, 26, 13, 6]
 gpio1_arr = [12, 16, 19, 21]
 
@@ -37,8 +48,5 @@ while(1):
   time.sleep(.01)
   file.write(outStr)
 
-file.close()
 
-stopBus(tof_arr0, gpio0_arr)
-stopBus(tof_arr1, gpio1_arr)
 
