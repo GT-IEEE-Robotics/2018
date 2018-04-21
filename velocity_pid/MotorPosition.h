@@ -23,6 +23,8 @@ int MotorPosition::update() {
         setDirection(0);
     }
 
+    Serial.println(encoder_count);
+
     return constrain(abs(output), 0, 255);
 
     // setSpeed(output);

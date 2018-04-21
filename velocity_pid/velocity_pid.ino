@@ -9,7 +9,7 @@
 // servo
 #include <Servo.h>
 
-int SPEED = 2.5;
+int SPEED = 3.5;
 
 #define REV_BASE (4741.44)  // revolution is 1920 counts
 #define REV_FLAG (464.64)   // https://www.pololu.com/category/115/25d-mm-metal-gearmotors
@@ -41,8 +41,8 @@ int SPEED = 2.5;
 #define ENC1_A  (42)
 #define ENC1_B  (44)
 // right front
-#define ENC2_A  (26)
-#define ENC2_B  (24)
+#define ENC2_A  (24)
+#define ENC2_B  (26)
 // left rear
 #define ENC3_A  (32)
 #define ENC3_B  (34)
@@ -78,8 +78,8 @@ int SPEED = 2.5;
 #define I5 (0.00001f)
 #define D5 (0.0f)
 // treasure
-#define P6 (2.0f)
-#define I6 (0.00001f)
+#define P6 (0.005f)
+#define I6 (0.0f)
 #define D6 (0.0f)
 
 /* control flow */
@@ -93,7 +93,7 @@ MotorVelocity right_front(PWM2, DIR2, ENC2_A, ENC2_B, P2, I2, D2);
 MotorVelocity left_rear(PWM3, DIR3, ENC3_A, ENC3_B, P3, I3, D3);
 MotorVelocity right_rear(PWM4, DIR4, ENC4_A, ENC4_B, P4, I4, D4);
 
-MotorPosition flag(PWM5, DIR5, ENC5_A, ENC5_B, P5, P5, P5);
+//MotorPosition flag(PWM5, DIR5, ENC5_A, ENC5_B, P5, P5, P5);
 Servo flagServo;
 // MotorPosition treasure(PWM6, DIR6, ENC6_A, ENC6_B, P6, P6, P6);
 
@@ -104,8 +104,18 @@ void left_front_encoder_isr(void) { left_front.encoder_isr(); }
 void right_front_encoder_isr(void) { right_front.encoder_isr(); }
 void left_rear_encoder_isr(void) { left_rear.encoder_isr(); }
 void right_rear_encoder_isr(void) { right_rear.encoder_isr(); }
-void flag_encoder_isr(void) { flag.encoder_isr(); }
+//void flag_encoder_isr(void) { flag.encoder_isr(); }
 
+
+int flag_enc_val;
+volatile int32_t flag_encoder_count;
+
+void flag_encoder_isr() {
+    flag_enc_val = (flag_enc_val << 2) | (digitalRead(ENC5_A) << 1) | digitalRead(ENC5_B);
+
+    flag_encoder_count += encoder_table[flag_enc_val & 0b1111];
+//    Serial.println(encoder_count);
+}
 
 // 7 seg
 #define SEVEN_SEG (28)
@@ -158,18 +168,20 @@ void setup() {
     left_rear.reverseMotor();
     left_front.reverseMotor();
     right_rear.reverseMotor();
-    // right_front.reverseMotor();
+//    flag.reverseMotor();
+//    right_front.reverseMotor();
 
     // set targets
-    // left_front.setTarget(5);
-    // right_front.setTarget(5);
-    // left_rear.setTarget(5);
-    // right_rear.setTarget(5);
+//     left_front.setTarget(SPEED);
+//     right_front.setTarget(SPEED);
+//     left_rear.setTarget(SPEED);
+//     right_rear.setTarget(SPEED);
 
-    // flag.setTarget(5*REV_FLAG);
+//     flag.setTarget(5*REV_FLAG);
 
     // start servo
     flagServo.attach(FLAG_SERVO);
+    flagServo.write(0);
 
     // gyro.setTarget(0);
     
@@ -177,7 +189,13 @@ void setup() {
     right_front.setInterruptHandler(right_front_encoder_isr);
     left_rear.setInterruptHandler(left_rear_encoder_isr);
     right_rear.setInterruptHandler(right_rear_encoder_isr);
-    flag.setInterruptHandler(flag_encoder_isr);
+//    flag.setInterruptHandler(flag_encoder_isr);
+
+    attachInterrupt(digitalPinToInterrupt(ENC5_A), flag_encoder_isr, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(ENC5_B), flag_encoder_isr, CHANGE);
+
+//    extendFlag();
+//    grabChest();
 }
 
 void loop() {
@@ -229,7 +247,7 @@ void loop() {
         int right_front_command = right_front.update();
         int left_rear_command = left_rear.update();
         int right_rear_command = right_rear.update();
-        int flag_command = flag.update();
+//        int flag_command = flag.update();
 
         // Serial.print("flag command: "); Serial.println(flag_command);
 
@@ -237,7 +255,7 @@ void loop() {
         right_front.setSpeed(right_front_command);
         left_rear.setSpeed(left_rear_command);
         right_rear.setSpeed(right_rear_command);
-        flag.setSpeed(flag_command);
+//        flag.setSpeed(flag_command);
 
         last_run = micros();
     }
@@ -299,20 +317,42 @@ void stopRobot() {
     setTargets(0, 0, 0, 0);
 }
 void extendFlag() {
-    flagServo.write(180);   // extend
+
+    setTargets(0, 0, 0, 0);
+    
+    flagServo.write(135);   // extend
 
     delay(400);             // wait for extension
 
-    flag.setTarget(5*REV_FLAG); // spin 5 times
+    digitalWrite(DIR5, LOW);
+    analogWrite(PWM5, 25);
+
+    while (abs(flag_encoder_count) < 2250) {}
+    
+    analogWrite(PWM5, 0);
+
+    delay(250);
+    flagServo.write(0);
+
+//    flag.setTarget(5*REV_FLAG); // spin 5 times
 
     delay(5000);    // wait for spin
 }
 void grabChest() {
 
-    digitalWrite(DIR6, 1);  // direction command
+    setTargets(0, 0, 0, 0);
+
+    digitalWrite(DIR6, HIGH);  // direction command
+    analogWrite(PWM6, 255);
+
+    delay(1000);
+
+    digitalWrite(DIR6, LOW);  // direction command
     analogWrite(PWM6, 255); // write full speed to pick up
 
     delay(1000);    // wait a second to capture
 
-    SPEED = 2.8;    // increase robot speed
+    analogWrite(PWM6, 0);
+
+//    SPEED = 2.8;    // increase robot speed
 }

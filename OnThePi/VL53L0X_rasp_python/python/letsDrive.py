@@ -1,7 +1,24 @@
+import serial
+import time
+
+port = '/dev/ttyACM0'
+ard = serial.Serial(port,115200)
+
+def sendCommand(command, speed=30):
+  print(command)
+  if (command is "reset"):
+    commandString = "!"
+  else:
+    commandString = command.upper() + "@" + str(speed) + "\n"
+  
+  ard.write(commandString)
+  time.sleep(.2)
+
+sendCommand("reset")
+sendCommand("IRCODE", 7)
+
 import numpy as np
 from sensorBus import *
-import time
-import serial
 
 
 delay = .001
@@ -33,18 +50,6 @@ SENSOR_MAP = {
 }
 
 
-port = '/dev/ttyACM0'
-ard = serial.Serial(port,115200)
-
-def sendCommand(command, speed=30):
-  print(command)
-  if (command is "reset"):
-    commandString = "!"
-  else:
-    commandString = command.upper() + "@" + str(speed) + "\n"
-  
-  ard.write(commandString)
-  time.sleep(.2)
 
 def getSensorReadings(const):
   oneBus = readBus(tof_arr1)
@@ -179,94 +184,148 @@ def getAvgSensors(const=[]):
 #  print(getAvgSensors([0, 0, 0, 0, 0, 0, 15]))
 print("start")
 
+sendCommand("IRCODE", 1)
+
 import lirc
 
 sockid = lirc.init("ieee_southeastcon_program")
 input = lirc.nextcode()
 while(input == ['pos']):
   print("Positioning IR received")
-  sendCommand("IRCODE", 7)
+  sendCommand("IRCODE", 9)
   input = lirc.nextcode()
 
 print("IR Code ", input)
-
-
-time.sleep(5)
-sendCommand("IRCODE",int(input, 2))
+sendCommand("IRCODE", int(input[0], 2))
 time.sleep(1)
-sendCommand("reset")
-sendCommand("newHeading")
-#straight("back")
-sendCommand("right")
-time.sleep(5.5)
-sendCommand("stop")
-sendCommand("newHeading")
 
-sendCommand("left")
-time.sleep(4.5)
+button1 = input[0][0]
+key = input[0][1]
+button2 = input[0][2]
+
+sendCommand("reset")
+
+if button1 == '0':
+  sendCommand("right")
+  time.sleep(3)
+  sendCommand("stop")
+  sendCommand("left")
+else:
+  sendCommand("left")
+  time.sleep(3)
+  sendCommand("stop")
+  sendCommand("right")
+
+time.sleep(3)
 sendCommand("stop")
 straight("back")
 
-sendCommand("forward")
-time.sleep(6.5)
-sendCommand("stop")
-sendCommand("newHeading")
-
-sendCommand("cw")
-time.sleep(2.65)
-sendCommand("stop")
-sendCommand("newHeading")
 
 sendCommand("forward")
-time.sleep(4.5)
+time.sleep(4)
 sendCommand("stop")
-sendCommand("newHeading")
 
-sendCommand("backward")
-time.sleep(1)
-sendCommand("stop")
-sendCommand("newHeading")
+if key == '0':
+  sendCommand("cw")
+  time.sleep(1.5)
+  sendCommand("stop")
 
-sendCommand("ccw")
-time.sleep(2.65)
-sendCommand("stop")
-sendCommand("newHeading")
+else:
+  sendCommand("ccw")
+  time.sleep(1.5)
+  sendCommand("stop")
+
 
 sendCommand("forward")
 time.sleep(3)
 sendCommand("stop")
-sendCommand("newHeading")
 
-straight("right")
-
-setDistance("right", 150)
+sendCommand("backward")
+time.sleep(1)
 sendCommand("stop")
-sendCommand("newHeading")
 
-straight("right")
+if key == '0':
+  sendCommand("ccw")
+  time.sleep(1.5)
+  sendCommand("stop")
+
+else:
+  sendCommand("cw")
+  time.sleep(1.5)
+  sendCommand("stop")
+
 
 sendCommand("forward")
-time.sleep(3.5)
+time.sleep(3)
 sendCommand("stop")
-sendCommand("newHeading")
+
+
+if key == '0':
+  straight("right")
+
+  setDistance("right", 150)
+  sendCommand("stop")
+
+  straight("right")
+else:
+  straight("left")
+
+  setDistance("left", 150)
+  sendCommand("stop")
+
+  straight("left")
+
+sendCommand("forward")
+time.sleep(2)
+sendCommand("stop")
 
 setDistance("front", 200)
 sendCommand("stop")
-sendCommand("newHeading")
 
-straight("right")
-time.sleep(.1)
-sendCommand("left")
-time.sleep(2)
-sendCommand("stop")
-time.sleep(.1)
+if key == '0':
+  straight("right")
+  time.sleep(.1)
+  sendCommand("left")
+  time.sleep(1.5)
+  sendCommand("stop")
+  time.sleep(.1)
+else:
+  straight("left")
+  time.sleep(.1)
+  sendCommand("right")
+  time.sleep(1.5)
+  sendCommand("stop")
+  time.sleep(.1)
 
 center("right", "left")
 straight("front")
 sendCommand("forward")
 time.sleep(1.5)
-sendCommand("newHeading")
+sendCommand("flag")
+time.sleep(3)
+
+sendCommand("backward")
+time.sleep(.5)
+
+sendCommand("chest")
+time.sleep(3)
+
+sendCommand("backward")
+time.sleep(6)
+
+if button2 == '0':
+  sendCommand("right")
+  time.sleep(3)
+  sendCommand("stop")
+  sendCommand("left")
+else:
+  sendCommand("left")
+  time.sleep(3)
+  sendCommand("stop")
+  sendCommand("right")
+
+time.sleep(3)
+sendCommand("stop")
+straight("back")
 
 sendCommand("stop")
-
-

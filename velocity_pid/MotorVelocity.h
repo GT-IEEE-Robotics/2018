@@ -31,7 +31,7 @@ int MotorVelocity::update() {
         setDirection(0);
     }
 
-    Serial.println(encoder_count);
+//    Serial.println(encoder_count);
 
     return constrain(abs(output), 0, 255);
 }

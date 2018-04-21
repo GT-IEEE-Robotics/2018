@@ -4,6 +4,6 @@
 import lirc
 
 sockid = lirc.init("ieee_southeastcon_program")
-while (1):
-	input = lirc.nextcode()
-	print(input)
+input = lirc.nextcode()
+print(input)
+lirc.deinit()
