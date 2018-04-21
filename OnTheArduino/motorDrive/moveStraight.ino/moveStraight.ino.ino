@@ -8,10 +8,15 @@
 // R = right side, L = left side
 // define pins for each motor speed & direction:
 // not sure on these but I'm guessing:
-#define BR (8)
-#define BL (9)
-#define FR (10)
-#define FL (11)
+#define BR (11)
+#define BL (10)
+#define FR (8)
+#define FL (9)
+
+#define BL_DIR 50
+#define FL_DIR 48
+#define FR_DIR 46
+#define BR_DIR 52
 
 #define TURN_SPEED 30
 
@@ -261,9 +266,9 @@ void serialEvent() {
 
 void setDirs(uint8_t dirs[]) {
   digitalWrite(46, dirs[0]);
-  digitalWrite(48, dirs[1]);
+  digitalWrite(52, dirs[1]);
   digitalWrite(50, dirs[2]);
-  digitalWrite(52, dirs[3]);
+  digitalWrite(48, dirs[3]);
 }
 
 void setSpeeds(int leftVel, int rightVel) {

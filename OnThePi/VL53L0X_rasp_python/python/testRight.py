@@ -171,8 +171,23 @@ def getAvgSensors(const=[]):
 #while(1):
 #  print(getAvgSensors([0, 0, 0, 0, 0, 0, 15]))
 
-while(1):
-  time.sleep(5)
-  sendCommand("right", 60)
+#while(1):
+time.sleep(5)
+sendCommand("forward", 60)
+time.sleep(5)
+sendCommand("stop")
+time.sleep(1)
+sendCommand("right", 60)
+time.sleep(5)
+sendCommand("stop")
+time.sleep(1)
+sendCommand("backward",60)
+time.sleep(5)
+sendCommand("stop")
+time.sleep(1)
+sendCommand("left", 60)
+time.sleep(5)
+sendCommand("stop")
+  
 #time.sleep(1)
 #sendCommand("stop")
