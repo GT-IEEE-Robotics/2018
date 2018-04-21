@@ -1,6 +1,15 @@
+// motor pid libraries
 #include "MotorVelocity.h"
 #include "MotorPosition.h"
+// gyro
 // #include "IMU.h"
+// 7 seg
+#include <Adafruit_GFX.h>
+#include "Adafruit_LEDBackpack.h"
+// servo
+#include <Servo.h>
+
+int SPEED = 2.5;
 
 #define REV_BASE (4741.44)  // revolution is 1920 counts
 #define REV_FLAG (464.64)   // https://www.pololu.com/category/115/25d-mm-metal-gearmotors
@@ -85,6 +94,7 @@ MotorVelocity left_rear(PWM3, DIR3, ENC3_A, ENC3_B, P3, I3, D3);
 MotorVelocity right_rear(PWM4, DIR4, ENC4_A, ENC4_B, P4, I4, D4);
 
 MotorPosition flag(PWM5, DIR5, ENC5_A, ENC5_B, P5, P5, P5);
+Servo flagServo;
 // MotorPosition treasure(PWM6, DIR6, ENC6_A, ENC6_B, P6, P6, P6);
 
 // Define global IMU Gyro Sensor
@@ -97,11 +107,52 @@ void right_rear_encoder_isr(void) { right_rear.encoder_isr(); }
 void flag_encoder_isr(void) { flag.encoder_isr(); }
 
 
+// 7 seg
+#define SEVEN_SEG (28)
+Adafruit_7segment matrix = Adafruit_7segment();
+void displayNum(int num) {
+  matrix.writeDigitRaw(2, 0x10);
+  if (num == 1)
+    matrix.writeDigitRaw(4, 0x30); //dec 1
+  else if (num == 2)
+    matrix.writeDigitRaw(4, 0x5B); //dec 2
+  else if (num == 3)
+    matrix.writeDigitRaw(4, 0x79); //dec 3
+  else if (num == 4)
+    matrix.writeDigitRaw(4, 0x74); //dec 4
+  else if (num == 5)
+    matrix.writeDigitRaw(4, 0x6D); //dec 5
+  else if (num == 6)
+    matrix.writeDigitRaw(4, 0x6F); //dec 6
+  else if (num == 7)
+    matrix.writeDigitRaw(4, 0x38); //Dec 7
+  else if (num == 8)
+    matrix.writeDigitRaw(4, 0xFF); //Dec 8
+  else if (num == 9)
+    matrix.writeDigitRaw(4, 0x7D); //Dec 9
+  matrix.writeDisplay();
+  delay(500);
+}
+
+// serial stuff with Pi
+String inputString = "";         // a String to hold incoming data
+boolean stringComplete = false;  // whether the string is complete
+
+
 void setup() {
 
+    // setup serial
     Serial.begin(115200);
+    inputString.reserve(200);
+
+    // seven segment output
+    pinMode(SEVEN_SEG, OUTPUT);
+    digitalWrite(SEVEN_SEG, HIGH);
+    matrix.begin(0x70);
 
     // gyro.init(30);
+    // gyro.reset();
+    // setPointHeading = gyro1.getZ();
 
     // set directions
     left_rear.reverseMotor();
@@ -110,12 +161,15 @@ void setup() {
     // right_front.reverseMotor();
 
     // set targets
-    left_front.setTarget(5);
-    right_front.setTarget(5);
-    left_rear.setTarget(5);
-    right_rear.setTarget(5);
+    // left_front.setTarget(5);
+    // right_front.setTarget(5);
+    // left_rear.setTarget(5);
+    // right_rear.setTarget(5);
 
-    flag.setTarget(5*REV_FLAG);
+    // flag.setTarget(5*REV_FLAG);
+
+    // start servo
+    flagServo.attach(FLAG_SERVO);
 
     // gyro.setTarget(0);
     
@@ -127,6 +181,40 @@ void setup() {
 }
 
 void loop() {
+
+    if (inputString == "FORWARD") {
+        driveForward();
+    } else if (inputString == "BACKWARD") {
+        driveBackward();
+    } else if (inputString == "LEFT") {
+        driveLeft();
+    } else if (inputString == "RIGHT") {
+        driveRight();
+    } else if (inputString == "CW") {
+        rotateCW();
+    } else if (inputString == "CCW") {
+        rotateCCW();
+    } else if (inputString == "STOP") {
+        stopRobot();
+    } else if (inputString == "FLAG") {
+        extendFlag();
+    } else if (inputString == "CHEST") {
+        grabChest();
+    }
+    // } else if (inputString == "NEWHEADING") {
+    //     gyro1.reset();
+    //     setPointHeading = gyro1.getZ();
+    //     initPIDs();
+    // }
+
+    //reads the input from the pi
+    if (stringComplete) {
+        // clear the string:
+        inputString = "";
+        stringComplete = false;
+    }
+
+
     // determine if it's time to run the PID calculations again
     if (micros() - last_run > PID_PERIOD) {
 
@@ -143,7 +231,7 @@ void loop() {
         int right_rear_command = right_rear.update();
         int flag_command = flag.update();
 
-        Serial.print("flag command: "); Serial.println(flag_command);
+        // Serial.print("flag command: "); Serial.println(flag_command);
 
         left_front.setSpeed(left_front_command);
         right_front.setSpeed(right_front_command);
@@ -153,4 +241,78 @@ void loop() {
 
         last_run = micros();
     }
+}
+
+void serialEvent() {
+  while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read();
+    Serial.print(inChar);
+    // add it to the inputString:
+    inputString += inChar;
+    // if the incoming character is a newline, set a flag so the main loop can
+    // do something about it:
+    if (inChar == 33) {
+      inputString = "";
+    } else if (inChar == '\n') {
+      int dumm = inputString.indexOf("@");
+      String speedString = inputString.substring(dumm + 1, inputString.length() - 1);
+      inputString = inputString.substring(0, dumm);
+      if (inputString != "IRCODE") {
+        // leftVel = speedString.toInt();
+        // rightVel = speedString.toInt();
+      } else {
+        displayNum(speedString.toInt());
+      }
+      stringComplete = true;
+    }
+  }
+  Serial.println(inputString);
+}
+
+void setTargets(float lf, float rf, float lr, float rr) { // 1 or -1 for direction, 0 for stop
+    left_front.setTarget(lf * SPEED);
+    left_front.setTarget(rf * SPEED);
+    left_front.setTarget(lr * SPEED);
+    left_front.setTarget(rr * SPEED);
+}
+
+void driveForward() {
+    setTargets(1, 1, 1, 1);
+}
+void driveBackward() {
+    setTargets(-1, -1, -1, -1);
+}
+void driveLeft() {
+    setTargets(1, -1, 1, -1);
+}
+void driveRight() {
+    setTargets(-1, 1, -1, 1);
+}
+void rotateCW() {
+    setTargets(-1, -1, 1, 1);
+}
+void rotateCCW() {
+    setTargets(1, 1, -1, -1);
+}
+void stopRobot() {
+    setTargets(0, 0, 0, 0);
+}
+void extendFlag() {
+    flagServo.write(180);   // extend
+
+    delay(400);             // wait for extension
+
+    flag.setTarget(5*REV_FLAG); // spin 5 times
+
+    delay(5000);    // wait for spin
+}
+void grabChest() {
+
+    digitalWrite(DIR6, 1);  // direction command
+    analogWrite(PWM6, 255); // write full speed to pick up
+
+    delay(1000);    // wait a second to capture
+
+    SPEED = 2.8;    // increase robot speed
 }
