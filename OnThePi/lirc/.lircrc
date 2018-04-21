@@ -1,0 +1,53 @@
+begin
+	button = 000
+	prog = ieee_southeastcon_program
+	config = 000
+end
+
+begin
+	button = 001
+	prog = ieee_southeastcon_program
+	config = 001
+end
+
+begin
+        button = 010
+        prog = ieee_southeastcon_program
+        config = 010
+end
+
+begin
+        button = 011
+        prog = ieee_southeastcon_program
+        config = 011
+end
+
+begin
+        button = 100
+        prog = ieee_southeastcon_program
+        config = 100
+end
+
+begin
+        button = 101
+        prog = ieee_southeastcon_program
+        config = 101
+end
+
+begin
+        button = 110
+        prog = ieee_southeastcon_program
+        config = 110
+end
+
+begin
+        button = 111
+        prog = ieee_southeastcon_program
+        config = 111
+end
+
+begin
+	button = pos
+	prog = ieee_southeastcon_program
+	config = pos
+end
