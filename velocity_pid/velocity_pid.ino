@@ -21,6 +21,8 @@
 // flag turner
 #define PWM5    (12)
 #define DIR5    (41)
+// flag turner servo pwm
+#define FLAG_SERVO  (7)
 // treasure box
 #define PWM6    (13)
 #define DIR6    (39)
