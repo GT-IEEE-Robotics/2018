@@ -1,8 +1,3 @@
-#include <Wire.h>
-#include <SPI.h>
-#include <SparkFunLSM9DS1.h>
-#include <PID_v1.h>
-
 // put your setup code here, to run once:
 // F = forward, B = backward
 // R = right side, L = left side

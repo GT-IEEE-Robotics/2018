@@ -22,7 +22,7 @@
 #define BL_PIN_A (32)
 #define BL_PIN_B (34)
 #define FR_PIN_A (26)
-#define FR_PIN_B (28)
+#define FR_PIN_B (24)
 #define FL_PIN_A (40)
 #define FL_PIN_B (42)
 

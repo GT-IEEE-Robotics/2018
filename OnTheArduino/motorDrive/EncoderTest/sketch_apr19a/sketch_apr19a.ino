@@ -14,13 +14,13 @@
 #define FL (11)
 #define FL_CONTROL (46)
 
-#define BR_ENC_A (38)
-#define BR_ENC_B (36)
+#define BR_ENC_A (36)
+#define BR_ENC_B (38)
 #define BL_ENC_A (32)
 #define BL_ENC_B (34)
 #define FR_ENC_A (26)
-#define FR_ENC_B (28)
-#define FL_ENC_A (40)
+#define FR_ENC_B (24)
+#define FL_ENC_A (44)
 #define FL_ENC_B (42)
 
 

@@ -177,7 +177,22 @@ def getAvgSensors(const=[]):
 #TODO: rest of course
 #while(1):
 #  print(getAvgSensors([0, 0, 0, 0, 0, 0, 15]))
+print("start")
 
+import lirc
+
+sockid = lirc.init("ieee_southeastcon_program")
+input = lirc.nextcode()
+while(input == ['pos']):
+  print("Positioning IR received")
+  input = lirc.nextcode()
+
+print("IR Code ", input)
+
+
+time.sleep(5)
+sendCommand("IRCODE",int(input, 2))
+time.sleep(1)
 sendCommand("reset")
 sendCommand("newHeading")
 #straight("back")

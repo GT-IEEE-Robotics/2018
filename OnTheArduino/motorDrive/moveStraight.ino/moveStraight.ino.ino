@@ -2,6 +2,8 @@
 #include <SPI.h>
 #include <SparkFunLSM9DS1.h>
 #include <PID_v1.h>
+#include <Adafruit_GFX.h>
+#include "Adafruit_LEDBackpack.h"
 
 // put your setup code here, to run once:
 // F = forward, B = backward
@@ -27,11 +29,34 @@ double rightVel = 30;
 double leftVel = 30;
 
 
-// Earth's magnetic field varies by location. Add or subtract
-// a declination to get a more accurate heading. CalculatePIPI
-// your's here:
-// http://www.ngdc.noaa.gov/geomag-web/#declination
-#define DECLINATION 5.167 // Declination (degrees) in Boulder, CO.
+Adafruit_7segment matrix = Adafruit_7segment();
+
+void displayNum(int num) {
+  matrix.writeDigitRaw(2, 0x10);
+  if (num == 1)
+    matrix.writeDigitRaw(4, 0x30); //dec 1
+  else if (num == 2)
+    matrix.writeDigitRaw(4, 0x5B); //dec 2
+  else if (num == 3)
+    matrix.writeDigitRaw(4, 0x79); //dec 3
+  else if (num == 4)
+    matrix.writeDigitRaw(4, 0x74); //dec 4
+  else if (num == 5)
+    matrix.writeDigitRaw(4, 0x6D); //dec 5
+  else if (num == 6)
+    matrix.writeDigitRaw(4, 0x6F); //dec 6
+  else if (num == 7)
+    matrix.writeDigitRaw(4, 0x38); //Dec 7
+  else if (num == 8)
+    matrix.writeDigitRaw(4, 0xFF); //Dec 8
+  else if (num == 9)
+    matrix.writeDigitRaw(4, 0x7D); //Dec 9
+  matrix.writeDisplay();
+  delay(500);
+}
+
+
+
 
 class Gyro {
     // SDO_XM and SDO_G are both pulled high, so our addresses are:
@@ -175,7 +200,9 @@ void initPIDs() {
 
 void setup() {
   Serial.begin(115200);
-
+  //gpio for i2c display
+  pinMode(28,OUTPUT);
+  digitalWrite(28, HIGH);
   // speed pins (pwm. analog write values from 0-255)
   pinMode(8, OUTPUT);
   pinMode(9, OUTPUT);
@@ -199,6 +226,7 @@ void setup() {
   setPointHeading = gyro1.getZ();
   leftPID->SetMode(AUTOMATIC);
   rightPID->SetMode(AUTOMATIC);
+  matrix.begin(0x70);
 }
 
 boolean shouldRun = true;
@@ -256,8 +284,12 @@ void serialEvent() {
       int dumm = inputString.indexOf("@");
       String speedString = inputString.substring(dumm + 1, inputString.length() - 1);
       inputString = inputString.substring(0, dumm);
-      leftVel = speedString.toInt();
-      rightVel = speedString.toInt();
+      if (inputString != "IRCODE") {
+        leftVel = speedString.toInt();
+        rightVel = speedString.toInt();
+      } else {
+        displayNum(speedString.toInt());
+      }
       stringComplete = true;
     }
   }
@@ -265,10 +297,10 @@ void serialEvent() {
 }
 
 void setDirs(uint8_t dirs[]) {
-  digitalWrite(46, dirs[0]);
-  digitalWrite(52, dirs[1]);
-  digitalWrite(50, dirs[2]);
-  digitalWrite(48, dirs[3]);
+  digitalWrite(BL_DIR, dirs[0]);
+  digitalWrite(FL_DIR, dirs[1]);
+  digitalWrite(FR_DIR, dirs[2]);
+  digitalWrite(BR_DIR, dirs[3]);
 }
 
 void setSpeeds(int leftVel, int rightVel) {
@@ -299,7 +331,7 @@ void driveBackward(int leftVel, int rightVel) {
 
 void driveRight(int leftVel, int rightVel) {
   // direction
-  uint8_t dirs[4] = {LOW, HIGH, HIGH, LOW};
+  uint8_t dirs[4] = {HIGH, LOW, HIGH, LOW};
   setDirs(dirs);
 
 
@@ -312,7 +344,7 @@ void driveRight(int leftVel, int rightVel) {
 
 void driveLeft(int leftVel, int rightVel) {
   // direction
-  uint8_t dirs[4] = {HIGH, LOW, LOW, HIGH};
+  uint8_t dirs[4] = {LOW, HIGH, LOW, HIGH};
   setDirs(dirs);
 
   // speed
@@ -324,7 +356,7 @@ void driveLeft(int leftVel, int rightVel) {
 
 void rotateCCW() {
   // direction
-  uint8_t dirs[4] = {LOW, HIGH, LOW, HIGH};
+  uint8_t dirs[4] = {HIGH, HIGH, LOW, LOW};
   setDirs(dirs);
 
   // speed
@@ -333,7 +365,7 @@ void rotateCCW() {
 
 void rotateCW() {
   // direction
-  uint8_t dirs[4] = {HIGH, LOW, HIGH, LOW};
+  uint8_t dirs[4] = {LOW, LOW, HIGH, HIGH};
   setDirs(dirs);
 
   // speed
