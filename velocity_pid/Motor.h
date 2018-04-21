@@ -82,7 +82,7 @@ void Motor::encoder_isr() {
     enc_val = (enc_val << 2) | (digitalRead(enca_pin) << 1) | digitalRead(encb_pin);
 
     encoder_count += encoder_table[enc_val & 0b1111];
-    Serial.println(encoder_count);
+//    Serial.println(encoder_count);
 }
 
 

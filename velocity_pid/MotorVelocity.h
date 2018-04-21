@@ -23,11 +23,15 @@ int MotorVelocity::update() {
     float error = target - velocity;
     float output = pid->update(error);
 
+//    Serial.print("left rear error: "); Serial.println(error);
+
     if (output > 0) {
         setDirection(1);
     } else {
         setDirection(0);
     }
+
+    Serial.println(encoder_count);
 
     return constrain(abs(output), 0, 255);
 }

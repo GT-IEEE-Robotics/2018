@@ -185,6 +185,7 @@ sockid = lirc.init("ieee_southeastcon_program")
 input = lirc.nextcode()
 while(input == ['pos']):
   print("Positioning IR received")
+  sendCommand("IRCODE", 7)
   input = lirc.nextcode()
 
 print("IR Code ", input)
