@@ -94,6 +94,8 @@ void left_front_encoder_isr(void) { left_front.encoder_isr(); }
 void right_front_encoder_isr(void) { right_front.encoder_isr(); }
 void left_rear_encoder_isr(void) { left_rear.encoder_isr(); }
 void right_rear_encoder_isr(void) { right_rear.encoder_isr(); }
+void flag_encoder_isr(void) { flag.encoder_isr(); }
+
 
 void setup() {
 
@@ -112,12 +114,16 @@ void setup() {
     right_front.setTarget(5);
     left_rear.setTarget(5);
     right_rear.setTarget(5);
+
+    flag.setTarget(5*REV_FLAG);
+
     // gyro.setTarget(0);
     
     left_front.setInterruptHandler(left_front_encoder_isr);
     right_front.setInterruptHandler(right_front_encoder_isr);
     left_rear.setInterruptHandler(left_rear_encoder_isr);
     right_rear.setInterruptHandler(right_rear_encoder_isr);
+    flag.setInterruptHandler(flag_encoder_isr);
 }
 
 void loop() {
@@ -135,14 +141,16 @@ void loop() {
         int right_front_command = right_front.update();
         int left_rear_command = left_rear.update();
         int right_rear_command = right_rear.update();
+        int flag_command = flag.update();
 
-        Serial.print("left: "); Serial.println(left_command);
-        Serial.print("left rear command: "); Serial.println(left_rear_command);
+        Serial.print("flag command: "); Serial.println(flag_command);
 
         left_front.setSpeed(left_front_command);
         right_front.setSpeed(right_front_command);
         left_rear.setSpeed(left_rear_command);
         right_rear.setSpeed(right_rear_command);
+        flag.setSpeed(flag_command);
+
         last_run = micros();
     }
 }
